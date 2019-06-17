@@ -15,4 +15,8 @@ public class MemberCardController {
     public String bind(){
         return "bind";
     }
+    @GetMapping("/charge")
+    public String charge(){
+        return "wx/charge";
+    }
 }

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>充值页面</title>
+    <link href="/css/weui.min.css" rel="stylesheet">
+    <style type="text/css">
+        body{
+            background-color: #ededed;
+        }
+        .button-sp-area {
+            margin: 15px auto;
+            padding: 15px;
+            text-align: center;
+        }
+        .itemBox{
+            flex-flow: wrap;
+        }
+        .itemBox .weui-flex__item{
+            width: 33.3%;
+            box-sizing: border-box;
+        }
+
+        .itemBox .weui-flex__item div{
+            text-align: center;
+            padding: 20px;
+            margin:5px;
+            border-radius: 8px;
+            background: white;
+            border: 2px solid #ccc;
+            color: gray;
+            font-size: 15px;
+        }
+        .itemBox .weui-flex__item>div{
+            text-align: center;
+            padding: 20px;
+            margin:5px;
+            border-radius: 8px;
+            background: white;
+            border: 2px solid #ccc;
+            color: gray;
+            font-size: 15px;
+        }
+        .itemBox .active>div{
+            background: #07c160;
+            border: 2px solid #07c160;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+    <div class="page__bd">
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title">充值金额</p>
+                        </div>
+                        <div class="weui-flex itemBox">
+                            <div class="weui-flex__item"><div class="placeholder" data-toggle="100">100</div></div>
+                            <div class="weui-flex__item"><div class="placeholder" data-toggle="200">200</div></div>
+                            <div class="weui-flex__item"><div class="placeholder" data-toggle="500">500</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="button-sp-area">
+        <input type="hidden" value="0" name="money">
+        <a href="javascript:;" class="weui-btn weui-btn_block weui-btn_primary">充值</a>
+    </div>
+</div>
+</body>
+<script src="/js/zepto.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".weui-flex__item").on("click",function(){
+            if($(this).hasClass("active")){
+                $(".weui-flex__item").removeClass("active");
+                $("input[name='money']").val(0);
+            }else {
+                $(".weui-flex__item").removeClass("active");
+                $(this).addClass("active");
+                $("input[name='money']").val($(this).children().first().attr("data-toggle"));
+            }
+        });
+        $(".weui-btn").on("click",function(){
+
+        });
+    });
+</script>
+</html>

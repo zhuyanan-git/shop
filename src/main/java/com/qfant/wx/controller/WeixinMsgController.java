@@ -123,6 +123,7 @@ public class WeixinMsgController {
                 cardActivatedMessage.setInitBonus(100);
                 cardActivatedMessage.setInitBalance(100d);
                 wxService.getMemberCardService().activateMemberCard(cardActivatedMessage);
+
             }else {
                 this.logger.error("获取用户信息失败,错误码："+userInfoResult.getErrorCode()+" 错误信息："+userInfoResult.getErrorMsg());
             }
