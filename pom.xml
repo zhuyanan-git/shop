@@ -171,7 +171,7 @@
             <version>3.4.0</version>
         </dependency>
         <dependency>
-            <groupId>pinyin4j</groupId>
+            <groupId>com.belerweb</groupId>
             <artifactId>pinyin4j</artifactId>
             <version>2.5.0</version>
         </dependency>

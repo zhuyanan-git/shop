@@ -101,7 +101,7 @@ public class WeixinMsgController {
                 member.setOpenid(userInfoResult.getOpenId());
                 member.setStatus(userInfoResult.getUserCardStatus());
                 member.setName(userInfoResult.getNickname());
-                member.setCardcode(inMessage.getUserCardCode());
+                member.setCardcode("W"+inMessage.getUserCardCode());
                 NameValues[] nameValues=userInfoResult.getUserInfo().getCommonFieldList();
                 if(nameValues.length>0){
                     for(int i=0;i<nameValues.length;i++){
@@ -118,10 +118,10 @@ public class WeixinMsgController {
                 }
                 memberService.saveMember(member);
                 WxMpMemberCardActivatedMessage cardActivatedMessage=new WxMpMemberCardActivatedMessage();
-                cardActivatedMessage.setMembershipNumber("0000002");
+                cardActivatedMessage.setMembershipNumber(member.getCardcode());
                 cardActivatedMessage.setCode(member.getCardcode());
-                cardActivatedMessage.setInitBonus(100);
-                cardActivatedMessage.setInitBalance(100d);
+                cardActivatedMessage.setInitBonus(0);
+                cardActivatedMessage.setInitBalance(0d);
                 wxService.getMemberCardService().activateMemberCard(cardActivatedMessage);
 
             }else {

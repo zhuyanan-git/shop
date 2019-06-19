@@ -1,5 +1,6 @@
 package com.qfant.config;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Binary Wang
  */
 @Configuration
+@Data
 public class WxMpConfig {
   @Value("${wx.mp.token}")
   private String token;
@@ -20,20 +22,5 @@ public class WxMpConfig {
   @Value("${wx.mp.aesKey}")
   private String aesKey;
 
-  public String getToken() {
-    return this.token;
-  }
-
-  public String getAppid() {
-    return this.appid;
-  }
-
-  public String getAppSecret() {
-    return this.appSecret;
-  }
-
-  public String getAesKey() {
-    return this.aesKey;
-  }
 
 }
