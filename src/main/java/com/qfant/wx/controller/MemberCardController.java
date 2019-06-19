@@ -2,9 +2,9 @@ package com.qfant.wx.controller;
 
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.BaseWxPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
-import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -12,7 +12,6 @@ import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.qfant.utils.DateUtils;
 import com.qfant.utils.IpUtils;
 import com.qfant.utils.StringUtils;
-import com.qfant.wx.api.ApiResult;
 import com.qfant.wx.entity.Order;
 import com.qfant.wx.service.OrderService;
 import com.qfant.wx.service.WeixinService;
@@ -105,13 +104,14 @@ public class MemberCardController {
             orderRequest.setTradeType("JSAPI");
             orderRequest.setOutTradeNo(orderNo);
             orderRequest.setTotalFee(BaseWxPayRequest.yuanToFen(money.toString()));//元转成分
+            orderRequest.setTotalFee(1);//元转成分
             orderRequest.setOpenid(openId);
             orderRequest.setSpbillCreateIp(IpUtils.getHostIp());
             orderRequest.setTimeStart(DateUtils.dateTimeNow("yyMMddHHmm"));
             orderRequest.setNotifyUrl("http://htgy.qfant.com/wx/member/notify");
-            WxPayUnifiedOrderResult orderResult=wxPayService.unifiedOrder(orderRequest);
+            WxPayMpOrderResult wxPayMpOrderResult=wxPayService.createOrder(orderRequest);
             result.put("code",0);
-            result.put("orderResult",orderResult);
+            result.put("result",wxPayMpOrderResult);
         }
         return result;
     }
@@ -132,6 +132,7 @@ public class MemberCardController {
         return type+time;
     }
     @PostMapping("/notify")
+    @ResponseBody
     public String notify (@RequestBody String xmlData) throws WxPayException {
         final WxPayOrderNotifyResult notifyResult = this.wxPayService.parseOrderNotifyResult(xmlData);
         Order order=orderService.getOrderByOrderno(notifyResult.getOutTradeNo());
