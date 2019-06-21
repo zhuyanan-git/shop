@@ -20,8 +20,8 @@ public class MemberService {
     @Autowired
     private MemberMapper memberMapper;
 
-    public void saveMember(Member member) {
-        memberMapper.insert(member);
+    public void saveAllMember(Member member) {//新增加会员
+        memberMapper.update(member);
         VipCard vipCard=new VipCard();
         vipCard.setCardNo(member.getCardcode());
         vipCard.setName(member.getName());
@@ -32,5 +32,14 @@ public class MemberService {
         vipCard.setCardid(UUIDUtils.getUUID36Bits());
         vipCard.setVIPBarCode(member.getCardcode());
         vipCardMapper.insert(vipCard);
+    }
+    public void insertMember(Member member) {
+        memberMapper.insert(member);
+    }
+    public void updateMember(Member member) {
+        memberMapper.update(member);
+    }
+    public Member getMemberByOPenId(String openId){
+        return memberMapper.getMemberByopenId(openId);
     }
 }

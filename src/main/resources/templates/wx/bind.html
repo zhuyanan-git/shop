@@ -1,19 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
-
-<!-- Mirrored from www.zi-han.net/theme/hplus/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:18:23 GMT -->
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- head 中 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.3/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.1/css/jquery-weui.min.css">
 
-
-    <title>绑定页面</title>
-
-
+    <title>老会员绑定页面</title>
+    <style type="text/css">
+        body {
+            background-color: #ededed;
+        }
+    </style>
 </head>
+<body>
+<div class="page">
+    <div class="page__bd" style="margin-top:30px;">
+        <!--<div class="weui-cells">-->
+        <!--<div style="text-align: center"><img src="/images/vipcard.jpg" width="600"/></div>-->
+        <!--</div>-->
+        <div class="weui-cells__title">输入会员卡号绑定老会员</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">会员卡号</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="cardNo" placeholder="会员卡号">
+                </div>
 
-<body class="gray-bg">
+            </div>
+            <div class="weui-cell weui-cell_vcode">
+                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" name="code" type="number" pattern="[0-9]*" placeholder="请输入验证码">
+                    <input type="hidden" th:value="${session['openId']}" name="openId">
+                </div>
+                <div class="weui-cell__ft">
+                    <button class="weui-vcode-btn">获取验证码</button>
+                </div>
+            </div>
+        </div>
+        <div class="weui-btn-area">
+            <a href="javascript:;" class="weui-btn weui-btn_block weui-btn_primary">确定</a>
+        </div>
+        <div class="weui-flex" style="text-align: center;font-size: 14px;color:#0d8ddb;margin-top:20px;">
+            <div class="weui-flex__item">
+                <div class="placeholder" id="noCode">接收不到验证码</div>
+            </div>
+            <div class="weui-flex__item">
+                <div class="placeholder" id="modifyPhone">修改手机号</div>
+            </div>
+        </div>
+    </div>
+    <div class="page__bd page__bd_spacing" >
+        <div class="weui-footer weui-footer_fixed-bottom" style="background-color: #ffffee;height: 20px;bottom: 0">
+            <p class="weui-footer__text">启凡科技提供技术支持</p>
+        </div>
+    </div>
+</div>
 </body>
+<script src="/js/zepto.min.js"></script>
+<!-- body 最后 -->
+<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.weui-dialog__btn').on('click', function(){
+            $(this).parents('.js_dialog').fadeOut(200);
+        });
+        $("#noCode").on("click",function(){
+            $.alert("请确认老会员卡绑定的手机号是否可用", "");
+        });
+        $("#modifyPhone").on("click",function(){
+            $.alert("请您到附近的店面让店员修改您的手机号", "");
+        });
+        $(".weui-vcode-btn").on("click",function(){
+            var cardNo=$("input[name='cardNo']").val();
+            if(cardNo==""){
+                $.toptip('卡号不能为空', 'error');return;
+            }else {
+                $.getJSON("/wx/member/getCode?cardNo="+cardNo,function(data){
+                    if(data.code!=0){
+                        $.toptip(data.msg, 'error');
+                    }else {
+                        $.toast(data.msg,"success");
+                    }
+                });
+            }
+        });
+        $(".weui-btn").on("click",function(){
+            var cardNo=$("input[name='cardNo']").val();
+            var openId=$("input[name='openId']").val();
+            var code=$("input[name='code']").val();
+            if(cardNo==""){
+                $.toptip('卡号不能为空', 'error');return;
+            }
+            if(code==""){
+                $.toptip('验证码不能为空', 'error');return;
+            }
+            $.post("/wx/member/bindCard",{cardno:cardNo,openId:openId,code:code},function(data){
+                $.toptip(data.msg, 'success');
+            });
+        });
+    });
+</script>
 </html>

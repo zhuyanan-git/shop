@@ -75,7 +75,7 @@ public class CardController extends BaseController{
             MemberCardActivateUserFormRequest memberCardActivateUserFormRequest=new MemberCardActivateUserFormRequest();
             memberCardActivateUserFormRequest.setCardId(result.getCardId());
 
-            memberCardActivateUserFormRequest.setBindOldCard("老会员绑定","http://htgy.qfant.com/wx/member/oldbind");
+            memberCardActivateUserFormRequest.setBindOldCard("老会员绑定","http://htgy.qfant.com/wx/member/bind");
 
             MemberCardUserForm required=new MemberCardUserForm();
             required.setCanModify(true);

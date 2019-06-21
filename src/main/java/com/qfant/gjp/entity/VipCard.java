@@ -19,7 +19,9 @@ public class VipCard {
     private Integer Lose=0;
     private Integer StopUse=0;
     private BigDecimal BuyTotal=new BigDecimal(0);
+    private BigDecimal IntegralTotal=new BigDecimal(0);//积分
     private BigDecimal BuyTotalPerDay=new BigDecimal(0);
+    private BigDecimal Cz=new BigDecimal(0);//可用储值
     private Integer AutoDiscount=1;
     private BigDecimal membertotal=new BigDecimal(0);
     private Integer automembertotal=0;

@@ -96,12 +96,15 @@ public class WeixinMsgController {
         if(inMessage.getEvent().equals("submit_membercard_user_info")){
             WxMpMemberCardUserInfoResult userInfoResult=wxService.getMemberCardService().getUserInfo(inMessage.getCardId(),inMessage.getUserCardCode());
             if(userInfoResult.getErrorCode().equals("0")){
-                Member member=new Member();
+                Member member=memberService.getMemberByOPenId(userInfoResult.getOpenId());
                 member.setCreatetime(new Date());
+                member.setNickname(userInfoResult.getNickname());
                 member.setOpenid(userInfoResult.getOpenId());
                 member.setStatus(userInfoResult.getUserCardStatus());
                 member.setName(userInfoResult.getNickname());
-                member.setCardcode("W"+inMessage.getUserCardCode());
+                member.setCardcode(inMessage.getUserCardCode());
+                member.setCardno(inMessage.getUserCardCode());
+                member.setType(1);
                 NameValues[] nameValues=userInfoResult.getUserInfo().getCommonFieldList();
                 if(nameValues.length>0){
                     for(int i=0;i<nameValues.length;i++){
@@ -116,7 +119,7 @@ public class WeixinMsgController {
                         }
                     }
                 }
-                memberService.saveMember(member);
+                memberService.saveAllMember(member);
                 WxMpMemberCardActivatedMessage cardActivatedMessage=new WxMpMemberCardActivatedMessage();
                 cardActivatedMessage.setMembershipNumber(member.getCardcode());
                 cardActivatedMessage.setCode(member.getCardcode());
@@ -128,6 +131,20 @@ public class WeixinMsgController {
                 this.logger.error("获取用户信息失败,错误码："+userInfoResult.getErrorCode()+" 错误信息："+userInfoResult.getErrorMsg());
             }
 
+        }else if(inMessage.getEvent().equals("user_get_card")){
+            Member member=memberService.getMemberByOPenId(inMessage.getFromUser());
+            if(member!=null){//如果存在就更新会员卡信息
+                member.setOpenid(inMessage.getFromUser());
+                member.setCardcode(inMessage.getUserCardCode());
+                member.setCreatetime(new Date());
+                memberService.updateMember(member);
+            }else {
+                member=new Member();
+                member.setOpenid(inMessage.getFromUser());
+                member.setCardcode(inMessage.getUserCardCode());
+                member.setCreatetime(new Date());
+                memberService.insertMember(member);
+            }
         }
     }
 }
