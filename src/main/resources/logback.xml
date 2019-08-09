@@ -68,6 +68,7 @@
 
 
 	<logger name="com.qfant" level="debug" />
+	<logger name="com.atomikos" level="debug" />
 
 	<root level="info">
 		<appender-ref ref="console" />

@@ -10,10 +10,10 @@
     </parent>
     <groupId>com.qfant</groupId>
     <artifactId>htgy</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <version>1.0</version>
+    <packaging>jar</packaging>
     <name>htgy</name>
-    <description>Demo project for Spring Boot</description>
+    <description>华佗国药微信会员卡项目</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,7 +36,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

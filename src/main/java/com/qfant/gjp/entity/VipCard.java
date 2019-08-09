@@ -12,8 +12,8 @@ public class VipCard {
     private String CardNo;
     private String Name;
     private String Tel;
-    private Integer CardType=4;
-    private Integer Discount=80;
+    private Integer CardType=1;
+    private Integer Discount=100;
     private Date BulidDate;
     private Date ValidityDate=new Date(2556115199L);
     private Integer Lose=0;

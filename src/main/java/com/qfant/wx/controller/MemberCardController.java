@@ -1,5 +1,6 @@
 package com.qfant.wx.controller;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
@@ -65,11 +66,16 @@ public class MemberCardController {
     @GetMapping("/charge")
     public String charge(String code, ModelMap map, HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        if (session.getAttribute("openId") != null && StringUtils.isNotEmpty(session.getAttribute("openId").toString())) {
-            map.put("openId", session.getAttribute("openId").toString());
-        } else {
-            init(code, "charge", request, response);
+
+        String url;
+        if (session.getAttribute("openId") == null || StringUtils.isEmpty(session.getAttribute("openId").toString())) {
+            url =init(code, "charge", request, response);
+            if(StringUtils.isNotEmpty(url)){
+                return url;
+            }
         }
+
+        map.put("openId", session.getAttribute("openId").toString());
         return "wx/charge";
     }
 
@@ -84,10 +90,7 @@ public class MemberCardController {
         if (money < 0) {
             result.put("code", -1);
             result.put("message", "金额有误");
-        } else if ((money - 100) != 0 && (money - 200) != 0 && (money - 500) != 0) {
-            result.put("code", -1);
-            result.put("message", "金额有误");
-        } else {
+        }  else {
             WxPayConfig payConfig = new WxPayConfig();
             payConfig.setAppId(StringUtils.trimToNull(env.getProperty("wx.mp.appId")));
             payConfig.setMchId(StringUtils.trimToNull(env.getProperty("wx.pay.mchId")));
@@ -110,7 +113,7 @@ public class MemberCardController {
             orderRequest.setTradeType("JSAPI");
             orderRequest.setOutTradeNo(orderNo);
             orderRequest.setTotalFee(BaseWxPayRequest.yuanToFen(money.toString()));//元转成分
-            orderRequest.setTotalFee(1);//元转成分
+//            orderRequest.setTotalFee(1);//元转成分
             orderRequest.setOpenid(openId);
             orderRequest.setSpbillCreateIp(IpUtils.getHostIp());
             orderRequest.setTimeStart(DateUtils.dateTimeNow("yyMMddHHmm"));
@@ -175,60 +178,71 @@ public class MemberCardController {
     @GetMapping("/chargeRecord")
     public String chargeRecord(String code, ModelMap map, HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        if (session.getAttribute("openId") != null && StringUtils.isNotEmpty(session.getAttribute("openId").toString())) {
-            String openId = session.getAttribute("openId").toString();
-            List<Order> orders = orderService.getOrderByOpenId(openId);
-            map.put("orders", orders);
-        } else {
-            init(code, "charge", request, response);
+
+        String url;
+        if (session.getAttribute("openId") == null || StringUtils.isEmpty(session.getAttribute("openId").toString())) {
+            url =init(code, "chargeRecord", request, response);
+            if(StringUtils.isNotEmpty(url)){
+                return url;
+            }
         }
+        String openId = session.getAttribute("openId").toString();
+        List<Order> orders = orderService.getOrderByOpenId(openId);
+        map.put("orders", orders);
         return "wx/chargeRecord";
     }
     @GetMapping("/bind")
     public String bind(String code, ModelMap map, HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        if (session.getAttribute("openId") != null && StringUtils.isNotEmpty(session.getAttribute("openId").toString())) {
-            String openId = session.getAttribute("openId").toString();
-            map.put("openId", openId);
-        } else {
-            init(code, "bind", request, response);
+        String url;
+        if (session.getAttribute("openId") == null || StringUtils.isEmpty(session.getAttribute("openId").toString())) {
+            url =init(code, "bind", request, response);
+            if(StringUtils.isNotEmpty(url)){
+                return url;
+            }
         }
+        String openId = session.getAttribute("openId").toString();
+        map.put("openId", openId);
         return "wx/bind";
     }
     @GetMapping("/balance")
     public String balance(String code, ModelMap map, HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        if (session.getAttribute("openId") != null && StringUtils.isNotEmpty(session.getAttribute("openId").toString())) {
-            String openId = session.getAttribute("openId").toString();
-            Member member=memberService.getMemberByOPenId(openId);
-            VipCard vipCard=vipCardService.getVipCardByCardNo(member.getCardno());
+        String url;
+        if (session.getAttribute("openId") == null || StringUtils.isEmpty(session.getAttribute("openId").toString())) {
+            url =init(code, "balance", request, response);
+            if(StringUtils.isNotEmpty(url)){
+                return url;
+            }
+        }
+        String openId = session.getAttribute("openId").toString();
+        Member member=memberService.getMemberByOPenId(openId);
+        VipCard vipCard=vipCardService.getVipCardByCardNo(member.getCardno());
 //            member.setName(vipCard.getName());
 //            member.setBalance(vipCard.getCz().doubleValue());
 //            member.setBonus(vipCard.getIntegralTotal().intValue());
 //            map.put("vipCard", vipCard);
-            map.put("name", vipCard.getName());
-            map.put("cardNo", vipCard.getCardNo());
-            map.put("balance", vipCard.getCz().setScale(2,BigDecimal.ROUND_HALF_UP));
-            map.put("integral", vipCard.getIntegralTotal().intValue());
-        } else {
-            init(code, "bind", request, response);
-        }
+        map.put("name", vipCard.getName());
+        map.put("cardNo", vipCard.getCardNo());
+        map.put("balance", vipCard.getCz().setScale(2,BigDecimal.ROUND_HALF_UP));
+        map.put("integral", vipCard.getIntegralTotal().intValue());
         return "wx/balance";
     }
-    private void init(String code, String method, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private String init(String code, String method, HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         if (code != null && !"".equals(code)) {
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = null;
             try {
                 wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
                 session.setAttribute("openId", wxMpOAuth2AccessToken.getOpenId());
+                return null;
             } catch (WxErrorException e) {
                 String url = wxService.oauth2buildAuthorizationUrl("http://htgy.qfant.com/wx/member/" + method, WxConsts.OAuth2Scope.SNSAPI_BASE, null);
-                response.sendRedirect(url);
+                return "redirect:"+url;
             }
         } else {
             String url = wxService.oauth2buildAuthorizationUrl("http://htgy.qfant.com/wx/member/" + method, WxConsts.OAuth2Scope.SNSAPI_BASE, null);
-            response.sendRedirect(url);
+            return "redirect:"+url;
         }
     }
 
@@ -260,6 +274,14 @@ public class MemberCardController {
                         String code = SmsVerificationCodeUtil.randomCode();
                         SmsVerificationCodeVo smsVerificationCodeVo = new SmsVerificationCodeVo(vipCard.getTel(), code, new Date());
                         SmsVerificationCodeUtil.setVerificationCode(vipCard.getTel(), smsVerificationCodeVo);
+                        try {
+                            SmsAliyun.sendSms(vipCard.getTel(),code);
+                        } catch (ClientException e) {
+                            e.printStackTrace();
+                            logger.error("发送验证码失败："+e.getMessage());
+                            result.put("code", 0);
+                            result.put("msg", "验证码发送成功");
+                        }
                         result.put("code", 0);
                         result.put("msg", "验证码发送成功");
                     }
@@ -321,6 +343,9 @@ public class MemberCardController {
 
                             result.put("code", 0);
                             result.put("msg", "绑定成功");
+                        }else {
+                            result.put("code", -1);
+                            result.put("msg", "微信会员卡领取信息不存在");
                         }
                     }else {
                         result.put("code", -1);

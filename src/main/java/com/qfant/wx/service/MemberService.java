@@ -19,7 +19,7 @@ public class MemberService {
     private VipCardMapper vipCardMapper;
     @Autowired
     private MemberMapper memberMapper;
-
+    @Transactional
     public void saveAllMember(Member member) {//新增加会员
         memberMapper.update(member);
         VipCard vipCard=new VipCard();
@@ -33,9 +33,11 @@ public class MemberService {
         vipCard.setVIPBarCode(member.getCardcode());
         vipCardMapper.insert(vipCard);
     }
+    @Transactional
     public void insertMember(Member member) {
         memberMapper.insert(member);
     }
+    @Transactional
     public void updateMember(Member member) {
         memberMapper.update(member);
     }

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-@Transactional
+
 public class VipCardService {
     @Autowired
     private VipCardMapper vipCardMapper;
@@ -17,10 +17,11 @@ public class VipCardService {
     public VipCard getVipCardByCardNo(String CardNo) {
         return vipCardMapper.getVipCardByCardNo(CardNo);
     }
+    @Transactional
     public void deleteVipCardByCardNo(String CardNo,String Tel){
         vipCardMapper.deleteVipCardByCardNo(CardNo, Tel);
     }
-
+    @Transactional
     public void updateVipCard(VipCard vipCard) {
         vipCardMapper.updateVipCard(vipCard);
     }

@@ -16,7 +16,7 @@ import java.util.Random;
  * 
  */
 public class SmsVerificationCodeUtil {
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	public static Map<String,SmsVerificationCodeVo> smsVerificationCodes = new HashMap<>();
 //	private final static ReadWriteLock lock = new ReentrantReadWriteLock();
 //	private final static Lock readLock = lock.readLock(); // 读锁
@@ -55,7 +55,7 @@ public class SmsVerificationCodeUtil {
     		    SmsVerificationCodeVo val = entry.getValue(); 
     		    long between = (now.getTime()-val.getCreateTime().getTime()) / 1000;//除以1000是为了转换成秒
     		    long minute = between / 60;
-    		    if (minute > 15) {//验证码保存十五分钟大于十五分钟的就remove
+    		    if (minute > 5) {//验证码保存十五分钟大于十五分钟的就remove
 //    		    	readLock.unlock();
 //    		    	writeLock.lock();
     		    	deleteList.add(key);
