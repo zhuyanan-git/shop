@@ -1,5 +1,6 @@
 package com.qfant.wx.controller;
 
+import com.google.common.base.Strings;
 import com.qfant.wx.entity.Member;
 import com.qfant.wx.service.MemberService;
 import com.qfant.wx.service.WeixinService;
@@ -93,7 +94,7 @@ public class WeixinMsgController {
     }
 
     private void saveMember(WxMpXmlMessage inMessage)  throws WxErrorException {
-        if(inMessage.getEvent().equals("submit_membercard_user_info")){
+        if(!Strings.isNullOrEmpty(inMessage.getEvent())&&inMessage.getEvent().equals("submit_membercard_user_info")){
             WxMpMemberCardUserInfoResult userInfoResult=wxService.getMemberCardService().getUserInfo(inMessage.getCardId(),inMessage.getUserCardCode());
             if(userInfoResult.getErrorCode().equals("0")){
                 Member member=memberService.getMemberByOPenId(userInfoResult.getOpenId());
@@ -131,7 +132,7 @@ public class WeixinMsgController {
                 this.logger.error("获取用户信息失败,错误码："+userInfoResult.getErrorCode()+" 错误信息："+userInfoResult.getErrorMsg());
             }
 
-        }else if(inMessage.getEvent().equals("user_get_card")){
+        }else if(!Strings.isNullOrEmpty(inMessage.getEvent())&&inMessage.getEvent().equals("user_get_card")){
             Member member=memberService.getMemberByOPenId(inMessage.getFromUser());
             if(member!=null){//如果存在就更新会员卡信息
                 member.setOpenid(inMessage.getFromUser());

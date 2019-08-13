@@ -55,7 +55,7 @@ public class LoginController extends BaseController{
         request.getSession().invalidate();
         return "login";
     }
-    public String encryptPassword(String username, String password, String salt) {
+    public  static String encryptPassword(String username, String password, String salt) {
         return new Md5Hash(username + password + salt).toHex().toString();
     }
 }
