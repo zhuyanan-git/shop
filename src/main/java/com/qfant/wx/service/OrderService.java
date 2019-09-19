@@ -1,6 +1,7 @@
 package com.qfant.wx.service;
 
 
+import com.qfant.wx.entity.MemberAndOrder;
 import com.qfant.wx.entity.Order;
 import com.qfant.wx.repository.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,4 +30,6 @@ public class OrderService {
     public List<Order> getOrderByOpenId(String orderno){
         return orderMapper.getOrderByOpenId(orderno);
     }
+
+    public List<MemberAndOrder> selectAllOrder(MemberAndOrder memberAndOrder){return orderMapper.selectAllOrder(memberAndOrder);}
 }

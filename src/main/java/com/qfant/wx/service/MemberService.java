@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -44,4 +45,10 @@ public class MemberService {
     public Member getMemberByOPenId(String openId){
         return memberMapper.getMemberByopenId(openId);
     }
+    @Transactional
+    public Member getMemberById(int id){return memberMapper.getMemberById(id);}
+
+    @Transactional
+    public List<Member> selectMemberList(Member member){return memberMapper.selectMemberList(member);}
+
 }

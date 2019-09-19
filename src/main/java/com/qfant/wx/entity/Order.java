@@ -1,5 +1,6 @@
 package com.qfant.wx.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,6 +10,7 @@ public class Order {
     private Integer id;
     private String orderno;
     private String openid;
+    @JsonFormat
     private Date submittime;
     private String ip;
     private Double price;
@@ -18,5 +20,5 @@ public class Order {
     private String transactionid;
     private String timeend;
     private Date notifytime;
-    private int status;//0 未支付 1 支付成功 2 支付失败
+    private int status ;//0 未支付 1 支付成功 2 支付失败
 }

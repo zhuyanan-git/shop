@@ -1,8 +1,11 @@
 package com.qfant.admin;
 
-import com.qfant.utils.AjaxResult;
-import com.qfant.utils.DateUtils;
-import com.qfant.utils.ServletUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.qfant.utils.page.PageDomain;
+import com.qfant.utils.page.TableDataInfo;
+import com.qfant.utils.page.TableSupport;
+import com.qfant.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
@@ -21,7 +24,7 @@ import java.util.List;
  * @author Liar
  */
 public class BaseController {
-    protected final Logger logger = LoggerFactory.getLogger(BaseController.class);
+    //protected final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
     /**
      * 将前台传递过来的日期格式的字符串，自动转化为Date类型
@@ -60,6 +63,33 @@ public class BaseController {
     }
 
 
+    /**
+     * 设置请求分页数据
+     */
+    protected void startPage()
+    {
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        Integer pageNum = pageDomain.getPageNum();
+        Integer pageSize = pageDomain.getPageSize();
+        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
+        {
+            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            PageHelper.startPage(pageNum, pageSize, orderBy);
+        }
+    }
+
+    /**
+     * 响应请求分页数据
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected TableDataInfo getDataTable(List<?> list)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
+        rspData.setRows(list);
+        rspData.setTotal(new PageInfo(list).getTotal());
+        return rspData;
+    }
     /**
      * 响应返回结果
      *

@@ -27,6 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
         loginRegistry.excludePathPatterns("/js/**");
         loginRegistry.excludePathPatterns("/images/**");
         loginRegistry.excludePathPatterns("/fonts/**");
+        loginRegistry.excludePathPatterns("/getVerify");
     }
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {

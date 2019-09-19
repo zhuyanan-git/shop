@@ -48,6 +48,21 @@ public class ServletUtils {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         return (ServletRequestAttributes) attributes;
     }
+    /**
+     * 获取Integer参数
+     */
+    public static Integer getParameterToInt(String name)
+    {
+        return Convert.toInt(getRequest().getParameter(name));
+    }
+
+    /**
+     * 获取Integer参数
+     */
+    public static Integer getParameterToInt(String name, Integer defaultValue)
+    {
+        return Convert.toInt(getRequest().getParameter(name), defaultValue);
+    }
 
     /**
      * 将字符串渲染到客户端

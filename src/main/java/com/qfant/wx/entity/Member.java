@@ -1,8 +1,10 @@
 package com.qfant.wx.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
+
 @Data
 public class Member {
     private Integer id;
@@ -19,6 +21,11 @@ public class Member {
     private double bonus;
     private double balance;
     private Integer type;//类型1新会员 2 老会员
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createtime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date bindtime;
+
+
+
 }
