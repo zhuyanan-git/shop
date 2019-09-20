@@ -138,6 +138,12 @@
             <version>${jsoup.version}</version>
         </dependency>
 
+        <!--文件上传工具类 -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons.fileupload.version}</version>
+        </dependency>
 
         <!-- excel工具 -->
         <dependency>
