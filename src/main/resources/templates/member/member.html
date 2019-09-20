@@ -112,17 +112,32 @@
                 {
                     field: 'type',
                     title: '类型',
-                    sortable: true
+                    sortable: true,
+                    formatter:function (value,row,index) {
+                        var type='';
+                        switch (value) {
+                            case 1:
+                                type='新会员';
+                                break;
+                            case 2:
+                                type='老会员';
+                                break;
+                        }
+                        return type;
+                    }
+
                 },
 
                 {
                     field:'createtime',
-                    title: '创建时间'
+                    title: '创建时间',
+                    sortable: true
 
                 },
                 {
                     field: 'bindtime',
-                    title: '绑定时间'
+                    title: '绑定时间',
+                    sortable: true
                 }
                 ]
 
