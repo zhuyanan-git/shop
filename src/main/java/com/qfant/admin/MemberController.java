@@ -1,13 +1,14 @@
 package com.qfant.admin;
 
-import com.qfant.framework.AjaxResult;
+import com.qfant.utils.AjaxResult;
 import com.qfant.utils.page.TableDataInfo;
-import com.qfant.utils.poi.ExcelUtil;
 import com.qfant.wx.entity.Member;
 import com.qfant.wx.service.MemberService;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -32,15 +33,15 @@ public class MemberController extends BaseController{
 
     }
 
-    /**
-     * 导出家庭成员列表
-     */
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(Member member) {
-        List<Member> list = memberService.selectMemberList(member);
-        ExcelUtil<Member> util = new ExcelUtil<Member>(Member.class);
-        return util.exportExcel(list, "会员信息");
-    }
+//    /**
+//     * 导出家庭成员列表
+//     */
+//    @PostMapping("/export")
+//    @ResponseBody
+//    public AjaxResult export(Member member) {
+//        List<Member> list = memberService.selectMemberList(member);
+//        ExcelUtil<Member> util = new ExcelUtil<Member>(Member.class);
+//        return util.exportExcel(list, "会员信息");
+//    }
 
 }
