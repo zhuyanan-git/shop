@@ -17,7 +17,7 @@ public class OrderController extends BaseController{
     @Autowired
     private OrderService orderService;
     @GetMapping
-    public String order(){return "/order/order";}
+    public String order(){return "order/order";}
 
     @PostMapping("/list")
     @ResponseBody

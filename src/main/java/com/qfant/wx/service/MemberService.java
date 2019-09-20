@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,9 @@ public class MemberService {
         vipCard.setBulidDate(new Date());
         vipCard.setCardid(UUIDUtils.getUUID36Bits());
         vipCard.setVIPBarCode(member.getCardcode());
+        Calendar cal=Calendar.getInstance();
+        cal.add(Calendar.YEAR,50);
+        vipCard.setValidityDate(new Timestamp(cal.getTimeInMillis()));
         vipCardMapper.insert(vipCard);
     }
     @Transactional

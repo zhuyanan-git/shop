@@ -21,7 +21,7 @@ public class MemberController extends BaseController{
     private MemberService memberService;
 
     @GetMapping()
-    public String member(){ return "/member/member";}
+    public String member(){ return "member/member";}
     //查询会员信息
     @PostMapping("/list")
     @ResponseBody
