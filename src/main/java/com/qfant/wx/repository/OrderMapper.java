@@ -44,7 +44,7 @@ public interface OrderMapper {
             "from member m , corder c " +
             "where m.openid = c.openid " +
             "<if test='cardno!=null'> and m.cardno like concat('%',#{cardno},'%') </if>"+
-            "<if test='name!=null'> and m.name like concat('%',#{name},'%') </if>"+
+            "<if test='name!=null'> and m.name like concat('%',#{name},'%') order by submittime desc</if>"+
             "<if test='cardno==null and name==null'> and m.name is not null order by submittime desc</if>"+
             " </script>")
     List<MemberAndOrder> selectAllOrder(MemberAndOrder memberAndOrder);
