@@ -55,10 +55,8 @@
 <script type="text/javascript">
     //获取验证码
     function getVerify() {
-        $("#imgCode").on("click", function() {
-            $("#imgVerify").attr("src", '/getVerify?' + Math.random());//jquery方式
-        });
-    }
+        $("#imgVerify").attr("src", '/getVerify?' + Math.random());//jquery方式
+   }
 
     /*登陆校验*/
     $("#submitLogin").click(function(){

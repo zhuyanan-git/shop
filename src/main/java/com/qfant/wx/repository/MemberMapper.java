@@ -9,7 +9,8 @@ import java.util.List;
 public interface MemberMapper {
     @Results({
             @Result(property = "cardno",column = "cardno"),
-            @Result(property = "name",column = "name")
+            @Result(property = "name",column = "name"),
+            @Result(property = "createtime",column = "createtime")
             })
     @Select("SELECT * FROM Member WHERE id = #{id}")
     Member getMemberById(int id);
@@ -29,7 +30,7 @@ public interface MemberMapper {
     @Select("<script> select * from member where" +
             " <if test='cardno!=null'> cardno like concat('%',#{cardno},'%') </if>" +
             " <if test='name!=null'> and name like concat('%',#{name},'%') </if> " +
-            "<if test='cardno==null and name==null'> name is not null</if>"+
+            "<if test='cardno==null and name==null'> name is not null order by createtime desc</if>"+
             "</script>")
     List<Member> selectMemberList(Member member);
 
