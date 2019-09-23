@@ -45,7 +45,7 @@ public class SubscribeHandler extends AbstractHandler {
     }
 
     try {
-      return new TextBuilder().build("感谢关注", wxMessage, weixinService);
+      return new TextBuilder().build("欢迎关注华佗国药大药房官方微信，您的关注将是我们进步的最大动力。华佗国药将始终如一带给您安全、高效、平价药！祝您身体健康！", wxMessage, weixinService);
     } catch (Exception e) {
       this.logger.error(e.getMessage(), e);
     }

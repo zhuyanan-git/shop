@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/animate.min.css" rel="stylesheet">
+    <link href="/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>会员卡信息</h5>
+                </div>
+                <div class="ibox-content">
+                    <form method="post" class="form-horizontal" action="/card/update">
+                        <input type="hidden" name="id" th:value="${card.id}">
+                        <input type="hidden" name="wxcardId" th:value="${card.wxcardId}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">会员卡json</label>
+
+                            <div class="col-sm-10">
+                                <textarea name="cardJson"class="form-control" th:text="${card.cardJson}" rows="100"></textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">保存</button>
+                                <button class="btn btn-white" type="button" name="generateCard">生成</button>
+                                <button class="btn btn-white" type="button" name="deleteCard">删除</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery.min.js?v=2.1.4"></script>
+<script src="/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="/js/content.min.js?v=1.0.0"></script>
+<script type="text/javascript">
+    $("button[name='generateCard']").on("click",function(){
+        $.getJSON("/card/generate",function(result){
+
+        });
+    });
+    $("button[name='deleteCard']").on("click",function(){
+        $.getJSON("/card/delete",function(result){
+
+        });
+    });
+</script>
+</body>
+</html>
