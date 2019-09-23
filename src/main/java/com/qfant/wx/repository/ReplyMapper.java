@@ -18,18 +18,22 @@ public interface ReplyMapper {
     Reply getReplyById(int id);
 
     @Insert("INSERT INTO Reply(keyword, content,createtime) VALUES (#{keyword}, #{content},#{createtime})")
-    void insert(Reply reply);
+    int insert(Reply reply);
 
 
     @Update("update Reply set keyword=#{keyword}, content=#{content},createtime=#{createtime} where id=#{id}")
-    void update(Reply reply);
+    int update(Reply reply);
 
 
-    @Select("<script> select * from Reply where" +
-            " <if test='keyword!=null'> keyword like concat('%',#{keyword},'%') </if>" +
+    @Select("<script> select * from reply" +
+            " <if test='keyword!=null'>  where keyword like concat('%',#{keyword},'%') order by createtime desc </if>" +
+            "<if test = 'keyword == null'>order by createtime desc </if>"+
             "</script>")
     List<Reply> selectReplyList(Reply reply);
 
     @Delete("delete from reply where id=#{id}")
-    void deleteReply(int id);
+    int deleteReply(Integer id);
+
+    @Delete("<script> delete from reply where id in <foreach item = 'id' collection = 'array' open = '(' separator = ',' close = ')'> #{id} </foreach> </script>")
+    int deleteReplyByIds(String[] ids);
 }
