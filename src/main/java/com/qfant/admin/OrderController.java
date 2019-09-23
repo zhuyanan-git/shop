@@ -24,8 +24,6 @@ public class OrderController extends BaseController{
     public TableDataInfo list(MemberAndOrder memberAndOrder){
         startPage();
         List<MemberAndOrder> list = orderService.selectAllOrder(memberAndOrder);
-
         return getDataTable(list);
-
     }
 }

@@ -31,7 +31,6 @@ public class MemberController extends BaseController{
         startPage();
         List<Member> list = memberService.selectMemberList(member);
         return getDataTable(list);
-
     }
 
     //会员数据导出

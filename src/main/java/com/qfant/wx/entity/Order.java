@@ -1,5 +1,6 @@
 package com.qfant.wx.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
