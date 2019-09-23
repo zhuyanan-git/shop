@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <meta charset="utf-8">
+    <head th:include="include :: header">
+
+    </head>
+    <body style="width:80%;margin-top:10px;margin-left:auto;margin-right: auto">
+        <form class="layui-form layui-form-pane" action="" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">菜单名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="name" autocomplete="off"  class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">菜单类型</label>
+                <div class="layui-input-inline">
+                    <select name="type" id="type" >
+                        <option value=""></option>
+                        <option value="1">网页类型</option>
+                        <option value="2">点击类型</option>
+                        <option value="3">小程序类型</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">小程序id</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="appid" id="appid"  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">关键字</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="keyword" id="keyword" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">网页链接</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="url" id="url"  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">小程序路径</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="pagepath" id="pagepath" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">父节点id</label>
+                <div class="layui-input-inline">
+                    <select name="pid" id="pid">
+                        <option value=""></option>
+                        <option value="0">一级菜单</option>
+                        <option value="1">二级菜单</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="addSave" >提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+
+        <div th:include="include :: footer"></div>
+
+        <script>
+        //保存方法
+            layui.use(['form','layer'], function () {
+                var form = layui.form
+                    , layer = layui.layer;
+                //监听提交
+                form.on('submit(addSave)', function (data) {
+
+                    var name = $("#name").val();
+                    var type=$("#type").val();
+                    var pid = $("#pid").val();
+                    var keyword= $("#keyword").val();
+                    if (name==""){
+                        layer.alert("菜单名称不能为空")
+                        $("#name").focus();
+                        return false;
+                    }
+                    if (type==""){
+                        layer.alert("请选择类型")
+                        $("#type").focus();
+                        return false;
+                    }
+                    if (keyword==""){
+                        layer.alert("请输入关键字")
+                        $("#keyword").focus();
+                        return false;
+                    }
+                    if (pid==""){
+                        layer.alert("请选择菜单级别")
+                        $("#pid").focus();
+                        return false;
+                    }
+                    console.log(JSON.stringify(data.field));//表单数据
+                    $.post('/menu/addSave',data.field,function (result) {
+                        if (result.success){
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index); //再执行关闭
+                        }else{
+                            layer.msg("保存失败");
+                        }
+                    });
+                    return false;
+                });
+            });
+
+        </script>
+    </body>
+</html>

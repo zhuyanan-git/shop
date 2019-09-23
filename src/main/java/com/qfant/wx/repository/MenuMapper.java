@@ -19,7 +19,7 @@ public interface MenuMapper {
     @Results({
             @Result(property = "name",column = "name"),
             @Result(property = "type",column = "type"),
-            @Result(property = "key",column = "key"),
+            @Result(property = "keyword",column = "keyword"),
             @Result(property = "url",column = "url"),
             @Result(property = "appid",column = "appid"),
             @Result(property = "pagepath",column = "pagepath"),
@@ -35,19 +35,20 @@ public interface MenuMapper {
     @Select("SELECT * FROM menu WHERE openid = #{openId}")
     List<Menu> getMenuByOpenId(String openId);
 
-    @Options(useGeneratedKeys = true)
-    @Insert("INSERT INTO menu(name,type,key,url,appid,pagepath,pid)" +
-            "VALUES (#{name},#{type},#{key},#{url},#{pagepath},#{pid})")
+    @Insert("INSERT INTO menu(name,type,keyword,url,appid,pagepath,pid)" +
+            " VALUES (#{name},#{type},#{keyword},#{url},#{appid},#{pagepath},#{pid})")
     void insert(Menu menu);
 
-    @Update("update menu set name=#{name}, type=#{type},url=#{url},appip=#{appip},pagepath=#{pagepath},pid=#{pid} where id=#{id}")
+    @Update("update menu set name=#{name},keyword=#{keyword},type=#{type},url=#{url},appid=#{appid},pagepath=#{pagepath},pid=#{pid} where id=#{id}")
     void update(Menu menu);
 
 
-    @Select(" select * from menu limit #{page},#{pageSize} ")
+    @Select("select * from menu limit #{page},#{pageSize} ")
     List<Menu> selecrAllMenu(Integer page,Integer pageSize);
 
     @Select("select count(*) from menu")
     Integer getTotal();
 
+    @Delete("delete from menu where id=#{id}")
+    void deleteById(Integer id);
 }

@@ -48,5 +48,9 @@ public class MenuService {
         return menuMapper.getTotal();
     }
 
+    public  void deleteById(Integer id){
+
+    }
+
 
 }

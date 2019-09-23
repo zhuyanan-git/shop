@@ -17,7 +17,7 @@ public class Menu {
 
     private Integer type;// 类型 1click点击 2view 打开url 3miniprogram小程序
 
-    private String key;//关键字
+    private String keyword;//关键字
 
     private String url;//路径
 
@@ -27,5 +27,8 @@ public class Menu {
 
     private Integer pid;//父菜单id
 
+    private String typeName;
+
+    private String pidName;
 
 }
