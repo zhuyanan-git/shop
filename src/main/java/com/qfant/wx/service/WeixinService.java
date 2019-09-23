@@ -2,12 +2,12 @@ package com.qfant.wx.service;
 
 import com.qfant.config.WxMpConfig;
 import com.qfant.utils.handler.*;
-import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.kefu.result.WxMpKfOnlineList;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 import me.chanjar.weixin.mp.constant.WxMpEventConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +54,7 @@ public class WeixinService extends WxMpServiceImpl {
 
     @PostConstruct
     public void init() {
-        final WxMpInMemoryConfigStorage config = new WxMpInMemoryConfigStorage();
+        final WxMpDefaultConfigImpl config = new WxMpDefaultConfigImpl();
         // 设置微信公众号的appid
         config.setAppId(this.wxConfig.getAppid());
         // 设置微信公众号的app corpSecret
