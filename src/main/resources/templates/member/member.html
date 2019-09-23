@@ -38,7 +38,7 @@
             <!--<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:house:remove">-->
                 <!--<i class="fa fa-remove"></i> 删除-->
             <!--</a>-->
-            <a class="btn btn-warning" onclick="$.table.exportExcel()">
+            <a class="btn btn-warning" onclick="downloadfile();">
                 <i class="fa fa-download"></i> 导出
             </a>
         </div>
@@ -50,10 +50,14 @@
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
     var prefix = ctx + "member";
+
+    function downloadfile(){
+        window.location.href= prefix + "/UserExcelDownloads";
+    }
+
     $(function () {
         var options = {
             url: prefix + "/list",
-            exportUrl: prefix + "/export",
             modalName: "会员信息",
             columns: [{
                 checkbox: true
