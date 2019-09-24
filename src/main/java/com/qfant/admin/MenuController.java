@@ -69,18 +69,6 @@ public class MenuController extends BaseController{
     @RequestMapping("/edit")
     public String edit(Integer id, ModelMap mmap){
         Menu menu = menuService.getMenuById(id);
-        if (menu.getType()==1){
-            menu.setTypeName("网页类型");
-        }else if (menu.getType()==2){
-            menu.setTypeName("点击类型");
-        }else {
-            menu.setTypeName("小程序类型");
-        }
-        if (menu.getPid()==0){
-            menu.setPidName("一级菜单");
-        }else {
-            menu.setPidName("二级菜单");
-        }
         mmap.put("menu",menu);
         List<Menu> menus=menuService.getMenuByPid(0);
         mmap.put("menus",menus);
