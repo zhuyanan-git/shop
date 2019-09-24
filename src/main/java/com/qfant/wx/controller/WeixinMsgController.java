@@ -3,8 +3,11 @@ package com.qfant.wx.controller;
 import com.google.common.base.Strings;
 import com.qfant.wx.entity.Member;
 import com.qfant.wx.service.MemberService;
-import com.qfant.wx.service.WeixinService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpMessageRouter;
+import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.membercard.NameValues;
 import me.chanjar.weixin.mp.bean.membercard.WxMpMemberCardActivatedMessage;
 import me.chanjar.weixin.mp.bean.membercard.WxMpMemberCardUserInfoResult;
@@ -14,22 +17,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
-@Controller
+@Slf4j
+@AllArgsConstructor
+@RestController
 @RequestMapping("/wx/portal")
 public class WeixinMsgController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private WeixinService wxService;
+    private final WxMpService wxService;
+    private final WxMpMessageRouter messageRouter;
     @Autowired
     private MemberService memberService;
-    @Autowired
-    public WeixinMsgController(WeixinService wxService) {
-        this.wxService = wxService;
-    }
     @ResponseBody
     @GetMapping(produces = "text/plain;charset=utf-8")
     public String authGet(@RequestParam(name = "signature", required = false) String signature,
@@ -65,27 +66,29 @@ public class WeixinMsgController {
 
         String out = null;
         if (encType == null) {
+
+
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
             saveMember(inMessage);
-            WxMpXmlOutMessage outMessage = this.wxService.route(inMessage);
+            WxMpXmlOutMessage outMessage = this.route(inMessage);
             if (outMessage == null) {
                 return "";
             }
-
             out = outMessage.toXml();
         } else if ("aes".equals(encType)) {
+
             // aes加密的消息
-            WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody,
-                    this.wxService.getWxMpConfigStorage(), timestamp, nonce, msgSignature);
+            WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxService.getWxMpConfigStorage(),
+                    timestamp, nonce, msgSignature);
             saveMember(inMessage);
-            this.logger.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
-            WxMpXmlOutMessage outMessage = this.wxService.route(inMessage);
+            log.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
+            WxMpXmlOutMessage outMessage = this.route(inMessage);
             if (outMessage == null) {
                 return "";
             }
 
-            out = outMessage.toEncryptedXml(this.wxService.getWxMpConfigStorage());
+            out = outMessage.toEncryptedXml(wxService.getWxMpConfigStorage());
         }
 
         this.logger.debug("\n组装回复信息：{}", out);
@@ -147,5 +150,15 @@ public class WeixinMsgController {
                 memberService.insertMember(member);
             }
         }
+    }
+
+    private WxMpXmlOutMessage route(WxMpXmlMessage message) {
+        try {
+            return this.messageRouter.route(message);
+        } catch (Exception e) {
+            log.error("路由消息时出现异常！", e);
+        }
+
+        return null;
     }
 }

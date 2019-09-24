@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 /**
  *
  * @Description: 基于fastjson封装的json转换工具类
@@ -52,5 +55,10 @@ public class JsonUtils {
         return JSON.parseObject(jsonData, new TypeReference<List<Map<String, Object>>>() {
         });
     }
-
+    public static String toJson(Object obj) {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        return gson.toJson(obj);
+    }
 }

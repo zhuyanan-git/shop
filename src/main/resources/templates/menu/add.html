@@ -17,9 +17,9 @@
                 <div class="layui-input-inline">
                     <select name="type" id="type" >
                         <option value=""></option>
-                        <option value="1">网页类型</option>
-                        <option value="2">点击类型</option>
-                        <option value="3">小程序类型</option>
+                        <option value="1">关键字</option>
+                        <option value="2">网页</option>
+                        <option value="3">小程序</option>
                     </select>
                 </div>
             </div>
@@ -48,13 +48,18 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">父节点id</label>
+                <label class="layui-form-label">父菜单</label>
                 <div class="layui-input-inline">
                     <select name="pid" id="pid">
-                        <option value=""></option>
-                        <option value="0">一级菜单</option>
-                        <option value="1">二级菜单</option>
+                        <option value="">选择父菜单</option>
+                        <option th:each="menu:${menus}" th:value="${menu.id}" th:text="${menu.name}"></option>
                     </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="sort" id="sort" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -89,16 +94,16 @@
                         $("#type").focus();
                         return false;
                     }
-                    if (keyword==""){
-                        layer.alert("请输入关键字")
-                        $("#keyword").focus();
-                        return false;
-                    }
-                    if (pid==""){
-                        layer.alert("请选择菜单级别")
-                        $("#pid").focus();
-                        return false;
-                    }
+                    // if (keyword==""){
+                    //     layer.alert("请输入关键字")
+                    //     $("#keyword").focus();
+                    //     return false;
+                    // }
+                    // if (pid==""){
+                    //     layer.alert("请选择菜单级别")
+                    //     $("#pid").focus();
+                    //     return false;
+                    // }
                     console.log(JSON.stringify(data.field));//表单数据
                     $.post('/menu/addSave',data.field,function (result) {
                         if (result.success){

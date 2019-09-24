@@ -2,15 +2,8 @@ package com.qfant.admin;
 
 import com.qfant.utils.AjaxResult;
 import com.qfant.utils.page.TableDataInfo;
-import com.qfant.wx.api.ApiResult;
-import com.qfant.wx.entity.Card;
 import com.qfant.wx.entity.Reply;
-import com.qfant.wx.service.CardService;
 import com.qfant.wx.service.ReplyService;
-import com.qfant.wx.service.UserService;
-import com.qfant.wx.service.WeixinService;
-import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.mp.bean.card.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

@@ -17,11 +17,9 @@ import com.qfant.wx.entity.Member;
 import com.qfant.wx.entity.Order;
 import com.qfant.wx.service.MemberService;
 import com.qfant.wx.service.OrderService;
-import com.qfant.wx.service.WeixinService;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.membercard.WxMpMemberCardActivatedMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import org.slf4j.Logger;
@@ -50,9 +48,7 @@ import java.util.regex.Pattern;
 @RequestMapping("/wx/member")
 public class MemberCardController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    private WeixinService wxService;
-    private WxMpService wxMpService = new WxMpServiceImpl();
+    private final WxMpService wxService;
     private WxPayService wxPayService = new WxPayServiceImpl();
     @Autowired
     private OrderService orderService;
@@ -63,6 +59,11 @@ public class MemberCardController {
     VipCardService vipCardService;
     @Autowired
     MemberService memberService;
+
+    public MemberCardController(WxMpService wxService) {
+        this.wxService = wxService;
+    }
+
     @GetMapping("/charge")
     public String charge(String code, ModelMap map, HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();

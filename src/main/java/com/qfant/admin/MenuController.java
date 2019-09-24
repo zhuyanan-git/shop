@@ -2,13 +2,13 @@ package com.qfant.admin;
 
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
-import com.qfant.utils.page.TableDataInfo;
-import com.qfant.wx.entity.Member;
+import com.google.common.collect.Lists;
 import com.qfant.wx.entity.Menu;
 import com.qfant.wx.service.MenuService;
+import me.chanjar.weixin.common.bean.menu.WxMenu;
+import me.chanjar.weixin.common.bean.menu.WxMenuButton;
+import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,8 +26,13 @@ public class MenuController extends BaseController{
     @Autowired
     private MenuService menuService;
 
-    private WxMpService wxMpService = new WxMpServiceImpl();
+    private final WxMpService wxService;
     private WxPayService wxPayService = new WxPayServiceImpl();
+
+    public MenuController(WxMpService wxService) {
+        this.wxService = wxService;
+    }
+
     @GetMapping()
     public String menu(){
         return "menu/menu";
@@ -39,7 +44,7 @@ public class MenuController extends BaseController{
     public Map<String,Object> list(@RequestParam(value="page",required=false)Integer page, @RequestParam(value="limit",required=false)Integer limit, Menu menu){
         Map<String,Object> resultMap = new HashMap<String, Object>();
         Integer count = menuService.getTotal();
-        List<Menu> menuList = menuService.selecrAllMenu(page-1,limit);
+        List<Menu> menuList = menuService.selectAllMenu(page-1,limit);
         resultMap.put("code",0);
         resultMap.put("count",count);
         resultMap.put("data",menuList);
@@ -51,7 +56,9 @@ public class MenuController extends BaseController{
      * @return
      */
     @RequestMapping("/add")
-    public String add(){
+    public String add(ModelMap mmap){
+        List<Menu> menus=menuService.getMenuByPid(0);
+        mmap.put("menus",menus);
         return "menu/add";
     }
 
@@ -75,6 +82,8 @@ public class MenuController extends BaseController{
             menu.setPidName("二级菜单");
         }
         mmap.put("menu",menu);
+        List<Menu> menus=menuService.getMenuByPid(0);
+        mmap.put("menus",menus);
         return "menu/edit";
     }
 
@@ -92,7 +101,53 @@ public class MenuController extends BaseController{
         resultMap.put("success",true);
         return resultMap;
     }
+    /**
+     *生成菜单方法
+     * @return
+     */
+    @GetMapping("/generate")
+    @ResponseBody
+    public Map<String,Object> generate() throws WxErrorException {
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        List<Menu> menus=menuService.getMenuByPid(0);
+        List<WxMenuButton> menuButtons= Lists.newArrayList();
+        menus.stream().forEach(v->{
+            WxMenuButton wxMenuButton=setMenu(v);
+            List<Menu> children=menuService.getMenuByPid(v.getId());
+            List<WxMenuButton> cmenuButtons=Lists.newArrayList();
+            if (children!=null&&children.size()>0){
+                cmenuButtons.clear();
+                children.stream().forEach(c->{
+                    WxMenuButton cwxMenuButton=setMenu(c);
+                    cmenuButtons.add(cwxMenuButton);
+                });
+            }
+            wxMenuButton.setSubButtons(cmenuButtons);
+            menuButtons.add(wxMenuButton);
+        });
+        WxMenu wxMenu = new WxMenu();
+        wxMenu.setButtons(menuButtons);
+        wxService.getMenuService().menuCreate(wxMenu);
+        resultMap.put("success",0);
+        return resultMap;
+    }
 
+    private WxMenuButton setMenu(Menu menu){
+        WxMenuButton wxMenuButton=new WxMenuButton();
+        wxMenuButton.setName(menu.getName());
+        if(menu.getType()==1){
+            wxMenuButton.setKey(menu.getKeyword());
+            wxMenuButton.setType("click");
+        }else if (menu.getType()==2){
+            wxMenuButton.setUrl(menu.getUrl());
+            wxMenuButton.setType("view");
+        }else {
+            wxMenuButton.setPagePath(menu.getPagepath());
+            wxMenuButton.setAppId(menu.getAppid());
+            wxMenuButton.setType("miniprogram");
+        }
+        return wxMenuButton;
+    }
     /**
      *添加菜单方法
      * @param menu
@@ -114,7 +169,7 @@ public class MenuController extends BaseController{
      */
     @PostMapping("/delete")
     @ResponseBody
-    public Map<String,Object> addDelete(Integer id){
+    public Map<String,Object> delete(Integer id){
         Map<String,Object> resultMap = new HashMap<String, Object>();
         menuService.deleteById(id);
         resultMap.put("success",true);

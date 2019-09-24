@@ -24,6 +24,8 @@
             <!--表头设置菜单管理-->
             <script type="text/html" id="toolbarMenu">
                 <button class="layui-btn layuiadmin-btn-list" data-type="add" layui-event="add" onclick="add()">添加</button>
+                <button class="layui-btn layuiadmin-btn-list" onclick="generate()">
+                    <i class="layui-icon">&#xe605;</i>生成</button>
             </script>
 
             <!--表格行元素的对象增删改查-->
@@ -119,7 +121,17 @@
                     }
                 });
              }
-
+            function generate(){
+                $.getJSON("/menu/generate",function (result) {
+                    if (result.success==0){
+                        layer.alert("生成菜单成功",function () {
+                            window.location.reload();
+                        });
+                    } else{
+                        layer.alert("生成菜单失败");
+                    }
+                })
+            }
         </script>
     </body>
 </html>

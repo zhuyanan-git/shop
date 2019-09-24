@@ -4,8 +4,8 @@ import com.qfant.wx.api.ApiResult;
 import com.qfant.wx.entity.Card;
 import com.qfant.wx.service.CardService;
 import com.qfant.wx.service.UserService;
-import com.qfant.wx.service.WeixinService;
 import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.card.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,17 +22,18 @@ import java.util.List;
 @RequestMapping("/card")
 public class CardController extends BaseController{
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    private WeixinService wxService;
-
-    public CardController(WeixinService wxService) {
-        this.wxService = wxService;
-    }
+    private final WxMpService wxService;
 
     @Autowired
     private UserService userService;
     @Autowired
     private CardService cardService;
+
+    public CardController(WxMpService wxService) {
+        this.wxService = wxService;
+    }
+
+
     @RequestMapping("/index")
     public String index(ModelMap map) {
         Card card=cardService.getCardById(1);

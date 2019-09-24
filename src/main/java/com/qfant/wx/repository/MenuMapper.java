@@ -24,6 +24,7 @@ public interface MenuMapper {
             @Result(property = "appid",column = "appid"),
             @Result(property = "pagepath",column = "pagepath"),
             @Result(property = "pid",column = "pid"),
+            @Result(property = "sort",column = "sort"),
     })
 
 
@@ -32,18 +33,18 @@ public interface MenuMapper {
 
 
 
-    @Select("SELECT * FROM menu WHERE openid = #{openId}")
-    List<Menu> getMenuByOpenId(String openId);
+    @Select("SELECT * FROM menu WHERE pid = #{pid} order by sort desc")
+    List<Menu> getMenuByPid(Integer pid);
 
-    @Insert("INSERT INTO menu(name,type,keyword,url,appid,pagepath,pid)" +
-            " VALUES (#{name},#{type},#{keyword},#{url},#{appid},#{pagepath},#{pid})")
+    @Insert("INSERT INTO menu(name,type,keyword,url,appid,pagepath,pid,sort)" +
+            " VALUES (#{name},#{type},#{keyword},#{url},#{appid},#{pagepath},#{pid},#{sort})")
     void insert(Menu menu);
 
-    @Update("update menu set name=#{name},keyword=#{keyword},type=#{type},url=#{url},appid=#{appid},pagepath=#{pagepath},pid=#{pid} where id=#{id}")
+    @Update("update menu set name=#{name},keyword=#{keyword},type=#{type},url=#{url},appid=#{appid},pagepath=#{pagepath},pid=#{pid},sort=#{sort} where id=#{id}")
     void update(Menu menu);
 
 
-    @Select("select * from menu limit #{page},#{pageSize} ")
+    @Select("select * from menu order by sort desc limit #{page},#{pageSize} ")
     List<Menu> selecrAllMenu(Integer page,Integer pageSize);
 
     @Select("select count(*) from menu")

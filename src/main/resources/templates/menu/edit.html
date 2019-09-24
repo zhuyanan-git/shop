@@ -49,13 +49,18 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">父节点id</label>
+                <label class="layui-form-label">父节点</label>
                 <div class="layui-input-inline">
                     <select name="pid" id="pid" >
-                        <option value="" th:value="${menu.pid}" th:text="${menu.pidName}" ></option>
-                        <option value="0">一级菜单</option>
-                        <option value="1">二级菜单</option>
+                        <option value="">选择父菜单</option>
+                        <option th:each="menu:${menus}" th:value="${menu.id}" th:text="${menu.name}" th:field="${menu.pid}"></option>
                     </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="sort" id="sort" th:value="${menu.sort}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -91,16 +96,16 @@
                         $("#type").focus();
                         return false;
                     }
-                    if (keyword==""){
-                        layer.alert("请输入关键字")
-                        $("#keyword").focus();
-                        return false;
-                    }
-                    if (pid==""){
-                        layer.alert("请选择菜单级别")
-                        $("#pid").focus();
-                        return false;
-                    }
+                    // if (keyword==""){
+                    //     layer.alert("请输入关键字")
+                    //     $("#keyword").focus();
+                    //     return false;
+                    // }
+                    // if (pid==""){
+                    //     layer.alert("请选择菜单级别")
+                    //     $("#pid").focus();
+                    //     return false;
+                    // }
                     $.post('/menu/editSave',data.field,function (result) {
                         if (result.success){
                             var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引

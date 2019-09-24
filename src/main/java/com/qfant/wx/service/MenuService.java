@@ -36,11 +36,11 @@ public class MenuService {
         return  menuMapper.getMenuById(id);
     }
 
-    public List<Menu> getMenuByOpenId(String openId){
-        return  menuMapper.getMenuByOpenId(openId);
+    public List<Menu> getMenuByPid(Integer pid){
+        return  menuMapper.getMenuByPid(pid);
     }
 
-    public List<Menu> selecrAllMenu(Integer page,Integer pageSize){
+    public List<Menu> selectAllMenu(Integer page,Integer pageSize){
         return menuMapper.selecrAllMenu(page,pageSize);
     }
 
@@ -49,7 +49,7 @@ public class MenuService {
     }
 
     public  void deleteById(Integer id){
-
+        menuMapper.deleteById(id);
     }
 
 

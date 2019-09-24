@@ -2,6 +2,8 @@ package com.qfant.wx.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 
 /**
  * @author 乐乐
@@ -30,5 +32,7 @@ public class Menu {
     private String typeName;
 
     private String pidName;
+    private Integer sort;//父菜单id
 
+    private List<Menu> children;
 }
