@@ -49,7 +49,7 @@ public class WxMpConfiguration {
         List<WxMpConfig> configs= Lists.newArrayList();
         configs.add(wxMpConfig);
         if (configs == null) {
-            throw new RuntimeException("大哥，拜托先看下项目首页的说明（readme文件），添加下相关配置，注意别配错了！");
+            throw new RuntimeException("微信公众号配置错误！");
         }
 
         WxMpService service = new WxMpServiceImpl();
