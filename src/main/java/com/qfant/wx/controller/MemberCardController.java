@@ -218,16 +218,20 @@ public class MemberCardController {
         }
         String openId = session.getAttribute("openId").toString();
         Member member=memberService.getMemberByOPenId(openId);
-        VipCard vipCard=vipCardService.getVipCardByCardNo(member.getCardno());
+        if(member==null){
+            return "redirect:https://mp.weixin.qq.com/s/bht6fI6Vy9nbkRKZW9Fe5g";
+        }else {
+            VipCard vipCard=vipCardService.getVipCardByCardNo(member.getCardno());
 //            member.setName(vipCard.getName());
 //            member.setBalance(vipCard.getCz().doubleValue());
 //            member.setBonus(vipCard.getIntegralTotal().intValue());
 //            map.put("vipCard", vipCard);
-        map.put("name", vipCard.getName());
-        map.put("cardNo", vipCard.getCardNo());
-        map.put("balance", vipCard.getCz().setScale(2,BigDecimal.ROUND_HALF_UP));
-        map.put("integral", vipCard.getIntegralTotal().intValue());
-        return "wx/balance";
+            map.put("name", vipCard.getName());
+            map.put("cardNo", vipCard.getCardNo());
+            map.put("balance", vipCard.getCz().setScale(2,BigDecimal.ROUND_HALF_UP));
+            map.put("integral", vipCard.getIntegralTotal().intValue());
+            return "wx/balance";
+        }
     }
     private String init(String code, String method, HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
