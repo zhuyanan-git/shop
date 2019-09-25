@@ -25,4 +25,9 @@ public interface StoreMapper {
 
     @Delete("delete from store where id = #{id}")
     void deleteStore(Integer id);
+    @Select("select * from store where id = #{id}")
+    Store getStoreById(Integer id);
+
+    @Update("update store set name=#{name},address=#{address},phone=#{phone},sort=#{sort} where id = #{id}")
+    void updateStore(Store store);
 }

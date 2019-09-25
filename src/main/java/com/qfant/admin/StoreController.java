@@ -4,6 +4,7 @@ import com.qfant.wx.entity.Store;
 import com.qfant.wx.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -49,6 +50,21 @@ public class StoreController extends BaseController{
     public Map<String,Object> delete(Integer id){
         Map<String,Object> resultMap = new HashMap<String, Object>();
         storeService.deleteStore(id);
+        resultMap.put("success",true);
+        return resultMap;
+    }
+    @RequestMapping("/edit")
+    public String edit(Integer id, ModelMap mmap){
+        Store store = storeService.getStoreById(id);
+        mmap.put("store",store);
+        return "store/edit";
+    }
+
+    @PostMapping("/editSave")
+    @ResponseBody
+    public Map<String,Object> editSave(Store store){
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        storeService.updateStore(store);
         resultMap.put("success",true);
         return resultMap;
     }

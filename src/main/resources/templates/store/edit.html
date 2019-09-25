@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header">
+
+</head>
+<body style="width:80%;margin-top:10px;margin-left:auto;margin-right: auto">
+<form class="layui-form layui-form-pane" action="" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label">门店名称</label>
+        <div class="layui-input-inline">
+            <input type="hidden" th:value="${store.id}" name="id" id="id" >
+            <input type="text" name="name" id="name" th:value="${store.name}" autocomplete="off"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">门店地址</label>
+        <div class="layui-input-inline">
+            <input type="text" name="address" id="address" th:value="${store.address}"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">门店电话</label>
+        <div class="layui-input-inline">
+            <input type="text" name="phone" id="phone" th:value="${store.phone}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-inline">
+            <input type="number" name="sort" id="sort" th:value="${store.sort}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="editSave" lay-filter="editSave" >提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<div th:include="include :: footer"></div>
+
+<script>
+
+
+
+    layui.use(['form','layer'], function () {
+        var form = layui.form
+            , layer = layui.layer;
+        //监听提交
+        form.on('submit(editSave)', function (data) {
+            var name = $("#name").val();
+            if (name==""){
+                layer.alert("门店名称不能为空")
+                $("#name").focus();
+                return false;
+            }
+            $.post('/store/editSave',data.field,function (result) {
+                if (result.success){
+                    layer.closeAll('loading');
+                    layer.load(2);
+                    layer.msg("修改成功", {icon: 6});
+                    setTimeout(function(){
+                        window.parent.location.reload();//修改成功后刷新父界面
+                    }, 1000);
+                    //加载层-风格
+                }else{
+                    layer.msg("修改失败，请重试", {icon: 5});
+                }
+            });
+            return false;
+        });
+    });
+
+</script>
+</body>
+</html>

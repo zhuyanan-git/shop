@@ -20,4 +20,8 @@ public class StoreService {
     public void insertStore(Store store){storeMapper.insertStore(store);}
 
     public void deleteStore(Integer id){storeMapper.deleteStore(id);}
+
+    public Store getStoreById(Integer id){return storeMapper.getStoreById(id);}
+
+    public void updateStore(Store store){storeMapper.updateStore(store);}
 }

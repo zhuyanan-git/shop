@@ -10,8 +10,6 @@
     <script type="text/html"  id="toolbarStore">
         <div class="layui-btn-group">
             <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" onclick="add()"><i class="layui-icon"></i></button>
-            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" ><i class="layui-icon"></i></button>
-            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="delete"><i class="layui-icon"></i></button>
         </div>
     </script>
 
@@ -24,14 +22,12 @@
 
     <div class="row">
         <div class="col-sm-12 search-collapse">
-            <div class="col-sm-12 select-table table-striped">
+            <!--<div class="col-sm-12 select-table table-striped search-collapse">-->
                 <table id="store" lay-filter="store"></table>
-            </div>
+            <!--</div>-->
         </div>
-
     </div>
 </div>
-
 <div th:include="include :: footer"></div>
 
 <script >
@@ -50,11 +46,11 @@
                 ,page: true //开启分页
                 ,cols: [
                     [ //表头
-                        {field: 'id', title: 'ID', width:100, sort: true,fixed: 'left'}
-                        ,{field: 'name', title:'门店名称', width:100,fixed: 'left'}
-                        ,{field: 'address', title: '门店地址', width:150,fixed: 'left'}
-                        ,{field: 'phone', title:'门店电话', width:150,fixed: 'left',templet: '#typeTpl'}
-                        ,{field: 'sort', title:'排序', width:150,sort: true, fixed: 'left'}
+                        {field: 'id', title: 'ID', width:200, sort: true,fixed: 'left'}
+                        ,{field: 'name', title:'门店名称', width:200,fixed: 'left'}
+                        ,{field: 'address', title: '门店地址', width:200,fixed: 'left'}
+                        ,{field: 'phone', title:'门店电话', width:200,fixed: 'left',templet: '#typeTpl'}
+                        ,{field: 'sort', title:'排序', width:200,sort: true, fixed: 'left'}
                         ,{field:'action', width:200, title: '操作',align:'center', toolbar: '#barStore'}
                     ]
                 ]
@@ -75,6 +71,18 @@
                                 layer.alert("删除失败");
                             }
                         })
+                    });
+                }else if(layEvent ==='edit'){
+                    layer.open({
+                        type:2,
+                        title:'修改门店页面',
+                        shade: 0.2,
+                        area: ['500px','90%'],
+                        content:'store/edit?id='+data.id,
+                        end:function(){
+                            storeManage();
+                        }
+
                     });
                 }
             });
