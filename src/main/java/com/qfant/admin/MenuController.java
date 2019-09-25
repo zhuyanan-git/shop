@@ -41,7 +41,8 @@ public class MenuController extends BaseController{
     //查询会员信息
     @GetMapping("/list")
     @ResponseBody
-    public Map<String,Object> list(@RequestParam(value="page",required=false)Integer page, @RequestParam(value="limit",required=false)Integer limit, Menu menu){
+    public Map<String,Object> list(@RequestParam(value="page",required=false)Integer page,
+                                   @RequestParam(value="limit",required=false)Integer limit, Menu menu){
         Map<String,Object> resultMap = new HashMap<String, Object>();
         Integer count = menuService.getTotal();
         List<Menu> menuList = menuService.selectAllMenu(page-1,limit);

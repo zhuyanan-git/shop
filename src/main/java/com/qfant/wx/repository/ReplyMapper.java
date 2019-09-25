@@ -1,6 +1,5 @@
 package com.qfant.wx.repository;
 
-import com.qfant.wx.entity.Member;
 import com.qfant.wx.entity.Reply;
 import org.apache.ibatis.annotations.*;
 
