@@ -18,7 +18,12 @@ public interface OrderMapper {
             @Result(property = "orderno",column = "orderno"),
             @Result(property = "submittime",column = "submittime"),
             @Result(property = "price",column = "price"),
-            @Result(property = "status",column = "status")
+            @Result(property = "status",column = "status"),
+            @Result(property = "type",column = "type"),
+            @Result(property = "storeid",column = "storeid"),
+            @Result(property = "isnotice",column = "isnotice"),
+            @Result(property = "storename",column = "storename"),
+            @Result(property = "noticetime",column = "noticetime")
     })
 
 
@@ -31,12 +36,12 @@ public interface OrderMapper {
     List<Order> getOrderByOpenId(String openId);
 
     @Options(useGeneratedKeys = true)
-    @Insert("INSERT INTO corder(orderno,openid,submittime,ip,price,resultcode,errcode,errcodedes,transactionid,timeend,notifytime,status)" +
-            "VALUES (#{orderno},#{openid},#{submittime},#{ip},#{price},#{resultcode},#{errcode},#{errcodedes},#{transactionid}, #{timeend},#{notifytime},#{status})")
+    @Insert("INSERT INTO corder(orderno,openid,submittime,ip,price,resultcode,errcode,errcodedes,transactionid,timeend,notifytime,status,type,storeid,isnotice,storename,noticetime)" +
+            "VALUES (#{orderno},#{openid},#{submittime},#{ip},#{price},#{resultcode},#{errcode},#{errcodedes},#{transactionid}, #{timeend},#{notifytime},#{status},#{type},#{storeid},#{isnotice},#{storename},#{noticetime})")
     void insert(Order order);
 
     @Update("update corder set orderno=#{orderno}, openid=#{openid},submittime=#{submittime},ip=#{ip},price=#{price},resultcode=#{resultcode},errcode=#{errcode}" +
-            ",errcodedes=#{errcodedes},transactionid=#{transactionid},timeend=#{timeend},notifytime=#{notifytime},status=#{status} where id=#{id}")
+            ",errcodedes=#{errcodedes},transactionid=#{transactionid},timeend=#{timeend},notifytime=#{notifytime},status=#{status},type=#{type},storeid=#{storeid},isnotice=#{isnotice},storename=#{storename},noticetime=#{noticetime} where id=#{id}")
     void update(Order order);
 
     @Select("<script> select " +

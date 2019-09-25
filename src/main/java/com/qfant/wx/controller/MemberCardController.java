@@ -87,8 +87,9 @@ public class MemberCardController {
         if (StringUtils.isEmpty(openId)) {
             result.put("code", -2);
             result.put("message", "openId获取失败");
+            return result;
         }
-        if (money < 0) {
+        if (money <= 0) {
             result.put("code", -1);
             result.put("message", "金额有误");
         }  else {
@@ -154,6 +155,7 @@ public class MemberCardController {
             order.setTimeend(notifyResult.getTimeEnd());
             order.setTransactionid(notifyResult.getTransactionId());
             order.setStatus(1);
+            order.setType(1);//设置订单为在线充值类型
             orderService.updateOrder(order);
             Member member=memberService.getMemberByOPenId(order.getOpenid());
             member.setBalance(member.getBalance()+order.getPrice());
