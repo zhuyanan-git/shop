@@ -12,7 +12,7 @@ public class Seller{
     private String phone;
     private String openid;
     private String storeid;
-    private String nickname;
+    private String storename;//门店名称
     private String status;
     private Integer isdelete;//是否删除0否1是
     private Integer online;//是否在线1是 0否
