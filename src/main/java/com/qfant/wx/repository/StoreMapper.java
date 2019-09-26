@@ -1,5 +1,6 @@
 package com.qfant.wx.repository;
 
+import com.qfant.wx.entity.Order;
 import com.qfant.wx.entity.Store;
 import org.apache.ibatis.annotations.*;
 
@@ -17,6 +18,9 @@ public interface StoreMapper {
     @Select("select * from store limit #{page},#{pageSize}")
     List<Store> selectStoreAll(Integer page,Integer pageSize);
 
+    @Select("select * from store where id=#{id}")
+    Store selectStoreById(Integer id);
+
     @Select("select count(*) from store")
     Integer getStoreTotal();
 
@@ -25,9 +29,7 @@ public interface StoreMapper {
 
     @Delete("delete from store where id = #{id}")
     void deleteStore(Integer id);
-    @Select("select * from store where id = #{id}")
-    Store getStoreById(Integer id);
 
-    @Update("update store set name=#{name},address=#{address},phone=#{phone},sort=#{sort} where id = #{id}")
-    void updateStore(Store store);
+    @Update("update store set name=#{name}, address=#{address},phone=#{phone},sort=#{sort},qrcode=#{qrcode} where id=#{id}")
+    void update(Store store);
 }

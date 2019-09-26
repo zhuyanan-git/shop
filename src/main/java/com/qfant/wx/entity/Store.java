@@ -9,4 +9,5 @@ public class Store {
     private String address;
     private String phone;
     private Integer sort;
+    private String qrcode;
 }
