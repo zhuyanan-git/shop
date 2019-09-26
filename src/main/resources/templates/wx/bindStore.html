@@ -19,22 +19,23 @@
 <body>
 <div class="page">
     <div class="page__bd" style="margin-top:30px;">
+        <input type="hidden" th:value="${openId}" name="openId" id="openId" >
         <div class="weui-cells__title">店员信息</div>
-        <div class="weui-cell">
-            <div class="weui-cell__bd">
-                <p>店员姓名</p>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="姓名" name="name" id="name" th:value="${seller.name}">
+                </div>
             </div>
-            <div class="weui-cell__ft">朱亚男</div>
-        </div>
-        <div class="weui-cell">
-            <div class="weui-cell__bd">
-                <p>手机号码</p>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="手机号" name="phone" id="phone" th:value="${seller.phone}">
+                </div>
             </div>
-            <div class="weui-cell__ft">1111111</div>
         </div>
         <div class="weui-cells__title">选择门店</div>
         <div class="weui-cell">
-            <select name="storeid" id="storeid">
+            <select name="storeid" id="storeid" th:field="${seller.storeid}">
                 <option th:each="c:${list}" th:text="${c.name}" th:value="${c.id}"></option>
             </select>
         </div>
@@ -62,14 +63,22 @@
     });
 
     $(".weui-btn").on("click",function(){
-        var openId="12";
+        var openId=$("#openId").val();
         var storeId = $("#storeid").val();
-        $.post("/wx/store/bind", {openId:openId,storeId:storeId},function(data){
+        var name = $("#name").val();
+        var phone = $("#phone").val();
+        if(openId=="" || storeId=="" || name=="" || phone==''){
+            $.toast("绑定信息不正确！", "forbidden");return false;
+        }
+        $.post("/wx/store/bind", {openId:openId,storeId:storeId,name:name,phone:phone},function(data){
             //alert(data.code);
             if(data.code == 0){
-                window.location.href='/wx/store/bindsuccess';
+                $.toast("绑定成功",function (){
+                    window.location.href='/wx/store/bindDetail?sellerId='+data.sellerId;
+                });
+
             }else{
-                $.toast("查询失败，错误的openId！", "text");return false;
+                $.toast("绑定失败！", "forbidden");return false;
             }
         });
     });

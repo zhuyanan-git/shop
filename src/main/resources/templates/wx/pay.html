@@ -131,17 +131,18 @@
 
         .submit {
             display: block;
-            margin: 20px auto 0;
+            margin: 30px auto 0;
             width: 90%;
             height: 40px;
             font-size: 16px;
-            color: #fff;
+            color: black;
             background: #80D983;
             border: 1px solid #47D14C;
             border-radius: 3px;
         }
         .active{
-            background: #57bf6a;
+            color: white;
+            background: #006400;
         }
 
         /* 键盘 */
@@ -173,19 +174,25 @@
         .form_edit > div:last-child {
             background-color: #DEE1E9;
         }
+
         .logo{
-            background: url("/images/logo.png");
+            margin: 0 auto;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-image: url("/images/logo.png") ;
+            background-size: 100% 100%;
         }
     </style>
 </head>
 <body>
 <div class="wrap">
-    <div style="padding: 20px;text-align: center;font-size: 24px;vertical-align:middle;">
+    <div style="padding: 20px;text-align: center;height: 120px;">
         <div class="logo"></div>
-        <div><span>启凡科技</span></div>
+        <span th:text="${store.name}"></span></div>
     <input type="hidden" th:value="${openId}" name="openId" id="openId" >
-    <input type="hidden" th:value="${storeid}" name="openId" id="storeid" >
-    <div>
+    <input type="hidden" th:value="${store.id}" name="openId" id="storeid" >
+    <div style="margin-top: 20px;">
         <form action="" class="edit_cash">
             <p>消费总额</p>
             <div class="shuru">
@@ -199,11 +206,11 @@
 </div>
 <div class="layer"></div>
 <!--<div class="form">-->
-    <!--<form action="" method="post">-->
-        <!--<input type="text" placeholder="姓名">-->
-        <!--<input type="text" placeholder="联系电话">-->
-        <!--<input type="submit" value="提交" class="infor-sub">-->
-    <!--</form>-->
+<!--<form action="" method="post">-->
+<!--<input type="text" placeholder="姓名">-->
+<!--<input type="text" placeholder="联系电话">-->
+<!--<input type="submit" value="提交" class="infor-sub">-->
+<!--</form>-->
 <!--</div>-->
 <div class="layer-content">
     <div class="form_edit clearfix">
@@ -239,8 +246,8 @@
                     // alert(res.err_msg);
                     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                     if (res.err_msg == 'get_brand_wcpay_request:ok') {
-                        $.toast("充值成功", function() {
-                            location.href="/wx/member/chargeRecord";
+                        $.toast("支付成功", function() {
+                            //location.href="/wx/member/chargeRecord";
                         });
                     }else if(res.err_msg == 'get_brand_wcpay_request:cancel'){
                         $.toast("取消支付", "cancel");
@@ -280,7 +287,7 @@
                     }
                 });
             }else {
-                $.toast("请选择充值金额", "forbidden");
+                $.toast("支付信息不正确", "forbidden");
             }
         });
         //填写信息

@@ -19,10 +19,7 @@ public interface SellerMapper {
             @Result(property = "audittime",column = "audittime"),
             @Result(property = "status",column = "status"),
             @Result(property = "isdelete",column = "isdelete"),
-            @Result(property = "online",column = "online"),
-            @Result(property = "cardno",column = "cardno"),
-            @Result(property = "name",column = "name"),
-            @Result(property = "createtime",column = "createtime")
+            @Result(property = "online",column = "online")
     })
     @Select("select se.id,se.name,st.name,se.phone,se.openid,se.storeid,se.bindtime,se.audittime,se.status from seller se,store st where se.storeid = st.id and se.id = #{id}")
     Seller getSellerById(Integer id);
@@ -33,6 +30,9 @@ public interface SellerMapper {
 
     @Select("select count(*) from seller where isdelete = #{isdelete}")
     Integer getSellerTotal(Integer isdelete);
+
+    @Insert("insert into seller(name,phone,openid,storeid,bindtime) values(#{name},#{phone},#{openid},#{storeid},#{bindtime})")
+    void insertSeller(Seller seller);
 
     @Delete("delete from seller where id = #{id}")
     void deleteSellerById(Integer id);
@@ -46,7 +46,7 @@ public interface SellerMapper {
     @Update("update seller set status=2, audittime = #{audittime} where id = #{id}")
     void updateNopass(Seller seller);
 
-    @Select("SELECT * FROM Seller WHERE openid = #{openId}")
+    @Select("SELECT * FROM seller WHERE openid = #{openId}")
     Seller getSellerByopenId(String openId);
 
     @Update("update seller set storeid=#{storeid} where id=#{id}")

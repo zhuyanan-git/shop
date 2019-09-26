@@ -18,6 +18,7 @@ Date: 2014-11-05
   position: relative;
   outline: none;
   z-index: 99999;
+  width: 100%;
 }
 
 .searchable-select-holder{

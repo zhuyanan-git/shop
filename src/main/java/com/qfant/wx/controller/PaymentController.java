@@ -54,16 +54,16 @@ public class PaymentController {
     public String toPay(Integer storeid,String code, ModelMap map, HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
 
-//        String url;
-//        if (session.getAttribute("openId") == null || StringUtils.isEmpty(session.getAttribute("openId").toString())) {
-//            url =init(code, "toPay?storeid="+storeid, request, response);
-//            if(StringUtils.isNotEmpty(url)){
-//                return url;
-//            }
-//        }
-
-//        map.put("openId", session.getAttribute("openId").toString());
-//        map.put("storeid", storeid);
+        String url;
+        if (session.getAttribute("openId") == null || StringUtils.isEmpty(session.getAttribute("openId").toString())) {
+            url =init(code, "toPay?storeid="+storeid, request, response);
+            if(StringUtils.isNotEmpty(url)){
+                return url;
+            }
+        }
+        Store store=storeService.selectStoreById(storeid);
+        map.put("openId", session.getAttribute("openId").toString());
+        map.put("store", store);
          return "wx/pay";
     }
 
@@ -106,13 +106,13 @@ public class PaymentController {
         orderRequest.setTradeType("JSAPI");
         orderRequest.setOutTradeNo(orderNo);
         orderRequest.setTotalFee(BaseWxPayRequest.yuanToFen(money.toString()));//元转成分
-//            orderRequest.setTotalFee(1);//元转成分
+            orderRequest.setTotalFee(1);//元转成分
         orderRequest.setOpenid(openId);
         orderRequest.setGoodsTag(store.getName());//门店名称
         orderRequest.setAttach(storeid+"");
         orderRequest.setSpbillCreateIp(IpUtils.getHostIp());
         orderRequest.setTimeStart(DateUtils.dateTimeNow("yyMMddHHmm"));
-        orderRequest.setNotifyUrl("http://htgy.qfant.com/wx/payment/notify");
+        orderRequest.setNotifyUrl(env.getProperty("payment.domain")+"/wx/payment/notify");
 
         WxPayMpOrderResult wxPayMpOrderResult = wxPayService.createOrder(orderRequest);
         result.put("code", 0);
@@ -129,11 +129,11 @@ public class PaymentController {
                 session.setAttribute("openId", wxMpOAuth2AccessToken.getOpenId());
                 return null;
             } catch (WxErrorException e) {
-                String url = wxService.oauth2buildAuthorizationUrl("http://htgy.qfant.com/wx/payment/" + method, WxConsts.OAuth2Scope.SNSAPI_BASE, null);
+                String url = wxService.oauth2buildAuthorizationUrl(env.getProperty("payment.domain")+"/wx/payment/" + method, WxConsts.OAuth2Scope.SNSAPI_BASE, null);
                 return "redirect:"+url;
             }
         } else {
-            String url = wxService.oauth2buildAuthorizationUrl("http://htgy.qfant.com/wx/payment/" + method, WxConsts.OAuth2Scope.SNSAPI_BASE, null);
+            String url = wxService.oauth2buildAuthorizationUrl(env.getProperty("payment.domain")+"/wx/payment/"  + method, WxConsts.OAuth2Scope.SNSAPI_BASE, null);
             return "redirect:"+url;
         }
     }
