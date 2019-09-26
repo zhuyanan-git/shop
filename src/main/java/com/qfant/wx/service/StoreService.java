@@ -15,6 +15,8 @@ public class StoreService {
 
     public List<Store> selectStoreAll(Integer page, Integer pageSize){ return storeMapper.selectStoreAll(page,pageSize);}
 
+    public List<Store> selectStoreList(){ return storeMapper.selectStoreList();}
+
     public Integer getStoreTotal(){return storeMapper.getStoreTotal();}
 
     public void insertStore(Store store){storeMapper.insertStore(store);}

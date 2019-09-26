@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- head 中 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.3/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.1/css/jquery-weui.min.css">
+    <link href="/css/jquery.searchableSelect.css" rel="stylesheet">
+
+    <title>绑定门店页面</title>
+    <style type="text/css">
+        body {
+            background-color: #ededed;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="page__bd" style="margin-top:30px;">
+        <div class="weui-cells__title">店员信息</div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>店员姓名</p>
+            </div>
+            <div class="weui-cell__ft">朱亚男</div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>手机号码</p>
+            </div>
+            <div class="weui-cell__ft">1111111</div>
+        </div>
+        <div class="weui-cells__title">选择门店</div>
+        <div class="weui-cell">
+            <select name="storeid" id="storeid">
+                <option th:each="c:${list}" th:text="${c.name}" th:value="${c.id}"></option>
+            </select>
+        </div>
+        <div class="weui-btn-area">
+            <a href="javascript:;" class="weui-btn weui-btn_block weui-btn_primary">确定</a>
+        </div>
+    </div>
+    <div class="page__bd page__bd_spacing" >
+        <div class="weui-footer weui-footer_fixed-bottom" style="background-color: #ffffee;height: 20px;bottom: 0">
+            <p class="weui-footer__text">启凡科技提供技术支持</p>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<!-- body 最后 -->
+<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+<script src="/js/jquery.searchableSelect.js"></script>
+<script type="text/javascript">
+
+    $(function(){
+        $('select').searchableSelect();
+    });
+
+    $(".weui-btn").on("click",function(){
+        var openId="12";
+        var storeId = $("#storeid").val();
+        $.post("/wx/store/bind", {openId:openId,storeId:storeId},function(data){
+            //alert(data.code);
+            if(data.code == 0){
+                window.location.href='/wx/store/bindsuccess';
+            }else{
+                $.toast("查询失败，错误的openId！", "text");return false;
+            }
+        });
+    });
+
+
+</script>
+</html>

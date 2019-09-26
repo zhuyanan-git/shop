@@ -17,6 +17,9 @@ public interface StoreMapper {
     @Select("select * from store limit #{page},#{pageSize}")
     List<Store> selectStoreAll(Integer page,Integer pageSize);
 
+    @Select("select * from store")
+    List<Store> selectStoreList();
+
     @Select("select count(*) from store")
     Integer getStoreTotal();
 

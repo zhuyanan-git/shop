@@ -64,7 +64,7 @@ public class PaymentController {
 
 //        map.put("openId", session.getAttribute("openId").toString());
 //        map.put("storeid", storeid);
-        return "wx/pay";
+         return "wx/pay";
     }
 
 
