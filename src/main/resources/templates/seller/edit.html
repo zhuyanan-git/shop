@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header">
+
+</head>
+<body style="width:80%;margin-top:10px;margin-left:auto;margin-right: auto">
+<form class="layui-form layui-form-pane" action="" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label">店员姓名</label>
+        <div class="layui-input-inline">
+            <input type="hidden" th:value="${seller.id}" name="id" id="id" >
+            <input type="text" name="name" id="name" th:value="${seller.name}" readonly="true"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">门店名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="storename" id="storename" th:value="${seller.storename}" readonly="true"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">店员电话</label>
+        <div class="layui-input-inline">
+            <input type="text" name="phone" id="phone" th:value="${seller.phone}" readonly="true" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">openid</label>
+        <div class="layui-input-inline">
+            <input type="number" name="openid" id="openid" th:value="${seller.openid}" readonly="true" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">门店ID</label>
+        <div class="layui-input-inline">
+            <input type="number" name="storeid" id="storeid" th:value="${seller.storeid}" readonly="true" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">绑定时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="bindtime" id="bindtime" th:value="${#dates.format(seller.bindtime,'yyyy-MM-dd HH:mm:ss')}" readonly="true" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">审核时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="audittime" id="audittime" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd HH:mm:ss')}" readonly="true" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">审核状态</label>
+        <div class="layui-input-inline">
+            <select name="status" id="status" disabled="disabled">
+                <option value="0" th:selected="${seller.status==0}" >未审核</option>
+                <option value="1" th:selected="${seller.status==1}">审核通过</option>
+                <option value="2" th:selected="${seller.status==2}">审核未通过</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="pass" lay-filter="pass" >审核通过</button>
+            <button class="layui-btn" lay-submit="nopass" lay-filter="nopass" >审核未通过</button>
+        </div>
+    </div>
+</form>
+
+<div th:include="include :: footer"></div>
+
+<script>
+    // // 操作按钮----关闭自身层
+    // function close_self() {
+    //     var index=parent.layer.getFrameIndex(window.name);
+    //     parent.layer.close(index);
+    // }
+    // $('.draft_btn').click(function () {
+    //     close_self();
+    //     layer.close(layer.index);
+    // });
+
+    layui.use(['form','layer'], function () {
+        var form = layui.form
+            , layer = layui.layer;
+        //监听提交
+        //审核通过
+        form.on('submit(pass)', function (data) {
+            $.post('/seller/pass',data.field,function (result) {
+                if (result.success){
+                    layer.closeAll('loading');
+                    layer.load(2);
+                    layer.msg("审核成功", {icon: 6});
+                    setTimeout(function(){
+                        window.parent.location.reload();//修改成功后刷新父界面
+                    }, 2000);
+                    //加载层-风格
+                }else{
+                    layer.msg("审核失败，请重试", {icon: 5});
+                }
+            });
+            return false;
+        });
+        //审核未通过
+        form.on('submit(nopass)', function (data) {
+            $.post('/seller/nopass',data.field,function (result) {
+
+                if (result.success){
+                    layer.closeAll('loading');
+                    layer.load(2);
+                    layer.msg("审核成功", {icon: 6});
+                    setTimeout(function(){
+                        window.parent.location.reload();//修改成功后刷新父界面
+                    }, 2000);
+                    //加载层-风格
+                }else{
+                    layer.msg("审核失败，请重试", {icon: 5});
+                }
+            });
+            return false;
+        });
+    });
+
+</script>
+</body>
+</html>
