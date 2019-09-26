@@ -26,6 +26,10 @@ public class StoreService {
         return storeMapper.getStoreById(id);
     }
 
+    public void updateStore(Store store){
+        storeMapper.updateStore(store);
+    }
+
     public void update(Store store){
         storeMapper.update(store);
     }
