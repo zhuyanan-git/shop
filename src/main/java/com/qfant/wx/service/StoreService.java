@@ -2,7 +2,6 @@ package com.qfant.wx.service;
 
 import com.qfant.wx.entity.Store;
 import com.qfant.wx.repository.StoreMapper;
-import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class StoreService {
     public void deleteStore(Integer id){storeMapper.deleteStore(id);}
 
     public Store selectStoreById(Integer id){
-        return storeMapper.selectStoreById(id);
+        return storeMapper.getStoreById(id);
     }
 
     public void update(Store store){

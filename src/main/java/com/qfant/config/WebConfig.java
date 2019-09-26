@@ -7,8 +7,8 @@ import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter implements WebMvcConfigurer {
-    @Value("${images}")
-    private String images;
+    @Value("${profile}")
+    private String profile;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -46,7 +46,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebMvcConfigur
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //文件磁盘图片url 映射
         // 配置server虚拟路径，handler为前台访问的目录，locations为files相对应的本地路径
-        registry.addResourceHandler("/images/**").addResourceLocations("file:"+images);
+        registry.addResourceHandler("/profile/**").addResourceLocations("file:"+profile);
     }
 
 }

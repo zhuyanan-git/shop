@@ -18,6 +18,7 @@
     <script type="text/html" id="barStore">
         <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-sm" lay-event="qrcode">生成二维码</a>
+        <a class="layui-btn layui-btn-sm" lay-event="viewQrcode">查看二维码</a>
         <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete">删除</a>
     </script>
 
@@ -52,7 +53,7 @@
                         ,{field: 'address', title: '门店地址', width:200,fixed: 'left'}
                         ,{field: 'phone', title:'门店电话', width:200,fixed: 'left',templet: '#typeTpl'}
                         ,{field: 'sort', title:'排序', width:100,sort: true, fixed: 'left'}
-                        ,{field:'action', width:300, title: '操作',align:'center', toolbar: '#barStore'}
+                        ,{field:'action', width:400, title: '操作',align:'center', toolbar: '#barStore'}
                     ]
                 ]
             });
@@ -96,6 +97,8 @@
                         }
 
                     });
+                }else if(layEvent ==='viewQrcode'){
+                    window.open("/profile/"+data.qrcode,"_blank");
                 }
             });
         });

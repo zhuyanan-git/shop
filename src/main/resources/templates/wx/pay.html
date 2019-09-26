@@ -173,13 +173,16 @@
         .form_edit > div:last-child {
             background-color: #DEE1E9;
         }
+        .logo{
+            background: url("/images/logo.png");
+        }
     </style>
 </head>
 <body>
 <div class="wrap">
     <div style="padding: 20px;text-align: center;font-size: 24px;vertical-align:middle;">
-        <img src="/images/store.png"/>
-        <span>启凡科技</span></div>
+        <div class="logo"></div>
+        <div><span>启凡科技</span></div>
     <input type="hidden" th:value="${openId}" name="openId" id="openId" >
     <input type="hidden" th:value="${storeid}" name="openId" id="storeid" >
     <div>

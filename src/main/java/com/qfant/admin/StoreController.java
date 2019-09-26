@@ -21,9 +21,10 @@ public class StoreController extends BaseController{
     @Autowired
     private StoreService storeService;
 
-    @Value("${images}")
-    private String images;
-
+    @Value("${profile}")
+    private String profile;
+    @Value("${payment.url}")
+    private String paymentUrl;
     @GetMapping()
     public String store(){return "store/store";}
 
@@ -66,20 +67,20 @@ public class StoreController extends BaseController{
     public Map<String,Object> qrcode(Integer id) throws Exception{
         Map<String,Object> resultMap = new HashMap<String, Object>();
         //生成二维码
-        String text = "启凡科技";
+
         // 嵌入二维码的图片路径
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
         String imgPath = path+"static/images/weixin.png";
         Store store = storeService.selectStoreById(id);
-        String codePath = null;
+        String codePath ;
         if (StringUtils.isNotEmpty(store.getQrcode())) {
             codePath = store.getQrcode();
         } else {
             codePath = DateUtils.dateTimeNow() + ".jpg";
         }
         // 生成的二维码的路径及名称
-        String destPath = images+codePath;
-        QRCodeUtil.createImage(text, imgPath,destPath);
+        String destPath = profile+codePath;
+        QRCodeUtil.createImage(paymentUrl+"?storeid="+id, imgPath,destPath);
         //overlapImage(destPath,imgPath);
         store.setQrcode(codePath);
         storeService.update(store);
