@@ -64,7 +64,7 @@ public class PaymentController {
 
 //        map.put("openId", session.getAttribute("openId").toString());
 //        map.put("storeid", storeid);
-        return "wx/pay";
+         return "wx/pay";
     }
 
 
@@ -94,7 +94,7 @@ public class PaymentController {
         order.setOpenid(openId);
         order.setType(2);//设置订单为扫码支付类型
         order.setStoreid(storeid);
-        Store store=storeService.getStoreById(storeid);
+        Store store=storeService.selectStoreById(storeid);
         order.setStorename(store.getName());//设置门店信息
         orderService.saveOrder(order);
         String orderNo = genOrderNo(order.getId(), "C");
@@ -149,11 +149,13 @@ public class PaymentController {
             order.setTransactionid(notifyResult.getTransactionId());
             order.setStatus(1);
             orderService.updateOrder(order);
+            Store store =storeService.selectStoreById(order.getStoreid());
+//            List<>
             /**发送模板消息**/
-            WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder().toUser("").templateId("").url("").build();
-            templateMessage.addData(new WxMpTemplateData("first", "storename", "#FF00FF"));
-            templateMessage.addData(new WxMpTemplateData("first", "storename", "#FF00FF"));
-            templateMessage.addData(new WxMpTemplateData("first", "storename", "#FF00FF"));
+            WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder().toUser("").templateId(env.getProperty("wx.mp.tplMessageId")).url("").build();
+            templateMessage.addData(new WxMpTemplateData("first", store.getName(), "#FF00FF"));
+            templateMessage.addData(new WxMpTemplateData("keyword1", "storename", "#FF00FF"));
+            templateMessage.addData(new WxMpTemplateData("keyword2", "storename", "#FF00FF"));
             try {
                 String msgId = this.wxService.getTemplateMsgService().sendTemplateMsg(templateMessage);
                 order.setIsnotice(1);
