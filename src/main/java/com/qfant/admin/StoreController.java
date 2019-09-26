@@ -1,10 +1,14 @@
 package com.qfant.admin;
 
+import com.qfant.utils.DateUtils;
+import com.qfant.utils.QRCodeUtil;
+import com.qfant.utils.StringUtils;
 import com.qfant.wx.entity.Store;
 import com.qfant.wx.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -16,6 +20,9 @@ import java.util.Map;
 public class StoreController extends BaseController{
     @Autowired
     private StoreService storeService;
+
+    @Value("${images}")
+    private String images;
 
     @GetMapping()
     public String store(){return "store/store";}
@@ -53,19 +60,32 @@ public class StoreController extends BaseController{
         resultMap.put("success",true);
         return resultMap;
     }
-    @RequestMapping("/edit")
-    public String edit(Integer id, ModelMap mmap){
-        Store store = storeService.getStoreById(id);
-        mmap.put("store",store);
-        return "store/edit";
-    }
 
-    @PostMapping("/editSave")
+    @RequestMapping("/qrcode")
     @ResponseBody
-    public Map<String,Object> editSave(Store store){
+    public Map<String,Object> qrcode(Integer id) throws Exception{
         Map<String,Object> resultMap = new HashMap<String, Object>();
-        storeService.updateStore(store);
+        //生成二维码
+        String text = "启凡科技";
+        // 嵌入二维码的图片路径
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        String imgPath = path+"static/images/weixin.png";
+        Store store = storeService.selectStoreById(id);
+        String codePath = null;
+        if (StringUtils.isNotEmpty(store.getQrcode())) {
+            codePath = store.getQrcode();
+        } else {
+            codePath = DateUtils.dateTimeNow() + ".jpg";
+        }
+        // 生成的二维码的路径及名称
+        String destPath = images+codePath;
+        QRCodeUtil.createImage(text, imgPath,destPath);
+        //overlapImage(destPath,imgPath);
+        store.setQrcode(codePath);
+        storeService.update(store);
         resultMap.put("success",true);
         return resultMap;
     }
+
+
 }

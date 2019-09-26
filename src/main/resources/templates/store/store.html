@@ -17,6 +17,7 @@
     <!--表格行元素的对象增删改查-->
     <script type="text/html" id="barStore">
         <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-sm" lay-event="qrcode">生成二维码</a>
         <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete">删除</a>
     </script>
 
@@ -50,8 +51,8 @@
                         ,{field: 'name', title:'门店名称', width:200,fixed: 'left'}
                         ,{field: 'address', title: '门店地址', width:200,fixed: 'left'}
                         ,{field: 'phone', title:'门店电话', width:200,fixed: 'left',templet: '#typeTpl'}
-                        ,{field: 'sort', title:'排序', width:200,sort: true, fixed: 'left'}
-                        ,{field:'action', width:200, title: '操作',align:'center', toolbar: '#barStore'}
+                        ,{field: 'sort', title:'排序', width:100,sort: true, fixed: 'left'}
+                        ,{field:'action', width:300, title: '操作',align:'center', toolbar: '#barStore'}
                     ]
                 ]
             });
@@ -72,7 +73,18 @@
                             }
                         })
                     });
-                }else if(layEvent ==='edit'){
+                }else if (layEvent ==='qrcode'){
+                    var id= data.id;
+                    $.post("/store/qrcode",{id:id},function (result) {
+                        if (result.success){
+                            layer.alert("二维码生成成功",function () {
+                                window.location.reload();
+                            });
+                        } else{
+                            layer.alert("二维码生成失败");
+                        }
+                    })
+                } else if(layEvent ==='edit'){
                     layer.open({
                         type:2,
                         title:'修改门店页面',

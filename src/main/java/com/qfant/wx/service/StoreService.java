@@ -23,7 +23,11 @@ public class StoreService {
 
     public void deleteStore(Integer id){storeMapper.deleteStore(id);}
 
-    public Store getStoreById(Integer id){return storeMapper.getStoreById(id);}
+    public Store selectStoreById(Integer id){
+        return storeMapper.selectStoreById(id);
+    }
 
-    public void updateStore(Store store){storeMapper.updateStore(store);}
+    public void update(Store store){
+        storeMapper.update(store);
+    }
 }

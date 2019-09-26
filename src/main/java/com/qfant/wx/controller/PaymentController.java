@@ -94,7 +94,7 @@ public class PaymentController {
         order.setOpenid(openId);
         order.setType(2);//设置订单为扫码支付类型
         order.setStoreid(storeid);
-        Store store=storeService.getStoreById(storeid);
+        Store store=storeService.selectStoreById(storeid);
         order.setStorename(store.getName());//设置门店信息
         orderService.saveOrder(order);
         String orderNo = genOrderNo(order.getId(), "C");
