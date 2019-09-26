@@ -52,7 +52,7 @@ public class SellerController extends BaseController{
         return resultMap;
     }
     /**
-     * 跳转到修改页面
+     * 跳转到审核页面
      * @return
      */
     @RequestMapping("/edit")
