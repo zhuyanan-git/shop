@@ -85,7 +85,7 @@ public class StoreController extends BaseController{
 
         // 嵌入二维码的图片路径
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-        String imgPath = path+"static/images/weixin.png";
+        String imgPath = profile+"weixin.png";
         Store store = storeService.selectStoreById(id);
         String codePath ;
         if (StringUtils.isNotEmpty(store.getQrcode())) {
