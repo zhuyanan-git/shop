@@ -28,7 +28,7 @@ public class SellerController extends BaseController{
                                    @RequestParam(value="limit") Integer limit, Seller seller){
         Map<String,Object> resultMap = new HashMap<String,Object>();
         Integer count = sellerService.getSellerTotal(0);
-        List<Seller> sellerList = sellerService.selectSellerAll(page-1,limit);
+        List<Seller> sellerList = sellerService.selectSellerAll((page-1)*limit,limit);
         resultMap.put("code",0);
         resultMap.put("count",count);
         resultMap.put("data",sellerList);

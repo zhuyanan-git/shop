@@ -45,7 +45,7 @@ public class MenuController extends BaseController{
                                    @RequestParam(value="limit",required=false)Integer limit, Menu menu){
         Map<String,Object> resultMap = new HashMap<String, Object>();
         Integer count = menuService.getTotal();
-        List<Menu> menuList = menuService.selectAllMenu(page-1,limit);
+        List<Menu> menuList = menuService.selectAllMenu((page-1)*limit,limit);
         resultMap.put("code",0);
         resultMap.put("count",count);
         resultMap.put("data",menuList);

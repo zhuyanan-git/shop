@@ -25,8 +25,8 @@ public interface SellerMapper {
     Seller getSellerById(Integer id);
 
     @Select("select se.id,se.name,st.name,se.phone,se.openid,se.storeid,se.bindtime,se.audittime,se.status,se.isdelete,se.online  " +
-            "from seller se,store st where se.storeid = st.id and isdelete=0 limit #{page},#{pageSize}")
-    List<Seller> selectSellerAll(Integer page,Integer pageSize);
+            "from seller se,store st where se.storeid = st.id and isdelete=0 limit #{start},#{pageSize}")
+    List<Seller> selectSellerAll(Integer start,Integer pageSize);
 
     @Select("select count(*) from seller where isdelete = #{isdelete}")
     Integer getSellerTotal(Integer isdelete);

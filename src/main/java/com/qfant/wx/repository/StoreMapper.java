@@ -14,8 +14,8 @@ public interface StoreMapper {
             @Result(property = "sort",column = "sort")
     })
 
-    @Select("select * from store limit #{page},#{pageSize}")
-    List<Store> selectStoreAll(Integer page,Integer pageSize);
+    @Select("select * from store limit #{start},#{pageSize}")
+    List<Store> selectStoreAll(Integer start ,Integer pageSize);
 
     @Select("select * from store")
     List<Store> selectStoreList();

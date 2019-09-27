@@ -12,7 +12,7 @@ public class StoreService {
     @Autowired
     private StoreMapper storeMapper;
 
-    public List<Store> selectStoreAll(Integer page, Integer pageSize){ return storeMapper.selectStoreAll(page,pageSize);}
+    public List<Store> selectStoreAll(Integer start, Integer pageSize){ return storeMapper.selectStoreAll(start,pageSize);}
 
     public List<Store> selectStoreList(){ return storeMapper.selectStoreList();}
 

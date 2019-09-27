@@ -40,8 +40,8 @@ public class MenuService {
         return  menuMapper.getMenuByPid(pid);
     }
 
-    public List<Menu> selectAllMenu(Integer page,Integer pageSize){
-        return menuMapper.selecrAllMenu(page,pageSize);
+    public List<Menu> selectAllMenu(Integer start,Integer pageSize){
+        return menuMapper.selecrAllMenu(start,pageSize);
     }
 
     public Integer  getTotal(){

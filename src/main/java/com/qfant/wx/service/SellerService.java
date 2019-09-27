@@ -14,7 +14,7 @@ public class SellerService {
     @Autowired
     private SellerMapper sellerMapper;
 
-    public List<Seller> selectSellerAll(Integer page,Integer pageSize){ return sellerMapper.selectSellerAll(page,pageSize);}
+    public List<Seller> selectSellerAll(Integer start,Integer pageSize){ return sellerMapper.selectSellerAll(start,pageSize);}
 
     public Integer getSellerTotal(Integer isdelete){return sellerMapper.getSellerTotal(isdelete);}
 

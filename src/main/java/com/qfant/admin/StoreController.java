@@ -35,7 +35,7 @@ public class StoreController extends BaseController{
                                    @RequestParam(value = "limit")Integer limit, Store store){
         Map<String,Object> resultMap = new HashMap<String, Object>();
         Integer count = storeService.getStoreTotal();
-        List<Store> storeList = storeService.selectStoreAll(page-1,limit);
+        List<Store> storeList = storeService.selectStoreAll((page-1)*limit,limit);
         resultMap.put("code",0);
         resultMap.put("count",count);
         resultMap.put("data",storeList);
