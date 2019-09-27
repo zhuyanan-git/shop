@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,29 +64,15 @@ public class SellerController extends BaseController{
     }
 
     /**
-     * 审核通过
+     * 审核是否通过
      * @param seller
      * @return
      */
     @RequestMapping("/pass")
     @ResponseBody
-    public Map<String,Object> pass(Seller seller){
+    public Map<String,Object> pass(Integer id, Date audittime,Integer status){
         Map<String,Object> resultMap = new HashMap<String, Object>();
-        sellerService.updatePass(seller);
-        resultMap.put("success",true);
-        return resultMap;
-    }
-
-    /**
-     * 审核未通过
-     * @param seller
-     * @return
-     */
-    @RequestMapping("/nopass")
-    @ResponseBody
-    public Map<String,Object> nopass(Seller seller){
-        Map<String,Object> resultMap = new HashMap<String, Object>();
-        sellerService.updateNopass(seller);
+        sellerService.updatePass(id,audittime,status);
         resultMap.put("success",true);
         return resultMap;
     }

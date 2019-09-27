@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,9 +25,7 @@ public class SellerService {
 
     public Seller getSellerById(Integer id){return sellerMapper.getSellerById(id);}
 
-    public void updatePass(Seller seller){sellerMapper.updatePass(seller);}
-
-    public void updateNopass(Seller seller){sellerMapper.updateNopass(seller);}
+    public void updatePass(Integer id, Date audittime,Integer status){sellerMapper.updatePass(id,audittime,status);}
 
     public Seller getSellerByOPenId(String openId){ return sellerMapper.getSellerByopenId(openId); }
 

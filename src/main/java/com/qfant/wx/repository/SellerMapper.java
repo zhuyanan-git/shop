@@ -3,6 +3,7 @@ package com.qfant.wx.repository;
 import com.qfant.wx.entity.Seller;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -40,11 +41,8 @@ public interface SellerMapper {
     @Update("update seller set isdelete = #{isdelete} where id = #{id}")
     void editIsdeleteById(Integer id,Integer isdelete);
 
-    @Update("update seller set status=1, audittime = #{audittime} where id = #{id}")
-    void updatePass(Seller seller);
-
-    @Update("update seller set status=2, audittime = #{audittime} where id = #{id}")
-    void updateNopass(Seller seller);
+    @Update("update seller set status=#{status}, audittime = #{audittime} where id = #{id}")
+    void updatePass(Integer id, Date audittime,Integer status);
 
     @Select("SELECT * FROM seller WHERE openid = #{openId}")
     Seller getSellerByopenId(String openId);

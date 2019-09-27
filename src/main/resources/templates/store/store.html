@@ -23,11 +23,7 @@
     </script>
 
     <div class="row">
-        <div class="col-sm-12 search-collapse">
-            <!--<div class="col-sm-12 select-table table-striped search-collapse">-->
-                <table id="store" lay-filter="store"></table>
-            <!--</div>-->
-        </div>
+        <table id="store" lay-filter="store"></table>
     </div>
 </div>
 <div th:include="include :: footer"></div>
@@ -89,8 +85,7 @@
                     layer.open({
                         type:2,
                         title:'修改门店页面',
-                        shade: 0.2,
-                        area: ['500px','90%'],
+                        area: ['500px','60%'],
                         content:'store/edit?id='+data.id,
                         end:function(){
                             storeManage();
@@ -112,7 +107,7 @@
             title: '添加门店页面',
             shadeClose: true,
             shade: 0.2,
-            area: ['500px', '90%'],
+            area: ['500px', '60%'],
             content: '/store/add',
             end: function () {
                 storeManage();

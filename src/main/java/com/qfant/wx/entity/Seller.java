@@ -13,8 +13,8 @@ public class Seller{
     private String openid;
     private Integer storeid;
     private String storename;//门店名称
-    private Integer status;
-    private String statusCn;//审核状态0未审核 1审核通过 2审核不通过
+    private Integer status;//审核状态0未审核 1审核通过 2审核不通过
+    private String statusCn;
     private Integer isdelete;//是否删除0否1是
     private Integer online;//是否在线1是 0否
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")

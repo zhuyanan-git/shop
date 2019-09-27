@@ -13,12 +13,7 @@
     </script>
 
     <div class="row">
-        <div class="col-sm-12 search-collapse">
-            <div class="col-sm-12 select-table table-striped">
-                <table id="seller" lay-filter="seller"></table>
-            </div>
-        </div>
-
+        <table id="seller" lay-filter="seller"></table>
     </div>
 </div>
 
@@ -125,9 +120,8 @@
                 }else if(layEvent === 'edit'){ //修改
                     layer.open({
                         type: 2,
-                        title: '修改店员页面',
-                        shade: 0.2,
-                        area: ['500px', '90%'],
+                        title: '审核店员页面',
+                        area: ['500px', '50%'],
                         content: '/seller/edit?id='+ data.id, //iframe的url
                         end: function () {
                             sellerManage();
