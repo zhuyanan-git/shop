@@ -11,8 +11,10 @@ import com.qfant.utils.DateUtils;
 import com.qfant.utils.IpUtils;
 import com.qfant.utils.StringUtils;
 import com.qfant.wx.entity.Order;
+import com.qfant.wx.entity.Seller;
 import com.qfant.wx.entity.Store;
 import com.qfant.wx.service.OrderService;
+import com.qfant.wx.service.SellerService;
 import com.qfant.wx.service.StoreService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +35,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 @Slf4j
 @AllArgsConstructor
@@ -48,6 +52,8 @@ public class PaymentController {
     private OrderService orderService;
     @Autowired
     private StoreService storeService;
+    @Autowired
+    private SellerService sellerService;
     @Autowired
     private Environment env;
     @GetMapping("/toPay")
@@ -150,20 +156,26 @@ public class PaymentController {
             order.setStatus(1);
             orderService.updateOrder(order);
             Store store =storeService.selectStoreById(order.getStoreid());
-//            List<>
-            /**发送模板消息**/
-            WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder().toUser("").templateId(env.getProperty("wx.mp.tplMessageId")).url("").build();
-            templateMessage.addData(new WxMpTemplateData("first", store.getName(), "#FF00FF"));
-            templateMessage.addData(new WxMpTemplateData("keyword1", "storename", "#FF00FF"));
-            templateMessage.addData(new WxMpTemplateData("keyword2", "storename", "#FF00FF"));
-            try {
-                String msgId = this.wxService.getTemplateMsgService().sendTemplateMsg(templateMessage);
-                order.setIsnotice(1);
-                order.setNoticetime(new Date());
-                orderService.updateOrder(order);
-            } catch (WxErrorException e) {
-                e.printStackTrace();
-                logger.error("订单通知失败："+e.getMessage());
+            List<Seller> sellers=sellerService.selectSellerByStoreId(order.getStoreid());
+            if(sellers!=null&&sellers.size()>0){
+                String msgId;
+                try {
+                    for (Seller s:sellers){
+                        /**发送模板消息**/
+                        WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder().toUser("").templateId(env.getProperty("wx.mp.tplMessageId")).url("").build();
+                        templateMessage.addData(new WxMpTemplateData("first", store.getName(), "#FF00FF"));
+                        templateMessage.addData(new WxMpTemplateData("keyword1", DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,order.getNotifytime()), "#FF00FF"));
+                        templateMessage.addData(new WxMpTemplateData("keyword2", new BigDecimal(order.getPrice()/100).setScale(2).toString(), "#FF00FF"));
+//                        templateMessage.addData(new WxMpTemplateData("remark", "如需查看账单明细，请点击详情！", "#FF00FF"));
+                        msgId = this.wxService.getTemplateMsgService().sendTemplateMsg(templateMessage);
+                    }
+                    order.setIsnotice(1);
+                    order.setNoticetime(new Date());
+                    orderService.updateOrder(order);
+                } catch (WxErrorException e) {
+                    e.printStackTrace();
+                    logger.error("订单通知失败："+e.getMessage());
+                }
             }
 
             /**会员卡余额更新结束**/

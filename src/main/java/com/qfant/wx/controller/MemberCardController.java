@@ -119,7 +119,7 @@ public class MemberCardController {
             orderRequest.setOpenid(openId);
             orderRequest.setSpbillCreateIp(IpUtils.getHostIp());
             orderRequest.setTimeStart(DateUtils.dateTimeNow("yyMMddHHmm"));
-            orderRequest.setNotifyUrl("http://htgy.qfant.com/wx/member/notify");
+            orderRequest.setNotifyUrl(env.getProperty("payment.domain")+"/wx/member/notify");
             WxPayMpOrderResult wxPayMpOrderResult = wxPayService.createOrder(orderRequest);
             result.put("code", 0);
             result.put("result", wxPayMpOrderResult);
@@ -221,7 +221,7 @@ public class MemberCardController {
         String openId = session.getAttribute("openId").toString();
         Member member=memberService.getMemberByOPenId(openId);
         if(member==null){
-            return "redirect:https://mp.weixin.qq.com/s/bht6fI6Vy9nbkRKZW9Fe5g";
+            return "redirect:"+env.getProperty("payment.vipcard");
         }else {
             VipCard vipCard=vipCardService.getVipCardByCardNo(member.getCardno());
 //            member.setName(vipCard.getName());
@@ -244,11 +244,11 @@ public class MemberCardController {
                 session.setAttribute("openId", wxMpOAuth2AccessToken.getOpenId());
                 return null;
             } catch (WxErrorException e) {
-                String url = wxService.oauth2buildAuthorizationUrl("http://htgy.qfant.com/wx/member/" + method, WxConsts.OAuth2Scope.SNSAPI_BASE, null);
+                String url = wxService.oauth2buildAuthorizationUrl(env.getProperty("payment.domain")+"/wx/member/" + method, WxConsts.OAuth2Scope.SNSAPI_BASE, null);
                 return "redirect:"+url;
             }
         } else {
-            String url = wxService.oauth2buildAuthorizationUrl("http://htgy.qfant.com/wx/member/" + method, WxConsts.OAuth2Scope.SNSAPI_BASE, null);
+            String url = wxService.oauth2buildAuthorizationUrl(env.getProperty("payment.domain")+"/wx/member/" + method, WxConsts.OAuth2Scope.SNSAPI_BASE, null);
             return "redirect:"+url;
         }
     }

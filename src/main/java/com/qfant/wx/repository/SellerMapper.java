@@ -51,5 +51,8 @@ public interface SellerMapper {
     void update(Seller seller);
 
 
+    @Select("select * from seller where online=1 and storeid=#{storeId}")
+    List<Seller> selectSellerByStoreId(Integer storeId);
+
 }
 

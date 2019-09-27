@@ -10,6 +10,7 @@ import me.chanjar.weixin.mp.bean.card.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,8 @@ public class CardController extends BaseController{
     private UserService userService;
     @Autowired
     private CardService cardService;
-
+    @Autowired
+    private Environment env;
     public CardController(WxMpService wxService) {
         this.wxService = wxService;
     }
@@ -76,7 +78,7 @@ public class CardController extends BaseController{
             MemberCardActivateUserFormRequest memberCardActivateUserFormRequest=new MemberCardActivateUserFormRequest();
             memberCardActivateUserFormRequest.setCardId(result.getCardId());
 
-            memberCardActivateUserFormRequest.setBindOldCard("老会员绑定","http://htgy.qfant.com/wx/member/bind");
+            memberCardActivateUserFormRequest.setBindOldCard("老会员绑定",env.getProperty("payment.domain")+"/wx/member/bind");
 
             MemberCardUserForm required=new MemberCardUserForm();
             required.setCanModify(true);

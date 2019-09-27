@@ -34,4 +34,9 @@ public class SellerService {
     public  void insertSeller(Seller seller){
         sellerMapper.insertSeller(seller);
     }
+
+
+    public List<Seller> selectSellerByStoreId(Integer storeId){
+        return sellerMapper.selectSellerByStoreId(storeId);
+    }
 }
