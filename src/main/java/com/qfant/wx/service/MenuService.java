@@ -52,5 +52,12 @@ public class MenuService {
         menuMapper.deleteById(id);
     }
 
+    public  List<Menu> selecrMenuList(){
+        return menuMapper.selecrMenuList();
+    }
+
+    public  void deleteByPidId(Integer pid){
+         menuMapper.deleteByPidId(pid);
+    }
 
 }

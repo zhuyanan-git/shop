@@ -35,38 +35,58 @@
             </script>
 
             <div class="row">
-                <table id="menu" lay-filter="menu"></table>
+                <table id="menu" class="layui-table"  lay-filter="menu"></table>
             </div>
         </div>
 
         <div th:include="include :: footer"></div>
 
         <script >
+            layui.config({
+                base : 'static/layui/'
+            }).extend({
+                treetable : 'treetable-lay/treetable',
+            });
             $(function(){
               menuManage()
             });
+
             function menuManage(){
-                layui.use('table', function(){
+                layui.use(['table', 'treetable','layer'], function(){
+                    var $ = layui.jquery;
                     var table = layui.table;
-                    //第一个实例
-                    table.render({
-                        elem: '#menu'
-                        ,height: 480
-                        ,toolbar: '#toolbarMenu'
-                        ,url: '/menu/list/' //数据接口
-                        ,page: true //开启分页
-                        ,cols: [
-                            [ //表头
-                                {field: 'id', title: 'ID', width:100, sort: true,fixed: 'left'}
-                                ,{field: 'name', title:'菜单标题', width:200,fixed: 'left'}
-                                ,{field: 'type', title:'类型', width:100,fixed: 'left',templet: '#typeTpl'}
-                                ,{field: 'appid', title:'小程序id', width:200, sort: true, fixed: 'left'}
-                                ,{field: 'pagepath', title:'小程序路径', width:200,fixed: 'left'}
-                                ,{field: 'url', title: '网页链接', width:200,fixed: 'left'}
-                                ,{field:'action', width:200, title: '操作',align:'center', toolbar: '#barMenu'}
-                            ]
-                        ]
-                    });
+                    var treetable = layui.treetable;
+                    var layer = layui.layer;
+                    // 渲染表格
+                        layer.load(2);
+                        treetable.render({
+                            id: "menu",
+                            treeColIndex: 1,	//树形图标显示在第几列
+                            treeSpid: '0',		//最上级的父级id
+                            treeIdName: 'id',
+                            treePidName: 'pid',	//pid字段的名称，父级菜单id
+                            treeDefaultClose: false,	//是否默认折叠
+                            treeLinkage: false,		//父级展开时是否自动展开所有子级
+                            elem: '#menu',
+                            toolbar: '#toolbarMenu',
+                            url: '/menu/list/', //数据接口
+                            page: false,//开启分页
+                            cols: [
+                                [ //表头
+                                    {field: 'id', title: 'ID', width: 80 }
+                                    , {field: 'name', title: '菜单标题', width: 200}
+                                    , {field: 'type', title: '类型',width: 100, templet: '#typeTpl'}
+                                    , {field: 'appid',width: 200, title: '小程序id'}
+                                    , {field: 'pagepath', width: 200,title: '小程序路'}
+                                    , {field: 'url', title: '网页链接',width: 200,}
+                                    , {field: 'action', title: '操作',width: 200,toolbar: '#barMenu'}
+                                ]
+                            ],
+                            done: function () {
+                                layer.closeAll('loading');
+                            },
+                        });
+
                     table.on('tool(menu)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                         var data = obj.data; //获得当前行数据
                         var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
@@ -97,7 +117,11 @@
                             });
                         }
                     });
-                });
+                    });
+
+
+
+
 
             }
 

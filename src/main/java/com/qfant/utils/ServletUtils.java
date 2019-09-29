@@ -44,10 +44,6 @@ public class ServletUtils {
         return getRequest().getSession();
     }
 
-    public static ServletRequestAttributes getRequestAttributes() {
-        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
-        return (ServletRequestAttributes) attributes;
-    }
     /**
      * 获取Integer参数
      */
@@ -63,6 +59,12 @@ public class ServletUtils {
     {
         return Convert.toInt(getRequest().getParameter(name), defaultValue);
     }
+
+    public static ServletRequestAttributes getRequestAttributes() {
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        return (ServletRequestAttributes) attributes;
+    }
+
 
     /**
      * 将字符串渲染到客户端

@@ -47,9 +47,16 @@ public interface MenuMapper {
     @Select("select * from menu order by sort desc limit #{start},#{pageSize} ")
     List<Menu> selecrAllMenu(Integer start,Integer pageSize);
 
+    @Select("select * from menu order by sort asc")
+    List<Menu> selecrMenuList();
+
+
     @Select("select count(*) from menu")
     Integer getTotal();
 
     @Delete("delete from menu where id=#{id}")
     void deleteById(Integer id);
+
+    @Delete("delete from menu where pid=#{pid}")
+    void deleteByPidId(Integer pid);
 }
