@@ -35,4 +35,8 @@ public interface ReplyMapper {
 
     @Delete("<script> delete from reply where id in <foreach item = 'id' collection = 'array' open = '(' separator = ',' close = ')'> #{id} </foreach> </script>")
     int deleteReplyByIds(String[] ids);
+
+
+    @Select("SELECT * FROM Reply WHERE keyword = #{keyword}")
+    Reply getReplyByKeyword(String  keyword);
 }

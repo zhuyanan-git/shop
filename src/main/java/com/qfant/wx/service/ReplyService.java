@@ -26,4 +26,8 @@ public class ReplyService {
     public int deleteReplyByIds (String ids){return replyMapper.deleteReplyByIds(Convert.toStrArray(ids));}
 
     public int insertReply(Reply reply){ return replyMapper.insert(reply);}
+
+    public Reply getReplyByKeyword(String keyword){
+        return replyMapper.getReplyByKeyword(keyword);
+    }
 }

@@ -1,12 +1,15 @@
 package com.qfant.utils.handler;
 
 import com.qfant.utils.builder.TextBuilder;
+import com.qfant.wx.entity.Reply;
+import com.qfant.wx.service.ReplyService;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -16,7 +19,8 @@ import java.util.Map;
  */
 @Component
 public class SubscribeHandler extends AbstractHandler {
-
+    @Autowired
+    private ReplyService replyService;
 
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
@@ -51,7 +55,12 @@ public class SubscribeHandler extends AbstractHandler {
         }
 
         try {
-            return new TextBuilder().build("欢迎关注华佗国药大药房官方微信，您的关注将是我们进步的最大动力。华佗国药将始终如一带给您安全、高效、平价药！祝您身体健康！", wxMessage, weixinService);
+            Reply reply = replyService.getReplyByKeyword("关注");
+            String content="欢迎关注华佗国药大药房官方微信，您的关注将是我们进步的最大动力。华佗国药将始终如一带给您安全、高效、平价药！祝您身体健康！";
+            if(reply!=null){
+                content = reply.getContent();
+            }
+            return new TextBuilder().build(content, wxMessage, weixinService);
         } catch (Exception e) {
             this.logger.error(e.getMessage(), e);
         }
