@@ -103,7 +103,7 @@ public class PaymentController {
         Store store=storeService.selectStoreById(storeid);
         order.setStorename(store.getName());//设置门店信息
         orderService.saveOrder(order);
-        String orderNo = genOrderNo(order.getId(), "C");
+        String orderNo = genOrderNo(order.getId(), "P");
         order.setOrderno(orderNo);
         orderService.updateOrder(order);
 
@@ -112,7 +112,7 @@ public class PaymentController {
         orderRequest.setTradeType("JSAPI");
         orderRequest.setOutTradeNo(orderNo);
         orderRequest.setTotalFee(BaseWxPayRequest.yuanToFen(money.toString()));//元转成分
-            orderRequest.setTotalFee(1);//元转成分
+//            orderRequest.setTotalFee(1);//元转成分
         orderRequest.setOpenid(openId);
         orderRequest.setGoodsTag(store.getName());//门店名称
         orderRequest.setAttach(storeid+"");
@@ -162,11 +162,12 @@ public class PaymentController {
                 try {
                     for (Seller s:sellers){
                         /**发送模板消息**/
-                        WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder().toUser("").templateId(env.getProperty("wx.mp.tplMessageId")).url("").build();
-                        templateMessage.addData(new WxMpTemplateData("first", store.getName(), "#FF00FF"));
-                        templateMessage.addData(new WxMpTemplateData("keyword1", DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,order.getNotifytime()), "#FF00FF"));
-                        templateMessage.addData(new WxMpTemplateData("keyword2", new BigDecimal(order.getPrice()/100).setScale(2).toString(), "#FF00FF"));
-//                        templateMessage.addData(new WxMpTemplateData("remark", "如需查看账单明细，请点击详情！", "#FF00FF"));
+                        WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder().toUser(s.getOpenid()).templateId(env.getProperty("wx.mp.tplMessageId")).url("").build();
+                        templateMessage.addData(new WxMpTemplateData("first", "您好，"+store.getName()+"发生了一笔微信支付交易。流水号："+order.getOrderno(), "#339933"));
+                        templateMessage.addData(new WxMpTemplateData("keyword1", store.getName(), "#339933"));
+                        templateMessage.addData(new WxMpTemplateData("keyword2", DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,order.getNotifytime()),"#339933"));
+                        templateMessage.addData(new WxMpTemplateData("keyword3", new BigDecimal(order.getPrice()).setScale(2,BigDecimal.ROUND_FLOOR).toString(), "#339933"));
+//                        templateMessage.addData(new WxMpTemplateData("remark", "！","#339933"));
                         msgId = this.wxService.getTemplateMsgService().sendTemplateMsg(templateMessage);
                     }
                     order.setIsnotice(1);

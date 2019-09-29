@@ -121,6 +121,8 @@
                     }
                 }
             );
+
+            WeixinJSBridge.call('hideOptionMenu');
         }
 
         $(".weui-flex__item").on("click",function(){
@@ -143,7 +145,6 @@
             if(openId!="" && money>0){
                 $.post('/wx/member/wxpay', {money:money,openId:openId}, function (ret) {
                     if (ret.code == 0){
-                        console.log(ret.orderResult);
                         if (typeof WeixinJSBridge == "undefined"){
                             if( document.addEventListener ){
                                 document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
@@ -169,5 +170,6 @@
             $("#money").val("");
         });
     });
+
 </script>
 </html>

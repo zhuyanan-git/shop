@@ -247,7 +247,8 @@
                     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                     if (res.err_msg == 'get_brand_wcpay_request:ok') {
                         $.toast("支付成功", function() {
-                            //location.href="/wx/member/chargeRecord";
+                            WeixinJSBridge.invoke('closeWindow',{},function(res){
+                            });
                         });
                     }else if(res.err_msg == 'get_brand_wcpay_request:cancel'){
                         $.toast("取消支付", "cancel");
@@ -263,14 +264,13 @@
             var openId = $("#openId").val();
             var storeid = $("#storeid").val();
             var money = document.getElementById("money").innerHTML;
-            var re =/^[1-9]*[1-9][0-9]*$/;
+            var re =/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
             if(!re.test(money)){
                 $.toast("支付金额有误", "forbidden");return false;
             }
             if(openId!=""&& storeid>0 && money>0){
                 $.post('/wx/payment/storepay', {money:money,openId:openId,storeid:storeid}, function (ret) {
                     if (ret.code == 0){
-                        console.log(ret.orderResult);
                         if (typeof WeixinJSBridge == "undefined"){
                             if( document.addEventListener ){
                                 document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);

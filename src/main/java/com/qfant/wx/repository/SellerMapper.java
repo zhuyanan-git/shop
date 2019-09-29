@@ -32,7 +32,8 @@ public interface SellerMapper {
     @Select("select count(*) from seller where isdelete = #{isdelete}")
     Integer getSellerTotal(Integer isdelete);
 
-    @Insert("insert into seller(name,phone,openid,storeid,bindtime) values(#{name},#{phone},#{openid},#{storeid},#{bindtime})")
+    @Insert({"insert into seller(name,phone,openid,storeid,bindtime) values(#{name},#{phone},#{openid},#{storeid},#{bindtime})"})
+    @Options(useGeneratedKeys=true)
     void insertSeller(Seller seller);
 
     @Delete("delete from seller where id = #{id}")

@@ -57,7 +57,20 @@
 <script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
 <script src="/js/jquery.searchableSelect.js"></script>
 <script type="text/javascript">
+    function onBridgeReady(){
+        WeixinJSBridge.call('hideOptionMenu');
+    }
 
+    if (typeof WeixinJSBridge == "undefined"){
+        if( document.addEventListener ){
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        }else if (document.attachEvent){
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+        }
+    }else{
+        onBridgeReady();
+    }
     $(function(){
         $('select').searchableSelect();
     });
@@ -68,7 +81,7 @@
         var name = $("#name").val();
         var phone = $("#phone").val();
         if(openId=="" || storeId=="" || name=="" || phone==''){
-            $.toast("绑定信息不正确！", "forbidden");return false;
+            // $.toast("绑定信息不正确！", "forbidden");return false;
         }
         $.post("/wx/store/bind", {openId:openId,storeId:storeId,name:name,phone:phone},function(data){
             //alert(data.code);
