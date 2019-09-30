@@ -53,6 +53,11 @@ public class MemberService {
     public Member getMemberById(int id){return memberMapper.getMemberById(id);}
 
     @Transactional
-    public List<Member> selectMemberList(Member member){return memberMapper.selectMemberList(member);}
+    public List<Member> selectMemberList(Integer page,Integer pageSize,Member member){return memberMapper.selectMemberList(page,pageSize,member);}
+
+    @Transactional
+    public Integer getMemberTotal(){ return memberMapper.getMemberTotal();}
+    @Transactional
+    public List<Member> exportMember(Member member){ return memberMapper.exportMember(member);}
 
 }

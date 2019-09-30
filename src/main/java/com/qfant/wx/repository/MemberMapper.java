@@ -27,11 +27,18 @@ public interface MemberMapper {
     void update(Member member);
 
 
-    @Select("<script> select * from member where" +
-            " <if test='cardno!=null'> cardno like concat('%',#{cardno},'%') </if>" +
-            " <if test='name!=null'> and name like concat('%',#{name},'%')  order by createtime desc</if> " +
-            "<if test='cardno==null and name==null'> name is not null order by createtime desc</if>"+
-            "</script>")
-    List<Member> selectMemberList(Member member);
+//    @Select("<script> select * from member where" +
+//            " <if test='cardno!=null'> cardno like concat('%',#{cardno},'%') </if>" +
+//            " <if test='name!=null'> and name like concat('%',#{name},'%')  order by createtime desc limit #{page},#{pageSize}</if> " +
+//            "<if test='cardno==null and name==null'> name is not null order by createtime desc limit #{page},#{pageSize}</if>"+
+//            "</script>")
+    @Select("select * from member where name is not null order by createtime desc limit #{page},#{pageSize}")
+    List<Member> selectMemberList(Integer page,Integer pageSize,Member member);
+
+    @Select("select count(*) from member")
+    Integer getMemberTotal();
+
+    @Select("select * from member where name is not null order by createtime desc")
+    List<Member> exportMember(Member member);
 
 }

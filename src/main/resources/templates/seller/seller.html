@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
-<head th:include="include :: header">
-
+<head>
+    <link href="layui/css/layui.css" rel="stylesheet">
+    <link href="css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min862f.css?v=4.1.0" rel="stylesheet">
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -17,7 +21,14 @@
     </div>
 </div>
 
-<div th:include="include :: footer"></div>
+<script src="js/jquery.min.js?v=2.1.4"></script>
+<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="js/plugins/layer/layer.min.js"></script>
+<script src="js/hplus.min.js?v=4.1.0"></script>
+<script type="text/javascript" src="js/contabs.min.js"></script>
+<script src="js/plugins/pace/pace.min.js"></script>
+<script src="layui/layui.js"></script>
 <script type="text/html" id="statusTemp">
     <a  class="layui-btn layui-btn-sm" lay-event="isdelete">删除</a>
 </script>
@@ -32,34 +43,31 @@
 
             table.render({
                 elem: '#seller'
-                , height: 480
+                , height: 'full-15'
                 , toolbar: '#toolbarSeller'
                 , url: '/seller/list/' //数据接口
                 , page: true //开启分页
                 , cols: [
                     [ //表头
-                        {field: 'id', title: 'ID', width: 50, sort: true, fixed: 'left'},
-                        {field: 'name', title: '姓名', width: 80, fixed: 'left'},
-                        {field: 'storename', title: '门店名称', width: 150, fixed: 'left'},
-                        {field: 'phone', title: '电话', width: 100, fixed: 'left', templet: '#typeTpl'},
-                        {field: 'openid', title: 'openid', width: 150, sort: true, fixed: 'left'},
-                        {field: 'storeid', title: '门店ID', width: 50, fixed: 'left'},
+                        {field: 'id', title: 'ID', sort: true, fixed: 'left'},
+                        {field: 'name', title: '姓名', fixed: 'left'},
+                        {field: 'storename', title: '门店名称',  fixed: 'left'},
+                        {field: 'phone', title: '电话',  fixed: 'left', templet: '#typeTpl'},
+                        {field: 'openid', title: 'openid', sort: true, fixed: 'left'},
+                        {field: 'storeid', title: '门店ID', fixed: 'left'},
                         {
                             field: 'bindtime',
                             title: '绑定时间',
-                            width: 200,
                             fixed: 'left'
                         },
                         {
                             field: 'audittime', 
-                            title: '审核时间', 
-                            width: 200,
+                            title: '审核时间',
                             fixed: 'left'
                         },
                         {
                             field: 'status',
                             title: '审核状态',
-                            width: 100,
                             align: 'center',
                             fixed: 'left',
                             templet:function(d){
@@ -76,7 +84,6 @@
                             field: 'isdelete',
                             title: '是否删除',
                             align: 'center',
-                            width: 100,
                             fixed: 'left',
                             templet:'#statusTemp'
                         },
@@ -84,7 +91,6 @@
                             field: 'online',
                             title: '是否在线',
                             align: 'center',
-                            width: 100,
                             fixed: 'left',
                             templet:function (d) {
                                 if(d.online=='1'){
