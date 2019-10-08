@@ -44,8 +44,8 @@ public interface MenuMapper {
     void update(Menu menu);
 
 
-    @Select("select * from menu order by sort desc limit #{start},#{pageSize} ")
-    List<Menu> selecrAllMenu(Integer start,Integer pageSize);
+    @Select("select * from menu")
+    List<Menu> selecrAllMenu();
 
     @Select("select * from menu order by sort asc")
     List<Menu> selecrMenuList();

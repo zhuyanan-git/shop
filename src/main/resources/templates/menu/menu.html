@@ -48,7 +48,7 @@
                 treetable : 'treetable-lay/treetable',
             });
             $(function(){
-              menuManage()
+                menuManage()
             });
 
             function menuManage(){
@@ -139,7 +139,7 @@
                         menuManage();
                     }
                 });
-             }
+            }
             function generate(){
                 $.getJSON("/menu/generate",function (result) {
                     if (result.success==0){

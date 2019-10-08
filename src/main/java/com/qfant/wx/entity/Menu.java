@@ -29,10 +29,10 @@ public class Menu {
 
     private Integer pid;//父菜单id
 
-    private String typeName;
+    private String typeName;//类型名称
 
-    private String pidName;
-    private Integer sort;//父菜单id
+    private String pidName;//父菜单名称
+    private Integer sort;
 
     private List<Menu> children;
 }
