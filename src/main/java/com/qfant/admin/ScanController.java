@@ -28,7 +28,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/scan")
-public class ScanController {
+public class ScanController extends BaseController{
 
     @Autowired
     private OrderService orderService;
