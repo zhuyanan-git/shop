@@ -20,6 +20,8 @@ public class Member{
     private String cardno;//管家婆会员卡号
     private double bonus;
     private double balance;
+    private Integer start;//开始页
+    private Integer pageSize;//分页大小
     private Integer type;//类型1新会员 2 老会员
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createtime;

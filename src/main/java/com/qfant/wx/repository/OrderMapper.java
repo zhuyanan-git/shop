@@ -45,14 +45,19 @@ public interface OrderMapper {
     void update(Order order);
 
     @Select("<script> select " +
-            "c.id, m.name, m.phone,m.openid,m.bonus,m.balance,m.cardno,c.orderno,c.submittime,c.price,c.status,c.storename from member as m,corder as c where m.openid = c.openid " +
-            "<if test='cardno!=null'> and m.cardno like concat('%',#{cardno},'%') </if>"+
-            "<if test='ordertype!=null'> and c.type = #{ordertype}</if>"+
-            "<if test='name!=null'> and m.name like concat('%',#{name},'%') order by submittime desc</if>"+
-//            "<if test='cardno==null and name==null'> and m.name is not null order by submittime desc</if>"+
-            "<if test='start!=null and pageSize!=null'>limit #{start},#{pageSize}</if>"+
+            "c.id, m.name, m.phone,m.openid,m.bonus,m.balance,m.cardno,c.orderno,c.submittime,c.price,c.status,c.type,c.storename from member as m,corder as c where m.openid = c.openid and m.name is not null" +
+            "<if test='cardno!=null and cardno!=\"\"'> and m.cardno like concat('%',#{cardno},'%') </if>"+
+            "<if test='name!=null'> and m.name like concat('%',#{name},'%')</if>"+
+            "<if test='start!=null and pageSize!=null'>order by submittime desc limit #{start},#{pageSize}</if>"+
             " </script>")
     List<MemberAndOrder> selectAllOrder(MemberAndOrder memberAndOrder);
+
+    @Select("<script> select " +
+            "count(*) from member as m,corder as c where m.openid = c.openid and m.name is not null" +
+            "<if test='cardno!=null and cardno!=\"\"'> and m.cardno like concat('%',#{cardno},'%')</if>" +
+            "<if test='name!=null'> and m.name like concat('%',#{name},'%') order by submittime desc</if>" +
+            " </script>")
+    Integer getTotalOrder(MemberAndOrder memberAndOrder);
 
     @Select("<script> select id,openid,orderno,submittime,price,status,storename,outrefundno,refundtime,refundid,refunduser from corder where status=1 in(1,3)" +
             "<if test='type!=null'> and type=#{type}</if>" +

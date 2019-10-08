@@ -17,25 +17,24 @@ public interface ReplyMapper {
     Reply getReplyById(int id);
 
     @Insert("INSERT INTO Reply(keyword, content,createtime) VALUES (#{keyword}, #{content},#{createtime})")
-    int insert(Reply reply);
+    void insert(Reply reply);
 
 
     @Update("update Reply set keyword=#{keyword}, content=#{content},createtime=#{createtime} where id=#{id}")
-    int update(Reply reply);
+    void update(Reply reply);
 
 
     @Select("<script> select * from reply" +
             " <if test='keyword!=null'>  where keyword like concat('%',#{keyword},'%') order by createtime desc </if>" +
-            "<if test = 'keyword == null'>order by createtime desc </if>"+
+            "<if test = 'start != null and pageSize != null'>limit #{start},#{pageSize}</if>"+
             "</script>")
     List<Reply> selectReplyList(Reply reply);
-
+    @Select("<script> select count(*) from reply" +
+            " <if test='keyword!=null'>  where keyword like concat('%',#{keyword},'%') order by createtime desc </if>" +
+            "</script>")
+    Integer getTotal(Reply reply);
     @Delete("delete from reply where id=#{id}")
-    int deleteReply(Integer id);
-
-    @Delete("<script> delete from reply where id in <foreach item = 'id' collection = 'array' open = '(' separator = ',' close = ')'> #{id} </foreach> </script>")
-    int deleteReplyByIds(String[] ids);
-
+    void deleteReplyById(Integer id);
 
     @Select("SELECT * FROM Reply WHERE keyword = #{keyword}")
     Reply getReplyByKeyword(String  keyword);

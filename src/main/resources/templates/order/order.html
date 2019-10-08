@@ -1,126 +1,164 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
-<head th:include="include :: header"></head>
+<head>
+    <link href="layui/css/layui.css" rel="stylesheet">
+    <link href="css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min862f.css?v=4.1.0" rel="stylesheet">
+</head>
 <body class="gray-bg">
-
 <div class="container-div">
-    <div class="row">
-        <div class="col-sm-12 search-collapse">
-            <form id="role-form">
-                <div class="select-list">
-                    <ul>
-                        <li>
-                            会员卡号：<input type="text" name="cardno"/>
-                        </li>
-
-                        <li>
-                            姓名：<input type="text" name="name"/>
-                        </li>
-                        <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                    class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i>&nbsp;重置</a>
-                        </li>
-                    </ul>
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text"name="name" id="name" autocomplete="off" placeholder="姓名" class="layui-input">
                 </div>
-            </form>
-        </div>
-
-
-        <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+                <label class="layui-form-label" style="width:93px;">会员卡号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="cardno" id="cardno"  autocomplete="off" placeholder="会员卡号" class="layui-input">
+                </div>
+                <button class="layui-btn" lay-filter="*" onclick="search()">搜索</button>
+            </div>
         </div>
     </div>
 </div>
-<div th:include="include :: footer"></div>
+<div class="container-div">
+    <div class="row">
+        <table id="order" lay-filter="order"></table>
+    </div>
+</div>
+
+<script src="js/jquery.min.js?v=2.1.4"></script>
+<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="js/plugins/layer/layer.min.js"></script>
+<script src="js/hplus.min.js?v=4.1.0"></script>
+<script type="text/javascript" src="js/contabs.min.js"></script>
+<script src="js/plugins/pace/pace.min.js"></script>
+<script src="layui/layui.js"></script>
 <script th:inline="javascript">
-    var prefix = ctx + "order";
     $(function () {
-        var options = {
-            url: prefix + "/list",
-            modalName: "会员信息",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: 'id',
-                    title: 'id',
-                    sortable: true
-                },
-                {
-                    field: 'name',
-                    title: '姓名',
-                    sortable: true
-                },
-                {
-                    field: 'phone',
-                    title: '电话',
-                    sortable: true
-                },
-                {
-                    field: 'openid',
-                    title: 'openid',
-                    sortable: true
-                },
-                {
-                    field: 'bonus',
-                    title: '积分',
-                    sortable: true
-                },
-                {
-                    field: 'balance',
-                    title: '余额',
-                    sortable: true
-                },
-                {
-                    field: 'cardno',
-                    title: '会员卡号',
-                    sortable: true
-                },
-                {
-                    field: 'orderno',
-                    title: '订单号',
-                    sortable: true
-                },
-                {
-                    field: 'submittime',
-                    title: '支付时间',
-                    sortable: true
-                },
-
-                {
-                    field:'price',
-                    title: '价格',
-                    sortable:true
-
-                },
-                {
-                    field:'status',
-                    title: '支付状态',
-                    formatter:function(value,row,index){
-                        var status = '';
-                        switch (value){
-                            case 0:
-                                status='未支付';
-                                break;
-                            case 1:
-                                status='支付成功';
-                                break;
-                            case 2:
-                                status='支付失败';
-                                break;
-                        }
-                        return status;
-                    }
-                }
-            ]
-        };
-        $.table.init(options);
+        orderManage()
     });
+
+    function orderManage() {
+        layui.use('table', function () {
+            var table = layui.table;
+
+            table.render({
+                elem: '#order'
+                , toolbar: '#toolbarOrder'
+                , url: 'order/list/' //数据接口
+                , page: true //开启分页
+                , cols: [
+                    [
+                        {
+                            field: 'id',
+                            title: 'id',
+                            sortable: true
+                        },
+                        {
+                            field: 'name',
+                            title: '姓名',
+                            sortable: true
+                        },
+                        {
+                            field: 'phone',
+                            title: '电话',
+                            sortable: true
+                        },
+                        {
+                            field: 'openid',
+                            title: 'openid',
+                            sortable: true
+                        },
+                        {
+                            field: 'bonus',
+                            title: '积分',
+                            sortable: true
+                        },
+                        {
+                            field: 'balance',
+                            title: '余额',
+                            sortable: true
+                        },
+                        {
+                            field: 'cardno',
+                            title: '会员卡号',
+                            sortable: true
+                        },
+                        {
+                            field: 'orderno',
+                            title: '订单号',
+                            sortable: true
+                        },
+                        {
+                            field: 'submittime',
+                            title: '支付时间',
+                            sortable: true
+                        },
+
+                        {
+                            field:'price',
+                            title: '价格',
+                            sortable:true
+
+                        },
+                        {
+                            field:'type',
+                            title: '支付类型',
+                            sortable:true,
+                            templet:function (d) {
+                                if (d.type == '1') {
+                                    return '充值';
+                                } else {
+                                    return '收款码支付';
+                                }
+                            }
+                        },
+                        {
+                            field:'status',
+                            title: '支付状态',
+                            templet:function(d){
+                                if(d.status =='0'){
+                                    return '未支付';
+                                }else if(d.status =='1'){
+                                    return '支付成功';
+                                }else if(d.status == '2'){
+                                    return '支付失败';
+                                }else{
+                                    return '已退款';
+                                }
+                            }
+                        }
+                    ]
+                ]
+            });
+        });
+    }
+    function search() {
+        var name = $("#name").val();
+        var cardno = $("#cardno").val();
+        layui.use('table',function(){
+            var table = layui.table;
+            //搜索
+            table.reload('order',{
+                where:{//设定异步数据接口的额外参数，任意设
+                    name:name,
+                    cardno:cardno
+                },
+                page:{
+                    curr:1//重新从第 1 页开始
+                }
+            });
+        });
+    }
+
 
 </script>
 </body>
 </html>
-

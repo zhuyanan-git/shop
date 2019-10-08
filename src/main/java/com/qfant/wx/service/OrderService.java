@@ -34,6 +34,8 @@ public class OrderService {
 
     public List<MemberAndOrder> selectAllOrder( MemberAndOrder memberAndOrder){return orderMapper.selectAllOrder(memberAndOrder);}
 
+    public Integer getTotalOrder(MemberAndOrder memberAndOrder){ return orderMapper.getTotalOrder(memberAndOrder);}
+
     public Integer getTotal(Order order){
        return orderMapper.getTotal(order);
     }

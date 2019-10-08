@@ -27,16 +27,18 @@ public interface MemberMapper {
     void update(Member member);
 
 
-//    @Select("<script> select * from member where" +
-//            " <if test='cardno!=null'> cardno like concat('%',#{cardno},'%') </if>" +
-//            " <if test='name!=null'> and name like concat('%',#{name},'%')  order by createtime desc limit #{page},#{pageSize}</if> " +
-//            "<if test='cardno==null and name==null'> name is not null order by createtime desc limit #{page},#{pageSize}</if>"+
-//            "</script>")
-    @Select("select * from member where name is not null order by createtime desc limit #{page},#{pageSize}")
-    List<Member> selectMemberList(Integer page,Integer pageSize,Member member);
+    @Select("<script> select * from member where name is not null" +
+            " <if test='cardno!=null and cardno!=\"\"'> and cardno like concat('%',#{cardno},'%') </if>" +
+            " <if test='name!=null and name!=\"\"'> and name like concat('%',#{name},'%') </if> " +
+            " <if test='start!=null and pageSize!=null'>order by createtime desc limit #{start},#{pageSize}</if>"+
+            "</script>")
+    List<Member> selectMemberList(Member member);
 
-    @Select("select count(*) from member")
-    Integer getMemberTotal();
+    @Select("<script> select count(*) from member where name is not null" +
+            " <if test='cardno!=null and cardno!=\"\"'> and cardno like concat('%',#{cardno},'%') </if>" +
+            " <if test='name!=null and name!=\"\"'> and name like concat('%',#{name},'%')  order by createtime desc</if> " +
+            "</script>")
+    Integer getMemberTotal(Member member);
 
     @Select("select * from member where name is not null order by createtime desc")
     List<Member> exportMember(Member member);

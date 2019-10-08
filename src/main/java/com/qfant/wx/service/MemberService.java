@@ -53,10 +53,10 @@ public class MemberService {
     public Member getMemberById(int id){return memberMapper.getMemberById(id);}
 
     @Transactional
-    public List<Member> selectMemberList(Integer page,Integer pageSize,Member member){return memberMapper.selectMemberList(page,pageSize,member);}
+    public List<Member> selectMemberList(Member member){return memberMapper.selectMemberList(member);}
 
     @Transactional
-    public Integer getMemberTotal(){ return memberMapper.getMemberTotal();}
+    public Integer getMemberTotal(Member member){ return memberMapper.getMemberTotal(member);}
     @Transactional
     public List<Member> exportMember(Member member){ return memberMapper.exportMember(member);}
 

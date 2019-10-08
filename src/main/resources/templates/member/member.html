@@ -9,6 +9,23 @@
     <link href="css/style.min862f.css?v=4.1.0" rel="stylesheet">
 </head>
 <body class="gray-bg">
+    <div class="container-div">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text"name="name" id="name" autocomplete="off" placeholder="姓名" class="layui-input">
+                    </div>
+                    <label class="layui-form-label" style="width:93px;">会员卡号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="cardno" id="cardno"  autocomplete="off" placeholder="会员卡号" class="layui-input">
+                    </div>
+                    <button class="layui-btn" lay-filter="*" onclick="search()">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <script type="text/html" id="toolbarMember">
     <div class="layui-btn-group">
         <button type="button" class="layui-btn layui-btn-radius" onclick="downloadfile()">导出数据</button>
@@ -39,35 +56,35 @@
 
             table.render({
                 elem: '#member'
-                , height: 'full-15'
                 , toolbar: '#toolbarMember'
                 , url: '/member/list/' //数据接口
                 , page: true //开启分页
                 , cols: [
-                    [ {
+                    [{
                         field: 'id',
                         width:'5%',
                         title: 'id',
                         sortable: true
                     },
-                        {
-                            field: 'name',
-                            width:'5%',
-                            title: '姓名',
-                            sortable: true
-                        },
-                        {
-                            field: 'phone',
-                            title: '电话',
-                            width:'7%',
-                            sortable: true
-                        },
-                        {
-                            field: 'idcard',
-                            title: '会员卡编号',
-                            width:'5%',
-                            sortable: true
-                        }, {
+                    {
+                        field: 'name',
+                        width:'5%',
+                        title: '姓名',
+                        sortable: true
+                    },
+                    {
+                        field: 'phone',
+                        title: '电话',
+                        width:'7%',
+                        sortable: true
+                    },
+                    {
+                        field: 'idcard',
+                        title: '会员卡编号',
+                        width:'5%',
+                        sortable: true
+                    },
+                    {
                         field: 'gender',
                         title: '性别',
                         width:'5%',
@@ -75,80 +92,81 @@
                     }, {
                         field: 'birthday',
                         title: '生日',
-                        width: '7%',
+                        width: '6%',
                         sortable: true
-                    }, {
+                    },
+                    {
                         field: 'openid',
                         title: 'openid',
+                        width:'8%',
+                        sortable: true
+                    },
+                    {
+                        field: 'nickname',
+                        title: '昵称',
+                        width:'5%',
+                        sortable: true
+                    },
+                    {
+                        field: 'bonus',
+                        title: '积分',
+                        width:'5%',
+                        sortable: true
+                    },
+                    {
+                        field: 'balance',
+                        title: '余额',
+                        width:'5%',
+                        sortable: true
+                    },
+                    {
+                        field: 'status',
+
+                        title: '状态',
+                        width:'5%',
+                        sortable: true
+                    },
+                    {
+                        field: 'cardno',
+                        title: '会员卡号',
                         width:'9%',
                         sortable: true
                     },
-                        {
-                            field: 'nickname',
-                            title: '昵称',
-                            width:'5%',
-                            sortable: true
-                        },
-                        {
-                            field: 'bonus',
-                            title: '积分',
-                            width:'5%',
-                            sortable: true
-                        },
-                        {
-                            field: 'balance',
-                            title: '余额',
-                            width:'5%',
-                            sortable: true
-                        },
-                        {
-                            field: 'status',
-
-                            title: '状态',
-                            width:'5%',
-                            sortable: true
-                        },
-                        {
-                            field: 'cardno',
-                            title: '会员卡号',
-                            width:'7%',
-                            sortable: true
-                        },
-                        {
-                            field: 'cardcode',
-                            title: '卡代码',
-                            width:'5%',
-                            sortable: true
-                        },
-                        {
-                            field: 'type',
-                            title: '类型',
-                            width:'5%',
-                            sortable: true,
-                            templet:function (d) {
-                                if(d.type=='1'){
-                                    return '新会员';
-                                }else {
-                                    return '老会员';
-                                }
-
+                    {
+                        field: 'cardcode',
+                        title: '卡代码',
+                        width:'5%',
+                        sortable: true
+                    },
+                    {
+                        field: 'type',
+                        title: '类型',
+                        width:'5%',
+                        sortable: true,
+                        templet:function (d) {
+                            if(d.type=='1'){
+                                return '新会员';
+                            }else {
+                                return '老会员';
                             }
 
-                        },
+                    }
 
-                        {
-                            field:'createtime',
-                            title: '创建时间',
-                            width:'10%',
-                            sortable: true
+                    },
 
-                        },
-                        {
-                            field: 'bindtime',
-                            title: '绑定时间',
-                            width:'10%',
-                            sortable: true
-                        }
+                    {
+                        field:'createtime',
+                        title: '创建时间',
+                        width:'10%',
+                        sortable: true
+
+                    },
+                    {
+                        field: 'bindtime',
+                        title: '绑定时间',
+                        width:'10%',
+                        sortable: true
+                    }
                     ]
                 ]
             });
@@ -157,6 +175,24 @@
     function downloadfile(){
         window.location.href=  "member/UserExcelDownloads";
     }
+    function search() {
+        var name = $("#name").val();
+        var cardno = $("#cardno").val();
+        layui.use('table',function(){
+            var table = layui.table;
+            //搜索
+            table.reload('member',{
+                where:{//设定异步数据接口的额外参数，任意设
+                    name:name,
+                    cardno:cardno
+                },
+                page:{
+                    curr:1//重新从第 1 页开始
+                }
+            });
+        });
+    }
+
 
 </script>
 </body>

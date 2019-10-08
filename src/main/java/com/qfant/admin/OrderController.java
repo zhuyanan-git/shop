@@ -1,16 +1,15 @@
 package com.qfant.admin;
 
-import com.qfant.utils.page.TableDataInfo;
 import com.qfant.wx.entity.MemberAndOrder;
 import com.qfant.wx.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/order")
 public class OrderController extends BaseController{
@@ -19,12 +18,17 @@ public class OrderController extends BaseController{
     @GetMapping
     public String order(){return "order/order";}
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @ResponseBody
-    public TableDataInfo list(MemberAndOrder memberAndOrder){
-        startPage();
-        memberAndOrder.setOrdertype(1);
-        List<MemberAndOrder> list = orderService.selectAllOrder(memberAndOrder);
-        return getDataTable(list);
+    public Map<String,Object> list(@RequestParam(value = "page") Integer page, @RequestParam(value = "limit") Integer limit, MemberAndOrder memberAndOrder){
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        memberAndOrder.setStart((page-1)*limit);
+        memberAndOrder.setPageSize(limit);
+        List<MemberAndOrder> orderList = orderService.selectAllOrder(memberAndOrder);
+        Integer count = orderService.getTotalOrder(memberAndOrder);
+        resultMap.put("code",0);
+        resultMap.put("count",count);
+        resultMap.put("data", orderList);
+        return resultMap;
     }
 }

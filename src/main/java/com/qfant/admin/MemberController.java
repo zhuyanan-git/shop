@@ -30,8 +30,10 @@ public class MemberController extends BaseController{
     @ResponseBody
     public Map<String,Object> list(@RequestParam(value = "page")Integer page,@RequestParam(value = "limit")Integer limit, Member member){
        Map<String,Object> resultMap = new HashMap<String, Object>();
-       Integer count = memberService.getMemberTotal();
-       List<Member> memberList = memberService.selectMemberList((page-1)*limit,limit,member);
+       member.setStart((page-1)*limit);
+       member.setPageSize(limit);
+       Integer count = memberService.getMemberTotal(member);
+       List<Member> memberList = memberService.selectMemberList(member);
        resultMap.put("code",0);
        resultMap.put("count",count);
        resultMap.put("data",memberList);

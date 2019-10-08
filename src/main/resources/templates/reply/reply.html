@@ -1,97 +1,166 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
-<head th:include="include :: header">
-    <script src="/js/ry-ui.js"></script>
+<head>
+    <link href="layui/css/layui.css" rel="stylesheet">
+    <link href="css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min862f.css?v=4.1.0" rel="stylesheet">
 </head>
 <body class="gray-bg">
-
 <div class="container-div">
-    <div class="row">
-        <div class="col-sm-12 search-collapse">
-            <form id="role-form">
-                <div class="select-list">
-                    <ul>
-                        <li>
-                            关键字：<input type="text"  name="keyword"/>
-                        </li>
-                        <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                    class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i>&nbsp;重置</a>
-                        </li>
-                    </ul>
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width:93px;">关键字</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="keyword" id="keyword"  autocomplete="off" placeholder="关键字" class="layui-input">
                 </div>
-            </form>
-        </div>
-        <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()">
-                <i class="fa fa-plus"></i> 新增
-            </a>
-            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()">
-            <i class="fa fa-remove"></i> 删除
-            </a>
-        </div>
-        <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+                <button class="layui-btn" lay-filter="*" onclick="search()">搜索</button>
+            </div>
         </div>
     </div>
 </div>
-<div th:include="include :: footer"></div>
-<script th:inline="javascript">
-    var prefix = ctx + "reply";
+<div class="container-div">
+    <!--表头设置菜单管理-->
+    <script type="text/html"  id="toolbarReply">
+        <div class="layui-btn-group">
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" onclick="add()"><i class="layui-icon"></i></button>
+        </div>
+    </script>
 
-    $(function () {
-        var options = {
-            url: prefix + "/list",
-            createUrl: prefix + "/add",
-            removeUrl: prefix + "/remove",
-            updateUrl:prefix + "/edit/{id}",
-            modalName: "文本信息",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: 'id',
-                    title: 'id',
-                    sortable: true
-                },
-                {
-                    field: 'keyword',
-                    title: '关键词',
-                    sortable: true
-                },
-                {
-                    field: 'content',
-                    title: '内容',
-                    sortable: true
-                },
-                {
-                    field:'createtime',
-                    title: '创建时间',
-                    sortable: true
 
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
-                }
-            ]
+    <!--表格行元素的对象增删改查-->
+    <script type="text/html" id="barReply">
+        <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete">删除</a>
+    </script>
 
-        };
-        $.table.init(options);
+    <div class="row">
+        <table id="reply" lay-filter="reply"></table>
+    </div>
+</div>
+<script src="js/jquery.min.js?v=2.1.4"></script>
+<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="js/plugins/layer/layer.min.js"></script>
+<script src="js/hplus.min.js?v=4.1.0"></script>
+<script type="text/javascript" src="js/contabs.min.js"></script>
+<script src="js/plugins/pace/pace.min.js"></script>
+<script src="layui/layui.js"></script>
+
+<script >
+    $(function(){
+        replyManage()
     });
+    function replyManage(){
+        layui.use('table', function(){
+            var table = layui.table;
+            //第一个实例
+            table.render({
+                elem: '#reply'
+                ,height: 600
+                ,toolbar: '#toolbarReply'
+                ,url: '/reply/list/' //数据接口
+                ,page: true //开启分页
+                ,cols: [
+                    [
+                        {
+                        field: 'id',
+                        title: 'id',
+                        sortable: true
+                        },
+                        {
+                            field: 'keyword',
+                            title: '关键字',
+                            sortable: true
+                        },
+                        {
+                            field: 'content',
+                            title: '内容',
+                            sortable: true
+                        },
+                        {
+                            field:'createtime',
+                            title: '创建时间',
+                            sortable: true
 
+                        },
+                        {
+                            field:'action',
+                            width:400,
+                            title: '操作',
+                            align:'center',
+                            toolbar: '#barReply'
+                        }
+                    ]
+                ]
+            });
+            table.on('tool(reply)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+                if(layEvent === 'delete'){ //删除
+                    layer.confirm('您确定删除这条数据吗？', function(index){
+                        var id= data.id;
+                        $.post("/reply/delete",{id:id},function (result) {
+                            if (result.success){
+                                layer.alert("删除成功",function () {
+                                    window.location.reload();
+                                });
+                            } else{
+                                layer.alert("删除失败");
+                            }
+                        })
+                    });
+                }else if(layEvent ==='edit'){
+                    layer.open({
+                        type:2,
+                        title:'修改门店页面',
+                        area: ['500px','60%'],
+                        content:'reply/edit?id='+data.id,
+                        end:function(){
+                            replyManage();
+                        }
+
+                    });
+                }
+            });
+        });
+
+    }
+    //弹出添加文本页面
+    function add() {
+        //iframe层
+        layer.open({
+            type: 2,
+            title: '添加文本页面',
+            shadeClose: true,
+            shade: 0.2,
+            area: ['500px', '60%'],
+            content: '/reply/add',
+            end: function () {
+               replyManage();
+            }
+        });
+    }
+    //搜索框
+    function search(){
+        var keyword=$("#keyword").val();
+        layui.use('table', function(){
+            var table = layui.table;
+            //这里以搜索为例
+            table.reload('reply',{
+                where: { //设定异步数据接口的额外参数，任意设
+                    keyword:keyword
+                }
+                ,page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+    }
 </script>
 </body>
 </html>

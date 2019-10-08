@@ -1,7 +1,5 @@
 package com.qfant.admin;
 
-import com.qfant.utils.AjaxResult;
-import com.qfant.utils.page.TableDataInfo;
 import com.qfant.wx.entity.Reply;
 import com.qfant.wx.service.ReplyService;
 import org.slf4j.Logger;
@@ -11,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -26,29 +26,45 @@ public class ReplyController extends BaseController{
     public String reply(){return "reply/reply";}
 
     //查询文本回复信息
-    @PostMapping("/list")
+    @GetMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Reply reply){
-        startPage();
-        List<Reply> list = replyService.selectReplyList(reply);
-        return getDataTable(list);
+    public Map<String,Object> list(@RequestParam(value="page") Integer page,@RequestParam(value = "limit") Integer limit, Reply reply){
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        reply.setStart((page-1)*limit);
+        reply.setPageSize(limit);
+        Integer count = replyService.getTotal(reply);
+        List<Reply> replyList = replyService.selectReplyList(reply);
+        resultMap.put("code",0);
+        resultMap.put("count",count);
+        resultMap.put("data",replyList);
+        return resultMap;
     }
     //增加文本回复信息
     @GetMapping("/add")
     public String add(){ return "reply/add";}
 
-    @PostMapping("/add")
+    @PostMapping("/addSave")
     @ResponseBody
-    public AjaxResult addSave(Reply reply) { return toAjax(replyService.insertReply(reply)); }
+    public Map<String,Object> addSave(Reply reply) {
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        replyService.insertReply(reply);
+        resultMap.put("success",true);
+        return resultMap;
+    }
 
     //删除文本回复信息
-    @PostMapping("/remove")
+    @PostMapping("/delete")
     @ResponseBody
-    public AjaxResult remove(String ids){return toAjax(replyService.deleteReplyByIds(ids));}
+    public Map<String,Object> delete(Integer id){
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        replyService.deleteReplyById(id);
+        resultMap.put("success",true);
+        return resultMap;
+    }
 
     //修改文本信息
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id,ModelMap mmap){
+    @RequestMapping("/edit")
+    public String edit(Integer id,ModelMap mmap){
         Reply reply =replyService.getReplyById(id);
         mmap.put("reply",reply);
         return "reply/edit";
@@ -56,7 +72,12 @@ public class ReplyController extends BaseController{
 
     //修改文本信息保存
     @ResponseBody
-    @PostMapping("/edit")
-    public AjaxResult editSave(Reply reply){return  toAjax(replyService.updateReply(reply));}
+    @RequestMapping("/editSave")
+    public Map<String,Object> editSave(Reply reply){
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        replyService.updateReply(reply);
+        resultMap.put("success",true);
+        return  resultMap;
+    }
 
 }
