@@ -11,16 +11,20 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class WxMpConfig {
   @Value("${wx.mp.token}")
-  private String token;
+  private  String token;
 
   @Value("${wx.mp.appId}")
-  private String appid;
+  private   String appid;
 
   @Value("${wx.mp.secret}")
-  private String appSecret;
+  private  String appSecret;
 
   @Value("${wx.mp.aesKey}")
-  private String aesKey;
+  private   String aesKey;
+
+  @Value("${wx.pay.mchId}")
+  private   String mchid;//商家id
+
 
 
 }

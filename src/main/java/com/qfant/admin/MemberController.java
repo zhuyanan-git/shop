@@ -1,6 +1,5 @@
 package com.qfant.admin;
 
-import com.qfant.utils.page.TableDataInfo;
 import com.qfant.wx.entity.Member;
 import com.qfant.wx.service.MemberService;
 
@@ -13,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/member")
@@ -25,12 +26,16 @@ public class MemberController extends BaseController{
     @GetMapping()
     public String member(){ return "member/member";}
     //查询会员信息
-    @PostMapping("/list")
+    @GetMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Member member){
-        startPage();
-        List<Member> list = memberService.selectMemberList(member);
-        return getDataTable(list);
+    public Map<String,Object> list(@RequestParam(value = "page")Integer page,@RequestParam(value = "limit")Integer limit, Member member){
+       Map<String,Object> resultMap = new HashMap<String, Object>();
+       Integer count = memberService.getMemberTotal();
+       List<Member> memberList = memberService.selectMemberList((page-1)*limit,limit,member);
+       resultMap.put("code",0);
+       resultMap.put("count",count);
+       resultMap.put("data",memberList);
+       return resultMap;
     }
 
     //会员数据导出
@@ -39,9 +44,9 @@ public class MemberController extends BaseController{
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("信息表");
 
-        List<Member> memberList = memberService.selectMemberList(member);
+        List<Member> memberList = memberService.exportMember(member);
 
-        String fileName = "userinf"  + ".xls";//设置要导出的文件的名字
+        String fileName = "huotuoguoyao"  + ".xls";//设置要导出的文件的名字
         //新增数据行，并且设置单元格数据
 
         int rowNum = 1;

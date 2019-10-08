@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
     <meta charset="utf-8">
-    <head th:include="include :: header">
-
+    <head>
+        <link href="/layui/css/layui.css" rel="stylesheet">
+        <link href="/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+        <link href="/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+        <link href="/css/animate.min.css" rel="stylesheet">
+        <link href="/css/style.min862f.css?v=4.1.0" rel="stylesheet">
     </head>
     <body style="width:80%;margin-top:10px;margin-left:auto;margin-right: auto">
         <form class="layui-form layui-form-pane" action="" method="post">
@@ -70,7 +74,14 @@
             </div>
         </form>
 
-        <div th:include="include :: footer"></div>
+        <script src="/js/jquery.min.js?v=2.1.4"></script>
+        <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="/js/plugins/layer/layer.min.js"></script>
+        <script src="/js/hplus.min.js?v=4.1.0"></script>
+        <script type="text/javascript" src="/js/contabs.min.js"></script>
+        <script src="/js/plugins/pace/pace.min.js"></script>
+        <script src="/layui/layui.js"></script>
 
         <script>
         //保存方法

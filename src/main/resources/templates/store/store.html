@@ -10,6 +10,8 @@
     <script type="text/html"  id="toolbarStore">
         <div class="layui-btn-group">
             <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" onclick="add()"><i class="layui-icon"></i></button>
+            <button type="button" class="layui-btn layui-bg-orange layui-btn-sm" onclick="qrcodeAll()">批量生产二维码</button>
+            <button type="button" class="layui-btn layui-bg-blue layui-btn-sm" onclick="downloadQrcode()">批量下载二维码</button>
         </div>
     </script>
 
@@ -98,6 +100,20 @@
             });
         });
 
+    }
+
+    function  qrcodeAll() {
+        $.get("/store/qrcodeAll",function (result) {
+            if (result.success){
+                layer.alert("生产成功")
+            } else {
+                layer.alert("生产失败")
+            }
+        })
+    }
+
+    function downloadQrcode() {
+        window.location.href="/store/downloadQrcode"
     }
     //弹出添加门店页面
     function add() {

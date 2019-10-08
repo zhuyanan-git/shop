@@ -1,8 +1,6 @@
 package com.qfant.admin;
 
-import com.qfant.utils.DateUtils;
-import com.qfant.utils.QRCodeUtil;
-import com.qfant.utils.StringUtils;
+import com.qfant.utils.*;
 import com.qfant.wx.entity.Store;
 import com.qfant.wx.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +26,7 @@ public class StoreController extends BaseController{
     private String profile;
     @Value("${payment.url}")
     private String paymentUrl;
+
     @GetMapping()
     public String store(){return "store/store";}
 
@@ -81,9 +82,6 @@ public class StoreController extends BaseController{
     @ResponseBody
     public Map<String,Object> qrcode(Integer id) throws Exception{
         Map<String,Object> resultMap = new HashMap<String, Object>();
-        //生成二维码
-
-        // 嵌入二维码的图片路径
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
         String imgPath = profile+"weixin.png";
         Store store = storeService.selectStoreById(id);
@@ -103,5 +101,48 @@ public class StoreController extends BaseController{
         return resultMap;
     }
 
+    /**
+     * 批量生产二维码
+     * @return
+     */
+    @GetMapping("/qrcodeAll")
+    @ResponseBody
+    public Map<String,Object> qrcodeAll() throws Exception{
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        List<Store> storeList = storeService.selectStoreList();
+        for (Store store:storeList){
+            //二维码图片名称
+            String codePath ;
+            if (StringUtils.isNotEmpty(store.getQrcode())) {
+                codePath = store.getQrcode();
+            } else {
+                codePath = DateUtils.dateTimeNow()+store.getId() + ".jpg";
+            }
+            // 生成的二维码的存放的路径
+            String destPath = profile+codePath;
+            //生产二维码到磁盘
+            QRCodeUtil.qrCode(paymentUrl+"?storeid="+store.getId(), destPath);
+            //更新数据库
+            store.setQrcode(codePath);
+            storeService.update(store);
+        }
+        resultMap.put("success",true);
+        return  resultMap;
+    }
+
+    /**
+     * 批量下载二维码
+     * @return
+     */
+    @GetMapping("/downloadQrcode")
+    public void downloadQrcode(HttpServletResponse response){
+        //待生成的zip包名
+        String zipName = DateUtils.dateTimeNow();
+        //待生成的zip保存路径
+        String zipFilePath = profile;
+        //压缩到本地磁盘profile
+        FileToZipUtil.fileToZip(profile , zipFilePath , zipName);
+        DownloadFileZipUtil.downloadZip(new File(profile+"/"+zipName+".zip"),response);
+    }
 
 }

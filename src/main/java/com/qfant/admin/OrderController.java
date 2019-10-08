@@ -23,6 +23,7 @@ public class OrderController extends BaseController{
     @ResponseBody
     public TableDataInfo list(MemberAndOrder memberAndOrder){
         startPage();
+        memberAndOrder.setOrdertype(1);
         List<MemberAndOrder> list = orderService.selectAllOrder(memberAndOrder);
         return getDataTable(list);
     }

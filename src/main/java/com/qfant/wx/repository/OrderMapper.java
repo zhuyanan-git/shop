@@ -41,18 +41,35 @@ public interface OrderMapper {
     void insert(Order order);
 
     @Update("update corder set orderno=#{orderno}, openid=#{openid},submittime=#{submittime},ip=#{ip},price=#{price},resultcode=#{resultcode},errcode=#{errcode}" +
-            ",errcodedes=#{errcodedes},transactionid=#{transactionid},timeend=#{timeend},notifytime=#{notifytime},status=#{status},type=#{type},storeid=#{storeid},isnotice=#{isnotice},storename=#{storename},noticetime=#{noticetime} where id=#{id}")
+            ",errcodedes=#{errcodedes},transactionid=#{transactionid},timeend=#{timeend},notifytime=#{notifytime},status=#{status},type=#{type},storeid=#{storeid},isnotice=#{isnotice},storename=#{storename},noticetime=#{noticetime},outrefundno=#{outrefundno},refundtime=#{refundtime},refundid=#{refundid},refunduser=#{refunduser} where id=#{id}")
     void update(Order order);
 
     @Select("<script> select " +
-            "m.id, m.name, m.phone,m.openid,m.bonus,m.balance,m.cardno,c.orderno,c.submittime,c.price,c.status " +
-            "from member m , corder c " +
-            "where m.openid = c.openid " +
+            "c.id, m.name, m.phone,m.openid,m.bonus,m.balance,m.cardno,c.orderno,c.submittime,c.price,c.status,c.storename from member as m,corder as c where m.openid = c.openid " +
             "<if test='cardno!=null'> and m.cardno like concat('%',#{cardno},'%') </if>"+
+            "<if test='ordertype!=null'> and c.type = #{ordertype}</if>"+
             "<if test='name!=null'> and m.name like concat('%',#{name},'%') order by submittime desc</if>"+
-            "<if test='cardno==null and name==null'> and m.name is not null order by submittime desc</if>"+
+//            "<if test='cardno==null and name==null'> and m.name is not null order by submittime desc</if>"+
+            "<if test='start!=null and pageSize!=null'>limit #{start},#{pageSize}</if>"+
             " </script>")
     List<MemberAndOrder> selectAllOrder(MemberAndOrder memberAndOrder);
 
+    @Select("<script> select id,openid,orderno,submittime,price,status,storename,outrefundno,refundtime,refundid,refunduser from corder where status=1 in(1,3)" +
+            "<if test='type!=null'> and type=#{type}</if>" +
+            "<if test='orderno!=null and orderno!=\"\" '> and orderno=#{orderno}</if>" +
+            "<if test='startTime!=null and endTime!=null'>and submittime BETWEEN #{startTime} and #{endTime}</if>" +
+            "<if test='start!=null and pageSize!=null'>limit #{start},#{pageSize}</if>"+
+            " </script>")
+    List<Order> selectList(Order order);
 
+    @Select("<script> select count(*) from corder where status in(1,3)" +
+            "<if test='type!=null'> and type=#{type}</if>" +
+            "<if test='orderno!=null and orderno!=\"\" '> and orderno=#{orderno}</if>" +
+            "<if test='startTime!=null and endTime!=null'>and submittime BETWEEN #{startTime} and #{endTime}</if>" +
+            " </script>")
+    Integer getTotal(Order order);
+
+
+    @Select("select * from corder where id=#{id}")
+    Order selectById(Integer id);
 }
