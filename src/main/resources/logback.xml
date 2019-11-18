@@ -67,7 +67,7 @@
 		<logger name="org.springframework.jdbc" level="debug" />
 
 
-	<logger name="com.qfant" level="debug" />
+	<logger name="com.kmm" level="debug" />
 	<logger name="com.atomikos" level="debug" />
 
 	<root level="info">

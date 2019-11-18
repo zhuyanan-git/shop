@@ -16,9 +16,9 @@
             maxEntriesLocalHeap="10000"
             eternal="false"
             overflowToDisk="true"
-            timeToIdleSeconds="20"
+            timeToIdleSeconds="20"              <!-- ··890的点点滴滴的点点滴滴的点点滴滴顶顶顶顶4444444444444444444444444444444仍然32w-->
             timeToLiveSeconds="60">
-    </defaultCache>
+    </ehcache>
 
     <!-- 存放用户登录信息，过期时间 3600秒，用ehache替换session功能 -->
     <cache name="session"

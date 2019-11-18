@@ -8,12 +8,12 @@
         <version>2.1.5.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.qfant</groupId>
+    <groupId>com.kmm</groupId>
     <artifactId>htgy</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <name>htgy</name>
-    <description>华佗国药微信会员卡项目</description>
+    <name>kmm</name>
+    <description>快买卖平台</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -104,11 +104,11 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.47</version>
         </dependency>
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>6.1.0.jre8</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.microsoft.sqlserver</groupId>-->
+<!--            <artifactId>mssql-jdbc</artifactId>-->
+<!--            <version>6.1.0.jre8</version>-->
+<!--        </dependency>-->
 
         <!--常用工具类 -->
         <dependency>
@@ -222,16 +222,16 @@
             <version>1.2.10</version>
         </dependency>
         <!--二维码-->
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>core</artifactId>
-            <version>3.3.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>javase</artifactId>
-            <version>3.3.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.google.zxing</groupId>-->
+<!--            <artifactId>core</artifactId>-->
+<!--            <version>3.3.3</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.google.zxing</groupId>-->
+<!--            <artifactId>javase</artifactId>-->
+<!--            <version>3.3.3</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
