@@ -15,7 +15,11 @@ public class IndexController extends BaseController{
     }
     @RequestMapping("/welcome")
     public String welcome(){return "welcome";}
-    @RequestMapping("/updatepassword")
-    public String updatepassword(){return "page/password";}
+
+    @RequestMapping("/userSetting")
+    public String userSetting(){return "userInfo/userSetting";}
+    @RequestMapping("/updatePassword")
+    public String updatepassword(){return "userInfo/password";}
+
 
 }
