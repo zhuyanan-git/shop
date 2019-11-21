@@ -18,6 +18,8 @@ public class UserService {
      */
     public User getUserByUsername(String userName){ return userInfoMapper.getUserByUserName(userName);    }
 
-    public User getUserById(Integer id){ return userInfoMapper.getUserById(id);}
+    public String getUserById(Integer id){ return userInfoMapper.getUserById(id);}
+
+    public void update(Integer id,String newPassword,String salt){userInfoMapper.update(id,newPassword,salt);}
 
 }

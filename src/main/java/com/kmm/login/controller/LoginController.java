@@ -4,7 +4,9 @@ import com.kmm.admin.BaseController;
 import com.kmm.config.RandomValidateCode;
 import com.kmm.login.entity.User;
 import com.kmm.login.repository.UserInfoMapper;
+import com.kmm.login.service.UserService;
 import com.kmm.utils.AjaxResult;
+import com.kmm.utils.Md5Util;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,13 +17,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
 public class LoginController extends BaseController{
     @Autowired
     private UserInfoMapper userInfoMapper;
-
+    @Autowired
+    private UserService userService;
+    private User user;
     /**
      * 登录页面生成验证码
      */
@@ -54,15 +60,13 @@ public class LoginController extends BaseController{
 
     @PostMapping("/submitlogin")
     @ResponseBody
-    public AjaxResult ajaxLogin(String userName, String password,String inputStr, HttpSession session) {
-        System.out.println(userName);
-        User user=userInfoMapper.getUserByUserName(userName);
-        System.out.println(user);
+    public AjaxResult ajaxLogin(String userName, String password,String inputStr, HttpSession session,HttpServletRequest request) {
+        user=userInfoMapper.getUserByUserName(userName);
         String random = (String) session.getAttribute("RANDOMVALIDATECODEKEY");
+        request.getSession().setAttribute("user",user);
         if(random.equals(inputStr.toUpperCase())){
             if(user!=null){
                 String encryptPassword=encryptPassword(userName,password,user.getSalt());
-                System.out.println(encryptPassword);
                 if(encryptPassword.equals(user.getPassword())){
                     getRequest().getSession().setAttribute("user",user);
                     return  success();
@@ -100,6 +104,25 @@ public class LoginController extends BaseController{
      */
     public  static String encryptPassword(String username, String password, String salt) {
         return new Md5Hash(username + password + salt).toHex().toString();
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public Map<String ,Object> update(String oldPassword, String newPassword){
+        Map<String,Object> map = new HashMap<String, Object>();
+        String password =userService.getUserById(user.getId());
+        String salt = Md5Util.string2MD5(oldPassword);
+        String encryptPassword = encryptPassword(user.getUserName(),oldPassword,salt);
+        if (encryptPassword.equals(password)){
+            String newSalt =  Md5Util.string2MD5(newPassword);
+            String newPassword1 = encryptPassword(user.getUserName(),newPassword,newSalt);
+            userService.update(user.getId(),newPassword1,newSalt);
+            map.put("success",true);
+        }else {
+            map.put("success",false);
+        }
+        return map;
+
     }
 
 }

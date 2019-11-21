@@ -1,10 +1,7 @@
 package com.kmm.login.repository;
 
 import com.kmm.login.entity.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 
 @Mapper
@@ -27,6 +24,9 @@ public interface UserInfoMapper {
     /**
      * 修改密码获取旧密码
      */
-    @Select("select * from user_info where id = #{id} ")
-    public User getUserById(Integer id);
+    @Select("select password from user_info where id = #{id} ")
+    public String getUserById(Integer id);
+
+    @Update("update user_info set password = #{password},salt = #{salt} where id = #{id} ")
+    public void update( Integer id,String password,String salt);
 }

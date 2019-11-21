@@ -23,6 +23,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebMvcConfigur
 //        loginRegistry.excludePathPatterns("/wx/**");
         loginRegistry.excludePathPatterns("/logout");
         loginRegistry.excludePathPatterns("/getVerify");
+        loginRegistry.excludePathPatterns("/update");
         // 排除资源请求
         loginRegistry.excludePathPatterns("/css/**");
         loginRegistry.excludePathPatterns("/js/**");
