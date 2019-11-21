@@ -1,0 +1,1019 @@
+Index: src/main/resources/templates/store/store.html
+===================================================================
+--- src/main/resources/templates/store/store.html	(date 1574128716000)
++++ src/main/resources/templates/store/store.html	(date 1574128716000)
+@@ -1,148 +0,0 @@
+-<!DOCTYPE html>
+-<html>
+-<head>
+-    <meta charset="utf-8">
+-    <title>layui</title>
+-    <meta name="renderer" content="webkit">
+-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+-    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+-    <link rel="stylesheet" href="../css/public.css" media="all">
+-</head>
+-<body>
+-<div class="layuimini-container">
+-    <div class="layuimini-main">
+-
+-        <fieldset class="layui-elem-field layuimini-search">
+-            <legend>搜索信息</legend>
+-            <div style="margin: 10px 10px 10px 10px">
+-                <form class="layui-form layui-form-pane" action="">
+-                    <div class="layui-form-item">
+-                        <div class="layui-inline">
+-                            <label class="layui-form-label">用户姓名</label>
+-                            <div class="layui-input-inline">
+-                                <input type="text" name="username" autocomplete="off" class="layui-input">
+-                            </div>
+-                        </div>
+-                        <div class="layui-inline">
+-                            <label class="layui-form-label">用户性别</label>
+-                            <div class="layui-input-inline">
+-                                <input type="text" name="sex" autocomplete="off" class="layui-input">
+-                            </div>
+-                        </div>
+-                        <div class="layui-inline">
+-                            <label class="layui-form-label">用户城市</label>
+-                            <div class="layui-input-inline">
+-                                <input type="text" name="city" autocomplete="off" class="layui-input">
+-                            </div>
+-                        </div>
+-                        <div class="layui-inline">
+-                            <label class="layui-form-label">用户职业</label>
+-                            <div class="layui-input-inline">
+-                                <input type="text" name="classify" autocomplete="off" class="layui-input">
+-                            </div>
+-                        </div>
+-                        <div class="layui-inline">
+-                            <a class="layui-btn" lay-submit="" lay-filter="data-search-btn">搜索</a>
+-                        </div>
+-                    </div>
+-                </form>
+-            </div>
+-        </fieldset>
+-
+-        <div class="layui-btn-group">
+-            <button class="layui-btn data-add-btn">添加</button>
+-            <button class="layui-btn layui-btn-danger data-delete-btn">删除</button>
+-        </div>
+-        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+-        <script type="text/html" id="currentTableBar">
+-            <a class="layui-btn layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+-        </script>
+-    </div>
+-</div>
+-<script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+-<script>
+-    layui.use(['form', 'table'], function () {
+-        var $ = layui.jquery,
+-            form = layui.form,
+-            table = layui.table;
+-
+-        table.render({
+-            elem: '#currentTableId',
+-            url: '../api/table.json',
+-            cols: [[
+-                {type: "checkbox", width: 50, fixed: "left"},
+-                {field: 'id', width: 80, title: 'ID', sort: true},
+-                {field: 'username', width: 80, title: '用户名'},
+-                {field: 'sex', width: 80, title: '性别', sort: true},
+-                {field: 'city', width: 80, title: '城市'},
+-                {field: 'sign', title: '签名', minWidth: 150},
+-                {field: 'experience', width: 80, title: '积分', sort: true},
+-                {field: 'score', width: 80, title: '评分', sort: true},
+-                {field: 'classify', width: 80, title: '职业'},
+-                {field: 'wealth', width: 135, title: '财富', sort: true},
+-                {title: '操作', minWidth: 50, templet: '#currentTableBar', fixed: "right", align: "center"}
+-            ]],
+-            limits: [10, 15, 20, 25, 50, 100],
+-            limit: 15,
+-            page: true
+-        });
+-
+-        // 监听搜索操作
+-        form.on('submit(data-search-btn)', function (data) {
+-            var result = JSON.stringify(data.field);
+-            layer.alert(result, {
+-                title: '最终的搜索信息'
+-            });
+-
+-            //执行搜索重载
+-            table.reload('currentTableId', {
+-                page: {
+-                    curr: 1
+-                }
+-                , where: {
+-                    searchParams: result
+-                }
+-            }, 'data');
+-
+-            return false;
+-        });
+-
+-        // 监听添加操作
+-        $(".data-add-btn").on("click", function () {
+-            layer.msg('添加数据');
+-        });
+-
+-        // 监听删除操作
+-        $(".data-delete-btn").on("click", function () {
+-            var checkStatus = table.checkStatus('currentTableId')
+-                , data = checkStatus.data;
+-            layer.alert(JSON.stringify(data));
+-        });
+-
+-        //监听表格复选框选择
+-        table.on('checkbox(currentTableFilter)', function (obj) {
+-            console.log(obj)
+-        });
+-
+-        table.on('tool(currentTableFilter)', function (obj) {
+-            var data = obj.data;
+-            if (obj.event === 'edit') {
+-                layer.alert('编辑行：<br>' + JSON.stringify(data))
+-            } else if (obj.event === 'delete') {
+-                layer.confirm('真的删除行么', function (index) {
+-                    obj.del();
+-                    layer.close(index);
+-                });
+-            }
+-        });
+-
+-    });
+-</script>
+-<script>
+-
+-</script>
+-
+-</body>
+-</html>
+\ No newline at end of file
+Index: src/main/resources/templates/userInfo/password.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/templates/userInfo/password.html	(date 1574128716000)
++++ src/main/resources/templates/userInfo/password.html	(date 1574136414219)
+@@ -1,5 +1,5 @@
+ <!DOCTYPE html>
+-<html>
++<html xmlns:th="http://www.thymeleaf.org">
+ <head>
+     <meta charset="utf-8">
+     <title>修改密码</title>
+@@ -20,7 +20,7 @@
+             <div class="layui-form-item">
+                 <label class="layui-form-label required">旧的密码</label>
+                 <div class="layui-input-block">
+-                    <input type="password" name="old_password" lay-verify="required" lay-reqtext="旧的密码不能为空" placeholder="请输入旧的密码"  value="" class="layui-input">
++                    <input type="password" name="old_password" id="old_password" lay-verify="required" lay-reqtext="旧的密码不能为空" placeholder="请输入旧的密码"  value="" class="layui-input">
+                     <tip>填写自己账号的旧的密码。</tip>
+                 </div>
+             </div>
+@@ -28,16 +28,15 @@
+             <div class="layui-form-item">
+                 <label class="layui-form-label required">新的密码</label>
+                 <div class="layui-input-block">
+-                    <input type="password" name="new_password" lay-verify="required" lay-reqtext="新的密码不能为空" placeholder="请输入新的密码"  value="" class="layui-input">
++                    <input type="password" name="new_password" id="new_password" lay-verify="required" lay-reqtext="新的密码不能为空" placeholder="请输入新的密码"  value="" class="layui-input">
+                 </div>
+             </div>
+             <div class="layui-form-item">
+-                <label class="layui-form-label required">新的密码</label>
++                <label class="layui-form-label required">确认密码的密码</label>
+                 <div class="layui-input-block">
+-                    <input type="password" name="again_password" lay-verify="required" lay-reqtext="新的密码不能为空" placeholder="请输入新的密码"  value="" class="layui-input">
++                    <input type="password" name="again_password" id="again_password" lay-verify="required" lay-reqtext="确认密码不能为空" placeholder="请输入新的密码"  value="" class="layui-input">
+                 </div>
+             </div>
+-
+             <div class="layui-form-item">
+                 <div class="layui-input-block">
+                     <button class="layui-btn" lay-submit lay-filter="saveBtn">确认保存</button>
+@@ -47,17 +46,34 @@
+     </div>
+ </div>
+ <script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
++<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+ <script>
+     layui.use(['form'], function () {
+-        var form = layui.form
++        var $ = layui.jquery,
++            form = layui.form
+             , layer = layui.layer;
+ 
+         //监听提交
+         form.on('submit(saveBtn)', function (data) {
+-            layer.alert(JSON.stringify(data.field), {
+-                title: '最终的提交信息'
+-            })
+-            return false;
++            var oldPassword = data.field.old_password;
++            var newPassword = data.field.new_password;
++            var againPassword = data.field.again_password;
++            if (newPassword ===againPassword){
++                $.post('/update',{oldPassword:oldPassword,newPassword:newPassword},function(result){
++                    if (result.success) {
++                        layer.closeAll('loading');
++                        layer.load(2);
++                        layer.msg("修改成功", {icon: 6});
++                        setTimeout(function(){
++                           location.href = "/login";//修改成功跳转到登录页面
++                        }, 1000);
++                    } else {
++                        layer.msg("密码错误，添加失败，请重试", {icon: 5});
++                    }
++                });
++            }else {
++                layer.alert("密码不一致")
++            }
+         });
+ 
+     });
+Index: src/main/java/com/kmm/login/controller/LoginController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/kmm/login/controller/LoginController.java	(date 1574128716000)
++++ src/main/java/com/kmm/login/controller/LoginController.java	(date 1574248194127)
+@@ -4,7 +4,9 @@
+ import com.kmm.config.RandomValidateCode;
+ import com.kmm.login.entity.User;
+ import com.kmm.login.repository.UserInfoMapper;
++import com.kmm.login.service.UserService;
+ import com.kmm.utils.AjaxResult;
++import com.kmm.utils.Md5Util;
+ import org.apache.shiro.crypto.hash.Md5Hash;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Controller;
+@@ -15,13 +17,17 @@
+ import javax.servlet.http.HttpServletRequest;
+ import javax.servlet.http.HttpServletResponse;
+ import javax.servlet.http.HttpSession;
++import java.util.HashMap;
++import java.util.Map;
+ 
+ 
+ @Controller
+ public class LoginController extends BaseController{
+     @Autowired
+     private UserInfoMapper userInfoMapper;
+-
++    @Autowired
++    private UserService userService;
++    private User user;
+     /**
+      * 登录页面生成验证码
+      */
+@@ -54,15 +60,13 @@
+ 
+     @PostMapping("/submitlogin")
+     @ResponseBody
+-    public AjaxResult ajaxLogin(String userName, String password,String inputStr, HttpSession session) {
+-        System.out.println(userName);
+-        User user=userInfoMapper.getUserByUserName(userName);
+-        System.out.println(user);
++    public AjaxResult ajaxLogin(String userName, String password,String inputStr, HttpSession session,HttpServletRequest request) {
++        user=userInfoMapper.getUserByUserName(userName);
+         String random = (String) session.getAttribute("RANDOMVALIDATECODEKEY");
++        request.getSession().setAttribute("user",user);
+         if(random.equals(inputStr.toUpperCase())){
+             if(user!=null){
+                 String encryptPassword=encryptPassword(userName,password,user.getSalt());
+-                System.out.println(encryptPassword);
+                 if(encryptPassword.equals(user.getPassword())){
+                     getRequest().getSession().setAttribute("user",user);
+                     return  success();
+@@ -102,4 +106,23 @@
+         return new Md5Hash(username + password + salt).toHex().toString();
+     }
+ 
++    @PostMapping("/update")
++    @ResponseBody
++    public Map<String ,Object> update(String oldPassword, String newPassword){
++        Map<String,Object> map = new HashMap<String, Object>();
++        String password =userService.getUserById(user.getId());
++        String salt = Md5Util.string2MD5(oldPassword);
++        String encryptPassword = encryptPassword(user.getUserName(),oldPassword,salt);
++        if (encryptPassword.equals(password)){
++            String newSalt =  Md5Util.string2MD5(newPassword);
++            String newPassword1 = encryptPassword(user.getUserName(),newPassword,newSalt);
++            userService.update(user.getId(),newPassword1,newSalt);
++            map.put("success",true);
++        }else {
++            map.put("success",false);
++        }
++        return map;
++
++    }
++
+ }
+\ No newline at end of file
+Index: src/main/resources/static/api/init.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/static/api/init.json	(date 1574128716000)
++++ src/main/resources/static/api/init.json	(date 1574220728081)
+@@ -14,204 +14,60 @@
+   },
+   "menuInfo": {
+     "currency": {
+-      "title": "常规管理",
++      "title": "商户功能",
+       "icon": "fa fa-address-book",
+       "child": [
+         {
+-          "title": "主页模板",
++          "title": "商品管理",
+           "href": "",
+-          "icon": "fa fa-home",
++          "icon": "fa fa-suitcase",
+           "target": "_self",
+           "child": [
+             {
+-              "title": "数据报表",
++              "title": "商品列表",
++              "href": "/goods",
++              "icon": "fa fa-archive",
++              "target": "_self"
++            },
++            {
++              "title": "商品类别",
+               "href": "/welcome",
+-              "icon": "fa fa-tachometer",
++              "icon": "fa fa-reorder",
+               "target": "_self"
+-            }
+-          ]
+-        },
+-        {
+-          "title": "菜单管理",
+-          "href": "page/menu.html",
+-          "icon": "fa fa-window-maximize",
+-          "target": "_self"
+-        },
+-        {
+-          "title": "系统设置",
+-          "href": "page/setting.html",
+-          "icon": "fa fa-gears",
+-          "target": "_self"
++            },
++            {
++              "title": "商品品牌",
++              "href": "/welcome",
++              "icon": "fa fa-th",
++              "target": "_self"
++            }
++          ]
+         },
+         {
+-          "title": "表格示例",
+-          "href": "page/table.html",
+-          "icon": "fa fa-file-text",
+-          "target": "_self"
+-        },
+-        {
+-          "title": "表单示例",
+-          "href": "",
+-          "icon": "fa fa-calendar",
+-          "target": "_self",
+-          "child": [
+-            {
+-              "title": "普通表单",
+-              "href": "page/form.html",
+-              "icon": "fa fa-list-alt",
+-              "target": "_self"
+-            },
+-            {
+-              "title": "分步表单",
+-              "href": "page/form-step.html",
+-              "icon": "fa fa-navicon",
+-              "target": "_self"
+-            }
+-          ]
+-        },
+-        {
+-          "title": "登录模板",
+-          "href": "",
+-          "icon": "fa fa-flag-o",
+-          "target": "_self",
+-          "child": [
+-            {
+-              "title": "登录-1",
+-              "href": "page/login-1.html",
+-              "icon": "fa fa-stumbleupon-circle",
+-              "target": "_blank"
+-            },
+-            {
+-              "title": "登录-2",
+-              "href": "page/login-2.html",
+-              "icon": "fa fa-viacoin",
+-              "target": "_blank"
+-            }
+-          ]
+-        },
+-        {
+-          "title": "异常页面",
+-          "href": "",
+-          "icon": "fa fa-home",
+-          "target": "_self",
+-          "child": [
+-            {
+-              "title": "404页面",
+-              "href": "/error/404.html",
+-              "icon": "fa fa-hourglass-end",
+-              "target": "_self"
+-            }
+-          ]
+-        },
+-        {
+-          "title": "其它界面",
+-          "href": "",
+-          "icon": "fa fa-snowflake-o",
+-          "target": "",
+-          "child": [
+-            {
+-              "title": "按钮示例",
+-              "href": "page/button.html",
+-              "icon": "fa fa-snowflake-o",
+-              "target": "_self"
+-            },
+-            {
+-              "title": "弹出层",
+-              "href": "page/layer.html",
+-              "icon": "fa fa-shield",
+-              "target": "_self"
+-            }
+-          ]
+-        }
+-      ]
+-    },
+-    "component": {
+-      "title": "组件管理",
+-      "icon": "fa fa-lemon-o",
+-      "child": [
+-        {
+-          "title": "图标列表",
+-          "href": "page/icon.html",
+-          "icon": "fa fa-dot-circle-o",
+-          "target": "_self"
+-        },
+-        {
+-          "title": "图标选择",
+-          "href": "page/icon-picker.html",
+-          "icon": "fa fa-adn",
+-          "target": "_self"
+-        },
+-        {
+-          "title": "颜色选择",
+-          "href": "page/color-select.html",
+-          "icon": "fa fa-dashboard",
+-          "target": "_self"
+-        },
+-        {
+-          "title": "下拉选择",
+-          "href": "page/table-select.html",
+-          "icon": "fa fa-angle-double-down",
++          "title": "订单信息",
++          "href": "page/menu.html",
++          "icon": "fa fa-list-alt",
+           "target": "_self"
+         },
+         {
+-          "title": "文件上传",
+-          "href": "page/upload.html",
+-          "icon": "fa fa-arrow-up",
+-          "target": "_self"
+-        },
+-        {
+-          "title": "富文本编辑器",
+-          "href": "page/editor.html",
+-          "icon": "fa fa-edit",
+-          "target": "_self"
+-        }
+-      ]
+-    },
+-    "other": {
+-      "title": "其它管理",
+-      "icon": "fa fa-slideshare",
+-      "child": [
+-        {
+-          "title": "多级菜单",
++          "title": "设置",
+           "href": "",
+-          "icon": "fa fa-meetup",
+-          "target": "",
+-          "child": [
+-            {
+-              "title": "按钮1",
+-              "href": "page/button.html",
+-              "icon": "fa fa-calendar",
+-              "target": "_self",
+-              "child": [
+-                {
+-                  "title": "按钮2",
+-                  "href": "page/button.html",
+-                  "icon": "fa fa-snowflake-o",
+-                  "target": "_self",
+-                  "child": [
+-                    {
+-                      "title": "按钮3",
+-                      "href": "page/button.html",
+-                      "icon": "fa fa-snowflake-o",
+-                      "target": "_self"
+-                    },
+-                    {
+-                      "title": "表单4",
+-                      "href": "page/form.html",
+-                      "icon": "fa fa-calendar",
+-                      "target": "_self"
+-                    }
+-                  ]
+-                }
+-              ]
+-            }
+-          ]
+-        },
+-        {
+-          "title": "失效菜单",
+-          "href": "page/error.html",
+-          "icon": "fa fa-superpowers",
+-          "target": "_self"
++          "icon": "fa fa-cog",
++          "target": "_self",
++          "child": [
++            {
++              "title": "基本资料",
++              "href": "page/form.html",
++              "icon": "fa fa-newspaper-o",
++              "target": "_self"
++            },
++            {
++              "title": "意见反馈",
++              "href": "page/form-step.html",
++              "icon": "fa fa-comments-o",
++              "target": "_self"
++            }
++          ]
+         }
+       ]
+     }
+Index: src/main/java/com/kmm/config/WebConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/kmm/config/WebConfig.java	(date 1574128716000)
++++ src/main/java/com/kmm/config/WebConfig.java	(date 1574133413294)
+@@ -23,6 +23,7 @@
+ //        loginRegistry.excludePathPatterns("/wx/**");
+         loginRegistry.excludePathPatterns("/logout");
+         loginRegistry.excludePathPatterns("/getVerify");
++        loginRegistry.excludePathPatterns("/update");
+         // 排除资源请求
+         loginRegistry.excludePathPatterns("/css/**");
+         loginRegistry.excludePathPatterns("/js/**");
+Index: src/main/java/com/kmm/login/service/UserService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/kmm/login/service/UserService.java	(date 1574128716000)
++++ src/main/java/com/kmm/login/service/UserService.java	(date 1574132267093)
+@@ -18,6 +18,8 @@
+      */
+     public User getUserByUsername(String userName){ return userInfoMapper.getUserByUserName(userName);    }
+ 
+-    public User getUserById(Integer id){ return userInfoMapper.getUserById(id);}
++    public String getUserById(Integer id){ return userInfoMapper.getUserById(id);}
++
++    public void update(Integer id,String newPassword,String salt){userInfoMapper.update(id,newPassword,salt);}
+ 
+ }
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- pom.xml	(date 1574128716000)
++++ pom.xml	(date 1574233875231)
+@@ -104,12 +104,6 @@
+             <artifactId>mysql-connector-java</artifactId>
+             <version>5.1.47</version>
+         </dependency>
+-<!--        <dependency>-->
+-<!--            <groupId>com.microsoft.sqlserver</groupId>-->
+-<!--            <artifactId>mssql-jdbc</artifactId>-->
+-<!--            <version>6.1.0.jre8</version>-->
+-<!--        </dependency>-->
+-
+         <!--常用工具类 -->
+         <dependency>
+             <groupId>org.apache.commons</groupId>
+@@ -221,17 +215,6 @@
+             <artifactId>pagehelper-spring-boot-starter</artifactId>
+             <version>1.2.10</version>
+         </dependency>
+-        <!--二维码-->
+-<!--        <dependency>-->
+-<!--            <groupId>com.google.zxing</groupId>-->
+-<!--            <artifactId>core</artifactId>-->
+-<!--            <version>3.3.3</version>-->
+-<!--        </dependency>-->
+-<!--        <dependency>-->
+-<!--            <groupId>com.google.zxing</groupId>-->
+-<!--            <artifactId>javase</artifactId>-->
+-<!--            <version>3.3.3</version>-->
+-<!--        </dependency>-->
+     </dependencies>
+ 
+     <build>
+Index: src/main/java/com/kmm/HtgyApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/kmm/HtgyApplication.java	(date 1574128716000)
++++ src/main/java/com/kmm/HtgyApplication.java	(date 1574242085449)
+@@ -14,10 +14,6 @@
+     public static void main(String[] args) {
+         SpringApplication.run(HtgyApplication.class, args);
+         System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow","|{}");
+-        String password = Md5Util.string2MD5("123456");
+-        String encryptPassword=encryptPassword("admin","123456",password);
+-        System.out.println("password-------"+encryptPassword);
+-        System.out.println("salt-----"+password);
+     }
+ 
+ }
+Index: src/main/resources/templates/welcome.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/templates/welcome.html	(date 1574128716000)
++++ src/main/resources/templates/welcome.html	(date 1574220876270)
+@@ -51,11 +51,11 @@
+                                                 <div class="panel-body">
+                                                     <div class="panel-title">
+                                                         <span class="label pull-right layui-bg-blue">实时</span>
+-                                                        <h5>用户统计</h5>
++                                                        <h5>访客</h5>
+                                                     </div>
+                                                     <div class="panel-content">
+                                                         <h1 class="no-margins">1234</h1>
+-                                                        <small>当前分类总记录数</small>
++                                                        <small>今日访客</small>
+                                                     </div>
+                                                 </div>
+                                             </div>
+@@ -65,11 +65,11 @@
+                                                 <div class="panel-body">
+                                                     <div class="panel-title">
+                                                         <span class="label pull-right layui-bg-cyan">实时</span>
+-                                                        <h5>商品统计</h5>
++                                                        <h5>销量</h5>
+                                                     </div>
+                                                     <div class="panel-content">
+                                                         <h1 class="no-margins">1234</h1>
+-                                                        <small>当前分类总记录数</small>
++                                                        <small>当前销量</small>
+                                                     </div>
+                                                 </div>
+                                             </div>
+@@ -79,11 +79,11 @@
+                                                 <div class="panel-body">
+                                                     <div class="panel-title">
+                                                         <span class="label pull-right layui-bg-orange">实时</span>
+-                                                        <h5>浏览统计</h5>
++                                                        <h5>订单</h5>
+                                                     </div>
+                                                     <div class="panel-content">
+                                                         <h1 class="no-margins">1234</h1>
+-                                                        <small>当前分类总记录数</small>
++                                                        <small>当前订单量</small>
+                                                     </div>
+                                                 </div>
+                                             </div>
+@@ -93,11 +93,11 @@
+                                                 <div class="panel-body">
+                                                     <div class="panel-title">
+                                                         <span class="label pull-right layui-bg-green">实时</span>
+-                                                        <h5>订单统计</h5>
++                                                        <h5>销售额</h5>
+                                                     </div>
+                                                     <div class="panel-content">
+                                                         <h1 class="no-margins">1234</h1>
+-                                                        <small>当前分类总记录数</small>
++                                                        <small>当前销售额/元</small>
+                                                     </div>
+                                                 </div>
+                                             </div>
+@@ -114,51 +114,39 @@
+                                 <div class="welcome-module">
+                                     <div class="layui-row layui-col-space10 layuimini-qiuck">
+                                         <div class="layui-col-xs3 layuimini-qiuck-module">
+-                                            <a href="javascript:;" data-iframe-tab="page/menu.html" data-title="菜单管理" data-icon="fa fa-window-maximize">
+-                                                <i class="fa fa-window-maximize"></i>
+-                                                <cite>菜单管理</cite>
+-                                            </a>
+-                                        </div>
+-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
+-                                            <a href="javascript:;" data-iframe-tab="page/setting.html" data-title="系统设置" data-icon="fa fa-gears">
+-                                                <i class="fa fa-gears"></i>
+-                                                <cite>系统设置</cite>
++                                            <a href="javascript:;" data-iframe-tab="/goods" data-title="商品列表" data-icon="fa fa-archive">
++                                                <i class="fa fa-archive"></i>
++                                                <cite>商品列表</cite>
+                                             </a>
+                                         </div>
+                                         <div class="layui-col-xs3 layuimini-qiuck-module">
+-                                            <a href="javascript:;" data-iframe-tab="page/table.html" data-title="表格示例" data-icon="fa fa-file-text">
+-                                                <i class="fa fa-file-text"></i>
+-                                                <cite>表格示例</cite>
++                                            <a href="javascript:;" data-iframe-tab="page/setting.html" data-title="商品类别" data-icon="fa fa-reorder">
++                                                <i class="fa fa-reorder"></i>
++                                                <cite>商品类别</cite>
+                                             </a>
+                                         </div>
+                                         <div class="layui-col-xs3 layuimini-qiuck-module">
+-                                            <a href="javascript:;" data-iframe-tab="page/icon.html" data-title="图标列表" data-icon="fa fa-dot-circle-o">
+-                                                <i class="fa fa-dot-circle-o"></i>
+-                                                <cite>图标列表</cite>
++                                            <a href="javascript:;" data-iframe-tab="page/table.html" data-title="商品品牌" data-icon="fa fa-th">
++                                                <i class="fa fa-th"></i>
++                                                <cite>商品品牌</cite>
+                                             </a>
+                                         </div>
+                                         <div class="layui-col-xs3 layuimini-qiuck-module">
+-                                            <a href="javascript:;" data-iframe-tab="page/form.html" data-title="表单示例" data-icon="fa fa-calendar">
+-                                                <i class="fa fa-calendar"></i>
+-                                                <cite>表单示例</cite>
++                                            <a href="javascript:;" data-iframe-tab="page/icon.html" data-title="订单信息" data-icon="fa fa-list-alt">
++                                                <i class="fa fa-list-alt"></i>
++                                                <cite>订单信息</cite>
+                                             </a>
+                                         </div>
+                                         <div class="layui-col-xs3 layuimini-qiuck-module">
+-                                            <a href="javascript:;" data-iframe-tab="page/404.html" data-title="404页面" data-icon="fa fa-hourglass-end">
+-                                                <i class="fa fa-hourglass-end"></i>
+-                                                <cite>404页面</cite>
++                                            <a href="javascript:;" data-iframe-tab="page/form.html" data-title="基本资料" data-icon="fa fa-newspaper-o">
++                                                <i class="fa fa-newspaper-o"></i>
++                                                <cite>基本资料</cite>
+                                             </a>
+                                         </div>
+                                         <div class="layui-col-xs3 layuimini-qiuck-module">
+-                                            <a href="javascript:;" data-iframe-tab="page/button.html" data-title="按钮示例" data-icon="fa fa-snowflake-o">
+-                                                <i class="fa fa-snowflake-o"></i>
+-                                                <cite>按钮示例</cite>
+-                                            </a>
+-                                        </div>
+-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
+-                                            <a href="javascript:;" data-iframe-tab="page/layer.html" data-title="弹出层" data-icon="fa fa-shield">
+-                                                <i class="fa fa-shield"></i>
+-                                                <cite>弹出层</cite>
++                                            <a href="javascript:;" data-iframe-tab="page/button.html" data-title="意见反馈" data-icon="fa fa-comments-o">
++                                                <i class="fa fa-comments-o"></i>
++                                                <cite>意见反馈</cite>
+                                             </a>
+                                         </div>
+                                     </div>
+Index: src/main/java/com/kmm/login/repository/UserInfoMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/kmm/login/repository/UserInfoMapper.java	(date 1574128716000)
++++ src/main/java/com/kmm/login/repository/UserInfoMapper.java	(date 1574134528742)
+@@ -1,10 +1,7 @@
+ package com.kmm.login.repository;
+ 
+ import com.kmm.login.entity.User;
+-import org.apache.ibatis.annotations.Mapper;
+-import org.apache.ibatis.annotations.Result;
+-import org.apache.ibatis.annotations.Results;
+-import org.apache.ibatis.annotations.Select;
++import org.apache.ibatis.annotations.*;
+ import org.springframework.stereotype.Service;
+ 
+ @Mapper
+@@ -27,6 +24,9 @@
+     /**
+      * 修改密码获取旧密码
+      */
+-    @Select("select * from user_info where id = #{id} ")
+-    public User getUserById(Integer id);
++    @Select("select password from user_info where id = #{id} ")
++    public String getUserById(Integer id);
++
++    @Update("update user_info set password = #{password},salt = #{salt} where id = #{id} ")
++    public void update( Integer id,String password,String salt);
+ }
+Index: src/main/resources/static/lib/layui-v2.5.4/layui.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/static/lib/layui-v2.5.4/layui.js	(date 1574128716000)
++++ src/main/resources/static/lib/layui-v2.5.4/layui.js	(date 1574129999533)
+@@ -1,2 +1,188 @@
+ /** layui-v2.5.4 MIT License By https://www.layui.com */
+- ;!function(e){"use strict";var t=document,o={modules:{},status:{},timeout:10,event:{}},n=function(){this.v="2.5.4"},r=function(){var e=t.currentScript?t.currentScript.src:function(){for(var e,o=t.scripts,n=o.length-1,r=n;r>0;r--)if("interactive"===o[r].readyState){e=o[r].src;break}return e||o[n].src}();return e.substring(0,e.lastIndexOf("/")+1)}(),i=function(t){e.console&&console.error&&console.error("Layui hint: "+t)},a="undefined"!=typeof opera&&"[object Opera]"===opera.toString(),u={layer:"modules/layer",laydate:"modules/laydate",laypage:"modules/laypage",laytpl:"modules/laytpl",layim:"modules/layim",layedit:"modules/layedit",form:"modules/form",upload:"modules/upload",transfer:"modules/transfer",tree:"modules/tree",table:"modules/table",element:"modules/element",rate:"modules/rate",colorpicker:"modules/colorpicker",slider:"modules/slider",carousel:"modules/carousel",flow:"modules/flow",util:"modules/util",code:"modules/code",jquery:"modules/jquery",mobile:"modules/mobile","layui.all":"../layui.all"};n.prototype.cache=o,n.prototype.define=function(e,t){var n=this,r="function"==typeof e,i=function(){var e=function(e,t){layui[e]=t,o.status[e]=!0};return"function"==typeof t&&t(function(n,r){e(n,r),o.callback[n]=function(){t(e)}}),this};return r&&(t=e,e=[]),!layui["layui.all"]&&layui["layui.mobile"]?i.call(n):(n.use(e,i),n)},n.prototype.use=function(e,n,l){function s(e,t){var n="PLaySTATION 3"===navigator.platform?/^complete$/:/^(complete|loaded)$/;("load"===e.type||n.test((e.currentTarget||e.srcElement).readyState))&&(o.modules[f]=t,d.removeChild(v),function r(){return++m>1e3*o.timeout/4?i(f+" is not a valid module"):void(o.status[f]?c():setTimeout(r,4))}())}function c(){l.push(layui[f]),e.length>1?y.use(e.slice(1),n,l):"function"==typeof n&&n.apply(layui,l)}var y=this,p=o.dir=o.dir?o.dir:r,d=t.getElementsByTagName("head")[0];e="string"==typeof e?[e]:e,window.jQuery&&jQuery.fn.on&&(y.each(e,function(t,o){"jquery"===o&&e.splice(t,1)}),layui.jquery=layui.$=jQuery);var f=e[0],m=0;if(l=l||[],o.host=o.host||(p.match(/\/\/([\s\S]+?)\//)||["//"+location.host+"/"])[0],0===e.length||layui["layui.all"]&&u[f]||!layui["layui.all"]&&layui["layui.mobile"]&&u[f])return c(),y;if(o.modules[f])!function g(){return++m>1e3*o.timeout/4?i(f+" is not a valid module"):void("string"==typeof o.modules[f]&&o.status[f]?c():setTimeout(g,4))}();else{var v=t.createElement("script"),h=(u[f]?p+"lay/":/^\{\/\}/.test(y.modules[f])?"":o.base||"")+(y.modules[f]||f)+".js";h=h.replace(/^\{\/\}/,""),v.async=!0,v.charset="utf-8",v.src=h+function(){var e=o.version===!0?o.v||(new Date).getTime():o.version||"";return e?"?v="+e:""}(),d.appendChild(v),!v.attachEvent||v.attachEvent.toString&&v.attachEvent.toString().indexOf("[native code")<0||a?v.addEventListener("load",function(e){s(e,h)},!1):v.attachEvent("onreadystatechange",function(e){s(e,h)}),o.modules[f]=h}return y},n.prototype.getStyle=function(t,o){var n=t.currentStyle?t.currentStyle:e.getComputedStyle(t,null);return n[n.getPropertyValue?"getPropertyValue":"getAttribute"](o)},n.prototype.link=function(e,n,r){var a=this,u=t.createElement("link"),l=t.getElementsByTagName("head")[0];"string"==typeof n&&(r=n);var s=(r||e).replace(/\.|\//g,""),c=u.id="layuicss-"+s,y=0;return u.rel="stylesheet",u.href=e+(o.debug?"?v="+(new Date).getTime():""),u.media="all",t.getElementById(c)||l.appendChild(u),"function"!=typeof n?a:(function p(){return++y>1e3*o.timeout/100?i(e+" timeout"):void(1989===parseInt(a.getStyle(t.getElementById(c),"width"))?function(){n()}():setTimeout(p,100))}(),a)},o.callback={},n.prototype.factory=function(e){if(layui[e])return"function"==typeof o.callback[e]?o.callback[e]:null},n.prototype.addcss=function(e,t,n){return layui.link(o.dir+"css/"+e,t,n)},n.prototype.img=function(e,t,o){var n=new Image;return n.src=e,n.complete?t(n):(n.onload=function(){n.onload=null,"function"==typeof t&&t(n)},void(n.onerror=function(e){n.onerror=null,"function"==typeof o&&o(e)}))},n.prototype.config=function(e){e=e||{};for(var t in e)o[t]=e[t];return this},n.prototype.modules=function(){var e={};for(var t in u)e[t]=u[t];return e}(),n.prototype.extend=function(e){var t=this;e=e||{};for(var o in e)t[o]||t.modules[o]?i("模块名 "+o+" 已被占用"):t.modules[o]=e[o];return t},n.prototype.router=function(e){var t=this,e=e||location.hash,o={path:[],search:{},hash:(e.match(/[^#](#.*$)/)||[])[1]||""};return/^#\//.test(e)?(e=e.replace(/^#\//,""),o.href="/"+e,e=e.replace(/([^#])(#.*$)/,"$1").split("/")||[],t.each(e,function(e,t){/^\w+=/.test(t)?function(){t=t.split("="),o.search[t[0]]=t[1]}():o.path.push(t)}),o):o},n.prototype.data=function(t,o,n){if(t=t||"layui",n=n||localStorage,e.JSON&&e.JSON.parse){if(null===o)return delete n[t];o="object"==typeof o?o:{key:o};try{var r=JSON.parse(n[t])}catch(i){var r={}}return"value"in o&&(r[o.key]=o.value),o.remove&&delete r[o.key],n[t]=JSON.stringify(r),o.key?r[o.key]:r}},n.prototype.sessionData=function(e,t){return this.data(e,t,sessionStorage)},n.prototype.device=function(t){var o=navigator.userAgent.toLowerCase(),n=function(e){var t=new RegExp(e+"/([^\\s\\_\\-]+)");return e=(o.match(t)||[])[1],e||!1},r={os:function(){return/windows/.test(o)?"windows":/linux/.test(o)?"linux":/iphone|ipod|ipad|ios/.test(o)?"ios":/mac/.test(o)?"mac":void 0}(),ie:function(){return!!(e.ActiveXObject||"ActiveXObject"in e)&&((o.match(/msie\s(\d+)/)||[])[1]||"11")}(),weixin:n("micromessenger")};return t&&!r[t]&&(r[t]=n(t)),r.android=/android/.test(o),r.ios="ios"===r.os,r},n.prototype.hint=function(){return{error:i}},n.prototype.each=function(e,t){var o,n=this;if("function"!=typeof t)return n;if(e=e||[],e.constructor===Object){for(o in e)if(t.call(e[o],o,e[o]))break}else for(o=0;o<e.length&&!t.call(e[o],o,e[o]);o++);return n},n.prototype.sort=function(e,t,o){var n=JSON.parse(JSON.stringify(e||[]));return t?(n.sort(function(e,o){var n=/^-?\d+$/,r=e[t],i=o[t];return n.test(r)&&(r=parseFloat(r)),n.test(i)&&(i=parseFloat(i)),r&&!i?1:!r&&i?-1:r>i?1:r<i?-1:0}),o&&n.reverse(),n):n},n.prototype.stope=function(t){t=t||e.event;try{t.stopPropagation()}catch(o){t.cancelBubble=!0}},n.prototype.onevent=function(e,t,o){return"string"!=typeof e||"function"!=typeof o?this:n.event(e,t,null,o)},n.prototype.event=n.event=function(e,t,n,r){var i=this,a=null,u=t.match(/\((.*)\)$/)||[],l=(e+"."+t).replace(u[0],""),s=u[1]||"",c=function(e,t){var o=t&&t.call(i,n);o===!1&&null===a&&(a=!1)};return r?(o.event[l]=o.event[l]||{},o.event[l][s]=[r],this):(layui.each(o.event[l],function(e,t){return"{*}"===s?void layui.each(t,c):(""===e&&layui.each(t,c),void(s&&e===s&&layui.each(t,c)))}),a)},e.layui=new n}(window);
+\ No newline at end of file
++;!function (e) {
++    "use strict";
++    var t = document, o = {modules: {}, status: {}, timeout: 10, event: {}}, n = function () {
++        this.v = "2.5.4"
++    }, r = function () {
++        var e = t.currentScript ? t.currentScript.src : function () {
++            for (var e, o = t.scripts, n = o.length - 1, r = n; r > 0; r--) if ("interactive" === o[r].readyState) {
++                e = o[r].src;
++                break
++            }
++            return e || o[n].src
++        }();
++        return e.substring(0, e.lastIndexOf("/") + 1)
++    }(), i = function (t) {
++        e.console && console.error && console.error("Layui hint: " + t)
++    }, a = "undefined" != typeof opera && "[object Opera]" === opera.toString(), u = {
++        layer: "modules/layer",
++        laydate: "modules/laydate",
++        laypage: "modules/laypage",
++        laytpl: "modules/laytpl",
++        layim: "modules/layim",
++        layedit: "modules/layedit",
++        form: "modules/form",
++        upload: "modules/upload",
++        transfer: "modules/transfer",
++        tree: "modules/tree",
++        table: "modules/table",
++        element: "modules/element",
++        rate: "modules/rate",
++        colorpicker: "modules/colorpicker",
++        slider: "modules/slider",
++        carousel: "modules/carousel",
++        flow: "modules/flow",
++        util: "modules/util",
++        code: "modules/code",
++        jquery: "modules/jquery",
++        mobile: "modules/mobile",
++        "layui.all": "../layui.all"
++    };
++    n.prototype.cache = o, n.prototype.define = function (e, t) {
++        var n = this, r = "function" == typeof e, i = function () {
++            var e = function (e, t) {
++                layui[e] = t, o.status[e] = !0
++            };
++            return "function" == typeof t && t(function (n, r) {
++                e(n, r), o.callback[n] = function () {
++                    t(e)
++                }
++            }), this
++        };
++        return r && (t = e, e = []), !layui["layui.all"] && layui["layui.mobile"] ? i.call(n) : (n.use(e, i), n)
++    }, n.prototype.use = function (e, n, l) {
++        function s(e, t) {
++            var n = "PLaySTATION 3" === navigator.platform ? /^complete$/ : /^(complete|loaded)$/;
++            ("load" === e.type || n.test((e.currentTarget || e.srcElement).readyState)) && (o.modules[f] = t, d.removeChild(v), function r() {
++                return ++m > 1e3 * o.timeout / 4 ? i(f + " is not a valid module") : void (o.status[f] ? c() : setTimeout(r, 4))
++            }())
++        }
++
++        function c() {
++            l.push(layui[f]), e.length > 1 ? y.use(e.slice(1), n, l) : "function" == typeof n && n.apply(layui, l)
++        }
++
++        var y = this, p = o.dir = o.dir ? o.dir : r, d = t.getElementsByTagName("head")[0];
++        e = "string" == typeof e ? [e] : e, window.jQuery && jQuery.fn.on && (y.each(e, function (t, o) {
++            "jquery" === o && e.splice(t, 1)
++        }), layui.jquery = layui.$ = jQuery);
++        var f = e[0], m = 0;
++        if (l = l || [], o.host = o.host || (p.match(/\/\/([\s\S]+?)\//) || ["//" + location.host + "/"])[0], 0 === e.length || layui["layui.all"] && u[f] || !layui["layui.all"] && layui["layui.mobile"] && u[f]) return c(), y;
++        if (o.modules[f]) !function g() {
++            return ++m > 1e3 * o.timeout / 4 ? i(f + " is not a valid module") : void ("string" == typeof o.modules[f] && o.status[f] ? c() : setTimeout(g, 4))
++        }(); else {
++            var v = t.createElement("script"),
++                h = (u[f] ? p + "lay/" : /^\{\/\}/.test(y.modules[f]) ? "" : o.base || "") + (y.modules[f] || f) + ".js";
++            h = h.replace(/^\{\/\}/, ""), v.async = !0, v.charset = "utf-8", v.src = h + function () {
++                var e = o.version === !0 ? o.v || (new Date).getTime() : o.version || "";
++                return e ? "?v=" + e : ""
++            }(), d.appendChild(v), !v.attachEvent || v.attachEvent.toString && v.attachEvent.toString().indexOf("[native code") < 0 || a ? v.addEventListener("load", function (e) {
++                s(e, h)
++            }, !1) : v.attachEvent("onreadystatechange", function (e) {
++                s(e, h)
++            }), o.modules[f] = h
++        }
++        return y
++    }, n.prototype.getStyle = function (t, o) {
++        var n = t.currentStyle ? t.currentStyle : e.getComputedStyle(t, null);
++        return n[n.getPropertyValue ? "getPropertyValue" : "getAttribute"](o)
++    }, n.prototype.link = function (e, n, r) {
++        var a = this, u = t.createElement("link"), l = t.getElementsByTagName("head")[0];
++        "string" == typeof n && (r = n);
++        var s = (r || e).replace(/\.|\//g, ""), c = u.id = "layuicss-" + s, y = 0;
++        return u.rel = "stylesheet", u.href = e + (o.debug ? "?v=" + (new Date).getTime() : ""), u.media = "all", t.getElementById(c) || l.appendChild(u), "function" != typeof n ? a : (function p() {
++            return ++y > 1e3 * o.timeout / 100 ? i(e + " timeout") : void (1989 === parseInt(a.getStyle(t.getElementById(c), "width")) ? function () {
++                n()
++            }() : setTimeout(p, 100))
++        }(), a)
++    }, o.callback = {}, n.prototype.factory = function (e) {
++        if (layui[e]) return "function" == typeof o.callback[e] ? o.callback[e] : null
++    }, n.prototype.addcss = function (e, t, n) {
++        return layui.link(o.dir + "css/" + e, t, n)
++    }, n.prototype.img = function (e, t, o) {
++        var n = new Image;
++        return n.src = e, n.complete ? t(n) : (n.onload = function () {
++            n.onload = null, "function" == typeof t && t(n)
++        }, void (n.onerror = function (e) {
++            n.onerror = null, "function" == typeof o && o(e)
++        }))
++    }, n.prototype.config = function (e) {
++        e = e || {};
++        for (var t in e) o[t] = e[t];
++        return this
++    }, n.prototype.modules = function () {
++        var e = {};
++        for (var t in u) e[t] = u[t];
++        return e
++    }(), n.prototype.extend = function (e) {
++        var t = this;
++        e = e || {};
++        for (var o in e) t[o] || t.modules[o] ? i("模块名 " + o + " 已被占用") : t.modules[o] = e[o];
++        return t
++    }, n.prototype.router = function (e) {
++        var t = this, e = e || location.hash, o = {path: [], search: {}, hash: (e.match(/[^#](#.*$)/) || [])[1] || ""};
++        return /^#\//.test(e) ? (e = e.replace(/^#\//, ""), o.href = "/" + e, e = e.replace(/([^#])(#.*$)/, "$1").split("/") || [], t.each(e, function (e, t) {
++            /^\w+=/.test(t) ? function () {
++                t = t.split("="), o.search[t[0]] = t[1]
++            }() : o.path.push(t)
++        }), o) : o
++    }, n.prototype.data = function (t, o, n) {
++        if (t = t || "layui", n = n || localStorage, e.JSON && e.JSON.parse) {
++            if (null === o) return delete n[t];
++            o = "object" == typeof o ? o : {key: o};
++            try {
++                var r = JSON.parse(n[t])
++            } catch (i) {
++                var r = {}
++            }
++            return "value" in o && (r[o.key] = o.value), o.remove && delete r[o.key], n[t] = JSON.stringify(r), o.key ? r[o.key] : r
++        }
++    }, n.prototype.sessionData = function (e, t) {
++        return this.data(e, t, sessionStorage)
++    }, n.prototype.device = function (t) {
++        var o = navigator.userAgent.toLowerCase(), n = function (e) {
++            var t = new RegExp(e + "/([^\\s\\_\\-]+)");
++            return e = (o.match(t) || [])[1], e || !1
++        }, r = {
++            os: function () {
++                return /windows/.test(o) ? "windows" : /linux/.test(o) ? "linux" : /iphone|ipod|ipad|ios/.test(o) ? "ios" : /mac/.test(o) ? "mac" : void 0
++            }(), ie: function () {
++                return !!(e.ActiveXObject || "ActiveXObject" in e) && ((o.match(/msie\s(\d+)/) || [])[1] || "11")
++            }(), weixin: n("micromessenger")
++        };
++        return t && !r[t] && (r[t] = n(t)), r.android = /android/.test(o), r.ios = "ios" === r.os, r
++    }, n.prototype.hint = function () {
++        return {error: i}
++    }, n.prototype.each = function (e, t) {
++        var o, n = this;
++        if ("function" != typeof t) return n;
++        if (e = e || [], e.constructor === Object) {
++            for (o in e) if (t.call(e[o], o, e[o])) break
++        } else for (o = 0; o < e.length && !t.call(e[o], o, e[o]); o++) ;
++        return n
++    }, n.prototype.sort = function (e, t, o) {
++        var n = JSON.parse(JSON.stringify(e || []));
++        return t ? (n.sort(function (e, o) {
++            var n = /^-?\d+$/, r = e[t], i = o[t];
++            return n.test(r) && (r = parseFloat(r)), n.test(i) && (i = parseFloat(i)), r && !i ? 1 : !r && i ? -1 : r > i ? 1 : r < i ? -1 : 0
++        }), o && n.reverse(), n) : n
++    }, n.prototype.stope = function (t) {
++        t = t || e.event;
++        try {
++            t.stopPropagation()
++        } catch (o) {
++            t.cancelBubble = !0
++        }
++    }, n.prototype.onevent = function (e, t, o) {
++        return "string" != typeof e || "function" != typeof o ? this : n.event(e, t, null, o)
++    }, n.prototype.event = n.event = function (e, t, n, r) {
++        var i = this, a = null, u = t.match(/\((.*)\)$/) || [], l = (e + "." + t).replace(u[0], ""), s = u[1] || "",
++            c = function (e, t) {
++                var o = t && t.call(i, n);
++                o === !1 && null === a && (a = !1)
++            };
++        return r ? (o.event[l] = o.event[l] || {}, o.event[l][s] = [r], this) : (layui.each(o.event[l], function (e, t) {
++            return "{*}" === s ? void layui.each(t, c) : ("" === e && layui.each(t, c), void (s && e === s && layui.each(t, c)))
++        }), a)
++    }, e.layui = new n
++}(window);
+\ No newline at end of file
