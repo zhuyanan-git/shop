@@ -19,31 +19,37 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户姓名</label>
+                            <label class="layui-form-label">商品名称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="username" autocomplete="off" class="layui-input">
+                                <input type="text" name="goodsName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户性别</label>
+                            <label class="layui-form-label">类别名称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="sex" autocomplete="off" class="layui-input">
+                                <input type="text" name="categoryName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户城市</label>
+                            <label class="layui-form-label">品牌名称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="city" autocomplete="off" class="layui-input">
+                                <input type="text" name="brandName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户职业</label>
+                            <label class="layui-form-label">审核状态</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="classify" autocomplete="off" class="layui-input">
+                                <select name="status">
+                                    <option value="">请选择审核状态</option>
+                                    <option value="0">待审核</option>
+                                    <option value="1">审核未通过</option>
+                                    <option value="2">审核通过</option>
+                                </select>
                             </div>
                         </div>
                         <div class="layui-inline">
                             <a class="layui-btn" lay-submit="" lay-filter="data-search-btn">搜索</a>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                         </div>
                     </div>
                 </form>
@@ -54,8 +60,8 @@
             <button class="layui-btn data-add-btn">添加</button>
             <button class="layui-btn layui-btn-danger data-delete-btn">删除</button>
         </div>
-        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
-        <script type="text/html" id="currentTableBar">
+        <table class="layui-hide" id="goods" lay-filter="currentTableFilter"></table>
+        <script type="text/html" id="goodsTableBar">
             <a class="layui-btn layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
         </script>
@@ -63,35 +69,53 @@
 </div>
 <script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
 <script type="text/javascript"  th:inline="none">
-    layui.use(['form', 'table'], function () {
+    layui.use(['form', 'table','laydate'], function () {
         var $ = layui.jquery,
             form = layui.form,
+            laydate = layui.laydate;
             table = layui.table;
 
         table.render({
-            elem: '#currentTableId',
+            elem: '#goods',
             url: 'goods/list',
             page: true,
             cols: [[
                 {type: "checkbox", width: 50, fixed: "left"},
                 {field: 'id', width: 80, title: 'ID', sort: true},
-                {field: 'goodsName', width: 80, title: '商品名称'},
-                {field: 'storeId', width: 80, title: '门店ID', sort: true},
-                {field: 'storeName', width: 80, title: '门店名称'},
-                {field: 'categoryId', title: '类别ID', minWidth: 150},
-                {field: 'categoryName', width: 80, title: '类别名称', sort: true},
-                {field: 'brandId', width: 80, title: '品牌ID', sort: true},
-                {field: 'brandName', width: 80, title: '品牌名称'},
-                {field: 'oldPrice', width: 80, title: '原价'},
-                {field: 'newPrice', width: 80, title: '特价'},
-                {field: 'stock', width: 80, title: '库存'},
-                {field: 'status', width: 80, title: '状态'},
-                {field: 'createTime', width: 80, title: '上架时间'},
-                {field: 'updateTime', width: 80, title: '修改时间'},
-                {field: 'goodsImg', width: 80, title: '图片路径'},
-                {field: 'buyNumber', width: 80, title: '销量'},
-                {field: 'goodsDescription', width: 80, title: '商品描述'},
-                {title: '操作', minWidth: 50, templet: '#currentTableBar', fixed: "right", align: "center"}
+                {field: 'goodsName', title: '商品名称'},
+               // {field: 'storeId', width: 80, title: '门店ID', sort: true},
+                {field: 'storeName', title: '门店名称'},
+                //{field: 'categoryId', title: '类别ID', minWidth: 150},
+                {field: 'categoryName', title: '类别名称', sort: true},
+                //{field: 'brandId', width: 80, title: '品牌ID', sort: true},
+                {field: 'brandName', title: '品牌名称'},
+                {field: 'oldPrice',  title: '原价'},
+                {field: 'newPrice',  title: '特价'},
+                {field: 'stock', title: '库存'},
+                {
+                    field: 'status',
+                    title: '审核状态',
+                    templet:function(d){
+                        if(d.status =='0'){
+                            return '待审核';
+                        }else if(d.status =='1'){
+                            return '审核未通过';
+                        }else if(d.status == '2'){
+                            return '审核通过';
+                        }else{
+                            return '待审核';
+                        }
+                    }},
+                {field: 'createTime',width: 200, title: '上架时间'},
+                {field: 'updateTime',width: 200, title: '修改时间'},
+                {field: 'goodsImg', title: '商品图片',templet:function (d) { return '<div><img src='+d.goodsImg+'></div>' }},
+                {field: 'buyNumber', title: '销量'},
+                {field: 'goodsDescription', title: '商品描述'},
+                {
+                    title: '操作',
+                    minWidth: 50,
+                    width: 120,
+                    templet: '#goodsTableBar', fixed: "right", align: "center"}
             ]],
 
         });
@@ -99,17 +123,21 @@
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             var result = JSON.stringify(data.field);
-            layer.alert(result, {
-                title: '最终的搜索信息'
-            });
-
+            var goodsName = data.field.goodsName;
+            var categoryName = data.field.categoryName;
+            var brandName = data.field.brandName;
+            var status = data.field.status;
             //执行搜索重载
-            table.reload('currentTableId', {
+            table.reload('goods', {
+
                 page: {
                     curr: 1
                 }
                 , where: {
-                    searchParams: result
+                    goodsName:goodsName,
+                    categoryName:categoryName,
+                    brandName:brandName,
+                    status:status,
                 }
             }, 'data');
 

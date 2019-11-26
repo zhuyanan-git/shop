@@ -1,5 +1,6 @@
 package com.kmm.goods.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,8 +19,10 @@ public class Goods {
     private Double oldPrice;
     private Double newPrice;
     private Integer stock;
-    private Integer status;//0未审核，1待审核，2审核未通过，3审核通过
+    private Integer status;//0待审核，1审核未通过，2审核通过
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
     private String goodsImg;
     private Integer buyNumber;

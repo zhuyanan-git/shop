@@ -14,6 +14,10 @@ public class HtgyApplication {
     public static void main(String[] args) {
         SpringApplication.run(HtgyApplication.class, args);
         System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow","|{}");
+        String name = "admin1";
+        String salt = Md5Util.string2MD5("123456");
+        String encryptPassword = encryptPassword(name,"123456",salt);
+        System.out.println(salt+"-----"+encryptPassword);
     }
 
 }
